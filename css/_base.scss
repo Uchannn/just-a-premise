@@ -1,0 +1,65 @@
+/* ════════════════════════════════════
+   🌸 BASE STYLES — GLOBAL SETTINGS
+   Applies to every page of Just A Premise
+   ════════════════════════════════════ */
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* COLOR VARIABLES */
+:root {
+  --pink: #eb96b4;
+  --gold: #9e6711;
+  --cream: #f2dfd4;
+  --sky: #b3ddf2;
+  --text-dark: #222;
+  --text-mid: #333;
+  --text-light: #555;
+  --bg-main: #fff;
+  --bg-soft: #fdfaff;
+}
+
+/* FONT SETTINGS */
+body {
+  font-family: "Quicksand", sans-serif;
+  background: linear-gradient(to bottom, var(--bg-main), var(--bg-soft));
+  color: var(--text-mid);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* TYPOGRAPHY */
+h1, h2, h3, nav a {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+p, li {
+  font-weight: 400;
+}
+
+/* BASIC ELEMENT STYLES */
+a {
+  color: var(--pink);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* CARDS (shared) */
+.card {
+  background: var(--bg-main);
+  border: 1px solid #eee;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+}
