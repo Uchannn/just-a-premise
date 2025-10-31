@@ -72,7 +72,7 @@ html {
 /* HEADER (Homepage + Shared) */
 header,
 .main-header {
-  background: url("../images/page-banner-bg.jpg") center/cover no-repeat;
+  background: url("../images/page-banner-bg.png") center/cover no-repeat;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -258,7 +258,7 @@ header,
 /* FOOTER */
 footer {
   text-align: center;
-  background: url("../images/page-banner-bg.jpg") center/cover no-repeat;
+  background: url("../images/page-banner-bg.png") center/cover no-repeat;
   color: var(--text-dark);
   padding: 1rem 1rem 1.5rem;
   margin-top: 3rem;
