@@ -1,0 +1,272 @@
+/* ════════════════════════════════════
+   🩷 LAYOUT STYLES — STRUCTURE & FRAME
+   Header, Hero, Buttons, Footer, Back-to-top
+   ════════════════════════════════════ */
+
+/* HEADER (Homepage + Shared) */
+header,
+.main-header {
+  background: url("../images/page-banner-bg.jpg") center/cover no-repeat;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.logo img {
+  height: 80px;
+  width: auto;
+  display: block;
+  transition: opacity 0.25s ease;
+}
+
+.logo a {
+  text-decoration: none;
+}
+
+.logo a:hover img {
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+/* HEADER BUTTONS */
+.header-buttons {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.main-header .btn.secondary {
+  background-color: var(--cream);
+  color: var(--text-dark);
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  font-family: "Quicksand", sans-serif;
+  letter-spacing: 0.4px;
+}
+
+.main-header .btn.secondary:hover {
+  background-color: var(--gold);
+  color: #fff;
+}
+
+/* HERO SECTION */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  padding: 3rem 4rem;
+  background: linear-gradient(to bottom right, #fff, #f9f8ff);
+  flex-wrap: wrap;
+}
+
+.hero-left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border: none;
+  box-shadow: none;
+}
+
+.hero-right {
+  flex: 1;
+  max-width: 800px;
+  text-align: center;
+}
+
+.hero-right h1 {
+  font-size: 2rem;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+  word-break: break-word;
+}
+
+.hero-right p {
+  color: var(--text-light);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+/* HERO BUTTONS */
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: nowrap;
+}
+
+.hero-buttons .btn {
+  background-color: var(--cream);
+  color: var(--text-dark);
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.hero-buttons .btn:hover {
+  background-color: var(--gold);
+  color: #fff;
+}
+
+/* 👇 New global Shop Button */
+.shop-button {
+  background-color: #9e6711;
+  color: white;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  display: inline-block;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out;
+  text-align: center;
+}
+
+.shop-button:hover {
+  background-color: #c07d17;
+}
+
+/* Cart Link/Button */ 
+.cart-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f2dfd4;
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.cart-link:hover {
+  background-color: #9e6711;
+}
+
+//* Cart Icon */
+.cart-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(12%) sepia(6%) saturate(0%) hue-rotate(194deg) brightness(96%) contrast(85%);
+  transition: filter 0.2s ease-in-out;
+}
+
+/* When hovering over the cart button */
+.cart-link:hover .cart-icon {
+  filter: brightness(0) invert(1); // makes it white on hover
+}
+
+/* Cart Counter Bubble */
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #9e6711;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 50%;
+  line-height: 1;
+  min-width: 18px;
+  text-align: center;
+  border: 2px solid #fff;
+}
+
+
+
+/* FOOTER */
+footer {
+  text-align: center;
+  background: url("../images/page-banner-bg.jpg") center/cover no-repeat;
+  color: var(--text-dark);
+  padding: 1rem 1rem 1.5rem;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+  position: relative;
+}
+
+.footer-links {
+  margin-top: 0.5rem;
+}
+
+.footer-links a {
+  color: var(--text-mid);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--pink);
+}
+
+.footer-email {
+  margin-top: 0.5rem;
+}
+
+/* SOCIAL ICONS */
+.socials {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.socials a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.socials a img {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  transition: transform 0.25s ease;
+}
+
+.socials a:hover img {
+  transform: scale(1.1);
+}
+
+/* BACK-TO-TOP BUTTON */
+.back-top {
+  position: fixed;
+  bottom: 1.8rem;
+  right: 1.8rem;
+  z-index: 100;
+  background-color: var(--cream);
+  color: var(--text-dark);
+  font-weight: 600;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.back-top:hover {
+  background-color: var(--gold);
+  color: #fff;
+  transform: translateY(-3px);
+}

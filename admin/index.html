@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>CMS | Just A Premise</title>
+  </head>
+  <body>
+    <script>
+      // Wait until the page is ready before loading Decap CMS
+      document.addEventListener("DOMContentLoaded", function () {
+        var script = document.createElement("script");
+        script.src = "https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js";
+        document.body.appendChild(script);
+      });
+    </script>
+  </body>
+</html>
