@@ -27,35 +27,39 @@ function renderCards() {
     if (!item.available) card.classList.add("sold");
 
     card.innerHTML = `
-      <div class="card-header" onclick="toggleExpand(${i})">
-        <h3>${item.title || "Untitled"}</h3>
-        <div class="badges">
-          ${!item.available ? `<span class="badge sold">SOLD</span>` : ""}
-          ${item.adult ? `<span class="badge adult">18+</span>` : ""}
-        </div>
-      </div>
-      <div class="card-body" id="body-${i}">
-        <label>Title</label>
-        <input type="text" value="${item.title || ""}"
-          oninput="updateField(${i}, 'title', this.value)" />
+  <div class="card-header" onclick="toggleExpand(${i})">
+    <h3>${item.title || "Untitled"}</h3>
+    <div class="badges">
+      ${!item.available ? `<span class="badge sold">SOLD</span>` : ""}
+      ${item.adult ? `<span class="badge adult">18+</span>` : ""}
+    </div>
+  </div>
 
-        <label>Description</label>
-        <textarea oninput="updateField(${i}, 'description', this.value)">${item.description || ""}</textarea>
+  <div class="card-body" id="body-${i}">
+    <label>Title</label>
+    <input type="text" value="${item.title || ""}"
+      oninput="updateField(${i}, 'title', this.value)" />
 
-        <label>Price</label>
-        <input type="number" step="0.01" value="${item.price || ""}"
-          oninput="updateField(${i}, 'price', parseFloat(this.value))" />
+    <label>Description</label>
+    <textarea oninput="updateField(${i}, 'description', this.value)">${item.description || ""}</textarea>
 
-        <label><input type="checkbox" ${item.available ? "checked" : ""} 
-          onchange="updateField(${i}, 'available', this.checked)" /> Available</label>
+    <label>Price</label>
+    <input type="number" step="0.01" value="${item.price || ""}"
+      oninput="updateField(${i}, 'price', parseFloat(this.value))" />
 
-        <label><input type="checkbox" ${item.featured ? "checked" : ""} 
-          onchange="updateField(${i}, 'featured', this.checked)" /> Featured</label>
+    <label><input type="checkbox" ${item.available ? "checked" : ""} 
+      onchange="updateField(${i}, 'available', this.checked)" /> Available</label>
 
-        <label><input type="checkbox" ${item.adult ? "checked" : ""} 
-          onchange="updateField(${i}, 'adult', this.checked)" /> 18+ Content</label>
-      </div>
-    `;
+    <label><input type="checkbox" ${item.featured ? "checked" : ""} 
+      onchange="updateField(${i}, 'featured', this.checked)" /> Featured</label>
+
+    <label><input type="checkbox" ${item.adult ? "checked" : ""} 
+      onchange="updateField(${i}, 'adult', this.checked)" /> 18+ Content</label>
+
+    <button class="delete-btn" onclick="deleteItem(${i})">🗑 Delete Item</button>
+  </div>
+`;
+
     grid.appendChild(card);
   });
 }
@@ -105,3 +109,13 @@ function importLocalFile() {
   };
   input.click();
 }
+
+// 💀 deleteItem belongs OUTSIDE importLocalFile()
+function deleteItem(index) {
+  const confirmDelete = confirm("Delete this item? This action cannot be undone.");
+  if (confirmDelete) {
+    data.splice(index, 1);
+    renderCards();
+  }
+}
+
