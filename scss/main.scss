@@ -1,0 +1,19 @@
+// main.scss — central entry point for your SCSS build
+
+// 1. Base variables & mixins
+@import 'variables';
+@import 'mixins';
+
+// 2. Reset & layout
+@import 'reset';
+@import 'layout';
+
+// 3. Page-specific sections
+@import 'pages';
+@import 'shop';
+@import 'admin';
+
+// 4. Temporary test styling
+body {
+  background: pink; // keep it if you still want that sanity check
+}

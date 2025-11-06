@@ -1,0 +1,192 @@
+// _admin.scss — Clean White Panel CMS ✨
+
+$bg: #fafbff;
+$panel: #ffffff;
+$border: #e7e8ec;
+$shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+$radius: 16px;
+$accent1: #ffd6e0;
+$accent2: #d1e8ff;
+$accent3: #c9ffe1;
+$text-dark: #2d2d2d;
+$text-light: #666;
+
+body {
+  margin: 0;
+  font-family: "Inter", "Poppins", sans-serif;
+  background: $bg;
+  color: $text-dark;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background: $panel;
+  border-right: 1px solid $border;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  gap: 0.75rem;
+  box-shadow: $shadow;
+  z-index: 5;
+
+  h2 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: $text-light;
+    margin-bottom: 0.5rem;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: $panel;
+    border: 1px solid $border;
+    padding: 0.7rem 0.8rem;
+    border-radius: $radius;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: $shadow;
+    transition: 0.2s;
+    font-size: 0.95rem;
+    color: $text-dark;
+
+    &:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(145deg, $accent2, $accent1);
+    }
+  }
+}
+
+/* Main workspace */
+main {
+  flex: 1;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+/* Toolbar */
+.toolbar {
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: $radius;
+  box-shadow: $shadow;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+  }
+}
+
+/* Card grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Card */
+.card {
+  background: $panel;
+  border-radius: $radius;
+  border: 1px solid $border;
+  padding: 1.25rem;
+  box-shadow: $shadow;
+  display: flex;
+  flex-direction: column;
+  transition: 0.2s;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+  }
+
+  &.sold {
+    opacity: 0.7;
+  }
+
+  &.adult {
+    border-color: $accent1;
+  }
+
+  .badge {
+    align-self: flex-start;
+    background: linear-gradient(120deg, $accent3, $accent2);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+
+    &.sold {
+      background: linear-gradient(120deg, #ddd, #eee);
+    }
+
+    &.adult {
+      background: linear-gradient(120deg, $accent1, lighten($accent1, 8%));
+      color: white;
+    }
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  textarea, input[type="text"], input[type="number"] {
+    border: 1px solid $border;
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+    background: #fff;
+    transition: 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: $accent2;
+      box-shadow: 0 0 0 2px rgba($accent2, 0.3);
+    }
+  }
+
+  input[type="checkbox"] {
+    transform: scale(1.25);
+    accent-color: $accent2;
+    margin-right: 0.5rem;
+  }
+}
+
+/* Add button */
+.add-item {
+  margin: 2.5rem auto;
+  display: block;
+  padding: 1rem 2rem;
+  border-radius: 40px;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  color: $text-dark;
+  background: linear-gradient(120deg, $accent3, $accent2);
+  box-shadow: $shadow;
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+}

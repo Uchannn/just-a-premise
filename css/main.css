@@ -1,0 +1,221 @@
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+.product-card img {
+  max-width: 100%;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+.product-card h3 {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+.product-card .price {
+  font-weight: 600;
+  color: #333;
+  margin: 0.25rem 0 0.5rem;
+}
+.product-card button {
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #4f8c95;
+  color: #fff;
+  transition: background 0.2s ease;
+}
+.product-card button:hover {
+  background: #3e6e75;
+}
+.product-card button.sold {
+  background: #999;
+  cursor: not-allowed;
+  text-transform: uppercase;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", "Poppins", sans-serif;
+  background: #fafbff;
+  color: #2d2d2d;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background: #ffffff;
+  border-right: 1px solid #e7e8ec;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  gap: 0.75rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  z-index: 5;
+}
+.sidebar h2 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+.sidebar button {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: #ffffff;
+  border: 1px solid #e7e8ec;
+  padding: 0.7rem 0.8rem;
+  border-radius: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: 0.2s;
+  font-size: 0.95rem;
+  color: #2d2d2d;
+}
+.sidebar button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(145deg, #d1e8ff, #ffd6e0);
+}
+
+/* Main workspace */
+main {
+  flex: 1;
+  background: #fafbff;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+/* Toolbar */
+.toolbar {
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+.toolbar h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Card grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Card */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e7e8ec;
+  padding: 1.25rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  transition: 0.2s;
+  position: relative;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+}
+.card.sold {
+  opacity: 0.7;
+}
+.card.adult {
+  border-color: #ffd6e0;
+}
+.card .badge {
+  align-self: flex-start;
+  background: linear-gradient(120deg, #c9ffe1, #d1e8ff);
+  color: #000;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+.card .badge.sold {
+  background: linear-gradient(120deg, #ddd, #eee);
+}
+.card .badge.adult {
+  background: linear-gradient(120deg, #ffd6e0, rgb(255, 254.8, 254.8487804878));
+  color: white;
+}
+.card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+.card textarea, .card input[type=text], .card input[type=number] {
+  border: 1px solid #e7e8ec;
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  background: #fff;
+  transition: 0.2s;
+}
+.card textarea:focus, .card input[type=text]:focus, .card input[type=number]:focus {
+  outline: none;
+  border-color: #d1e8ff;
+  box-shadow: 0 0 0 2px rgba(209, 232, 255, 0.3);
+}
+.card input[type=checkbox] {
+  transform: scale(1.25);
+  accent-color: #d1e8ff;
+  margin-right: 0.5rem;
+}
+
+/* Add button */
+.add-item {
+  margin: 2.5rem auto;
+  display: block;
+  padding: 1rem 2rem;
+  border-radius: 40px;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #2d2d2d;
+  background: linear-gradient(120deg, #c9ffe1, #d1e8ff);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.add-item:hover {
+  transform: translateY(-3px);
+}
+
+body {
+  background: pink;
+}

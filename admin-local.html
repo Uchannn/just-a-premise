@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just a Premise CMS</title>
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>CMS</h2>
+    <nav>
+      <button onclick="loadFile('shop')">🛍 Shop</button>
+      <button onclick="loadFile('web_services')">🖥 Web Services</button>
+      <button onclick="loadFile('pages')">📄 Pages</button>
+      <button onclick="loadFile('downloads')">⬇ Downloads</button>
+      <hr />
+      <button onclick="importLocalFile()">📂 Import JSON</button>
+      <button onclick="saveJSON()">💾 Save File</button>
+    </nav>
+  </aside>
+
+  <!-- Main workspace -->
+  <main>
+    <header class="toolbar">
+      <div class="file-info">
+        <h1 id="file-title">Nothing Loaded</h1>
+        <p id="file-desc">Select a section to begin editing.</p>
+      </div>
+    </header>
+
+    <section id="card-grid" class="card-grid"></section>
+
+    <button class="add-item" onclick="addItem()">+ Add Item</button>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just a Premise CMS</title>
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>CMS</h2>
+    <nav>
+      <button onclick="loadFile('shop')">🛍 Shop</button>
+      <button onclick="loadFile('web_services')">🖥 Web Services</button>
+      <button onclick="loadFile('pages')">📄 Pages</button>
+      <button onclick="loadFile('downloads')">⬇ Downloads</button>
+      <hr />
+      <button onclick="importLocalFile()">📂 Import JSON</button>
+      <button onclick="saveJSON()">💾 Save File</button>
+    </nav>
+  </aside>
+
+  <!-- Main workspace -->
+  <main>
+    <header class="toolbar">
+      <div class="file-info">
+        <h1 id="file-title">Nothing Loaded</h1>
+        <p id="file-desc">Select a section to begin editing.</p>
+      </div>
+    </header>
+
+    <section id="card-grid" class="card-grid"></section>
+
+    <button class="add-item" onclick="addItem()">+ Add Item</button>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

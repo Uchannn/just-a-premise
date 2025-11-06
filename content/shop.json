@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Test Product",
+    "price": 15,
+    "available": true,
+    "featured": false,
+    "description": "A simple test item.",
+    "images": ["images/test.jpg"]
+  },
+  {
+    "title": "Sold Example",
+    "price": 10,
+    "available": false,
+    "featured": false,
+    "description": "This should show a SOLD badge.",
+    "images": ["images/test2.jpg"]
+  }
+]
