@@ -302,4 +302,64 @@ body {
   background: pink;
 }
 
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+.shop-grid .product-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+.shop-grid .product-card:hover {
+  transform: translateY(-5px);
+}
+.shop-grid .product-card img {
+  width: 100%;
+  height: auto;
+  border-bottom: 1px solid #eee;
+}
+.shop-grid .product-card h2 {
+  font-size: 1.1rem;
+  margin: 0.75rem 0;
+}
+.shop-grid .product-card p {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.product-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+.product-detail .product-hero {
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.product-detail .product-hero img {
+  border-radius: 16px;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+.product-detail .product-hero .product-info {
+  text-align: center;
+}
+.product-detail .product-hero .product-tags span {
+  background: #f0f0f8;
+  border-radius: 12px;
+  padding: 0.25rem 0.75rem;
+  margin: 0.25rem;
+  font-size: 0.8rem;
+  color: #666;
+}
+
 /*# sourceMappingURL=main.css.map */

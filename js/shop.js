@@ -9,22 +9,28 @@ async function loadShop() {
     const shopContainer = document.getElementById('shop');
     shopContainer.innerHTML = '';
 
+    // Build product cards
     products.forEach((product) => {
       const card = document.createElement('div');
       card.classList.add('product-card');
 
-      // Image
+      // Link to product page (wraps image + title)
+      const link = document.createElement('a');
+      link.href = `product.html?id=${product.id}`;
+      link.classList.add('product-link');
+
       if (product.images && product.images.length > 0) {
         const img = document.createElement('img');
         img.src = product.images[0];
         img.alt = product.title;
-        card.appendChild(img);
+        link.appendChild(img);
       }
 
-      // Title
       const title = document.createElement('h3');
       title.textContent = product.title;
-      card.appendChild(title);
+      link.appendChild(title);
+
+      card.appendChild(link);
 
       // Description
       const desc = document.createElement('p');
@@ -49,8 +55,10 @@ async function loadShop() {
       }
       card.appendChild(button);
 
+      // Add to shop container
       shopContainer.appendChild(card);
     });
+
   } catch (err) {
     console.error('Error loading shop:', err);
     const shopContainer = document.getElementById('shop');
