@@ -5,7 +5,7 @@ if (!productId) {
   document.getElementById("product-detail").innerHTML =
     "<p>Product not found.</p>";
 } else {
-  fetch("/content/shop.json")
+  fetch("/data/shop.json")
     .then(res => res.json())
     .then(data => {
       const item = data.find(p => p.id === productId);

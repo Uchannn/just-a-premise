@@ -7,7 +7,7 @@ async function loadFile(type) {
   document.getElementById("file-title").textContent = "Shop";
   document.getElementById("file-desc").textContent = "Edit products below";
 
-  const res = await fetch("../data/shop.json?cachebust=" + Date.now());
+const res = await fetch("/data/shop.json?cachebust=" + Date.now());
   data = await res.json();
   renderCards();
 }
@@ -15,20 +15,27 @@ async function loadFile(type) {
 function renderCards() {
   const grid = document.getElementById("card-grid");
   grid.innerHTML = "";
+
   data.forEach((item, index) => {
     const card = document.createElement("div");
-    card.className = "cms-card";
-    card.innerHTML = `
+    card.className = "card";
+
+    // this wraps the inputs, lets CSS control spacing and open/closed states
+    const body = document.createElement("div");
+    body.className = "card-body open";
+    body.innerHTML = `
       <input value="${item.title}" data-field="title" placeholder="Title">
       <input type="number" value="${item.price}" data-field="price" placeholder="Price">
       <input value="${item.stripe_link || ""}" data-field="stripe_link" placeholder="Stripe link">
       <textarea data-field="description" placeholder="Description">${item.description || ""}</textarea>
       <label><input type="checkbox" ${item.available ? "checked" : ""} data-field="available"> Available</label>
-      <button onclick="removeItem(${index})">Delete</button>
+      <button class="delete-btn" onclick="removeItem(${index})">Delete</button>
     `;
-    grid.append(card);
+    card.appendChild(body);
+    grid.appendChild(card);
   });
 }
+
 
 function addItem() {
   data.push({

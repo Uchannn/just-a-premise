@@ -18,16 +18,19 @@ if (pass !== "Yesme1me") {
   <!-- Sidebar -->
  <aside class="sidebar">
   <h3>Files</h3>
-  <button data-icon="🛍" onclick="loadFile('shop')">Shop</button>
-  <button data-icon="🖥" onclick="loadFile('web_services')">Web Services</button>
-  <button data-icon="📄" onclick="loadFile('pages')">Pages</button>
-  <button data-icon="⬇" onclick="loadFile('downloads')">Downloads</button>
+  <button class="nav-btn" onclick="loadFile('shop')"><span class="icon">🛍</span> Shop</button>
+  <button class="nav-btn" onclick="loadFile('web_services')"><span class="icon">🖥</span> Web Services</button>
+  <button class="nav-btn" onclick="loadFile('pages')"><span class="icon">📄</span> Pages</button>
+  <button class="nav-btn" onclick="loadFile('downloads')"><span class="icon">⬇</span> Downloads</button>
+
 
   <hr />
 
   <h3>Actions</h3>
-  <button data-icon="📂" onclick="importLocalFile()">Import JSON</button>
-  <button data-icon="💾" onclick="saveJSON()">Save File</button>
+    <h3>Actions</h3>
+  <button class="nav-btn" onclick="importLocalFile()"><span class="icon">📂</span> Import JSON</button>
+  <button class="nav-btn" onclick="saveJSON()"><span class="icon">💾</span> Save File</button>
+
 </aside>
 
 
