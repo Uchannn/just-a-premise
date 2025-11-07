@@ -1,4 +1,3 @@
-@charset "UTF-8";
 .shop-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -106,6 +105,7 @@
   --text-light: #666;
 }
 
+/* RESET */
 * {
   box-sizing: border-box;
 }
@@ -120,7 +120,7 @@ body {
   color: var(--text-dark);
 }
 
-/* Sidebar */
+/* SIDEBAR */
 .sidebar {
   width: 280px;
   background: var(--panel);
@@ -131,7 +131,6 @@ body {
   gap: 0.75rem;
   box-shadow: var(--shadow);
   z-index: 5;
-  /* Section headers (like "Files" / "Actions") */
 }
 .sidebar h3 {
   font-size: 1rem;
@@ -140,47 +139,57 @@ body {
   margin: 1rem 0 0.4rem;
 }
 .sidebar {
-  /* Buttons — cute pastel style */
+  /* Pastel button-in-button style */
 }
 .sidebar button {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  background: var(--panel);
-  border: none;
-  padding: 0.9rem 1.1rem;
-  border-radius: 18px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  cursor: pointer;
-  color: var(--text-dark);
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 3px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.25s ease;
-}
-.sidebar button:hover {
-  transform: translateY(-2px);
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9), 0 5px 12px rgba(0, 0, 0, 0.08);
-}
-.sidebar button:active {
-  transform: scale(0.98);
-}
-.sidebar button {
-  /* icon bubble */
-}
-.sidebar button::before {
-  content: attr(data-icon);
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  font-size: 1.3rem;
-  background: linear-gradient(145deg, var(--accent2), var(--accent1));
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.7), 0 2px 4px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  height: 64px;
+  margin-bottom: 1rem;
+  border: none;
+  background: #ffffff; /* outer shell */
+  border-radius: 18px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+  /* Inner layer */
 }
-.sidebar {
-  /* Divider line between groups */
+.sidebar button::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent2), var(--accent1));
+  z-index: 0;
+  transition: all 0.25s ease;
+}
+.sidebar button {
+  /* Label text */
+}
+.sidebar button span {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
+  width: 100%;
+}
+.sidebar button:hover {
+  transform: translateY(-2px);
+}
+.sidebar button:hover::before {
+  background: linear-gradient(135deg, var(--accent3), var(--accent2));
+}
+.sidebar button:active {
+  transform: scale(0.98);
 }
 .sidebar hr {
   width: 100%;
@@ -190,7 +199,7 @@ body {
   opacity: 0.7;
 }
 
-/* Main area */
+/* MAIN AREA */
 main {
   flex: 1;
   display: flex;
@@ -201,14 +210,15 @@ main {
   position: relative;
 }
 
-/* Toolbar */
+/* TOOLBAR */
 .toolbar {
   position: sticky;
   top: 0;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.75rem;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
@@ -228,7 +238,7 @@ main {
   background: var(--accent2);
 }
 
-/* Card grid */
+/* CARD GRID */
 .card {
   background: var(--panel);
   border-radius: var(--radius);
@@ -292,7 +302,6 @@ main {
   accent-color: var(--accent2);
 }
 
-/* ⬇️ These go OUTSIDE of .card now ⬇️ */
 /* Add Item Button */
 .add-item {
   margin: 2.5rem auto;
