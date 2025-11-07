@@ -1,5 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Fri Nov  7 18:41:39 UTC 2025
+Generated on Fri Nov  7 19:06:19 UTC 2025
 
 === ./scss/_pages.scss ===
 
@@ -79,7 +79,8 @@ body {
 === ./scss/_reset.scss ===
 
 === ./scss/_admin.scss ===
-// _admin.scss ‚Äî Pastel UI version for Just a Premise CMS üí´
+// _admin.scss ‚Äî Just a Premise CMS Refined ‚ú®
+// Clean pastel "button-in-button" UI, with smooth layout and gentle depth
 
 :root {
   --bg: #fafbff;
@@ -94,9 +95,8 @@ body {
   --text-light: #666;
 }
 
-* {
-  box-sizing: border-box;
-}
+/* RESET */
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -108,7 +108,7 @@ body {
   color: var(--text-dark);
 }
 
-/* Sidebar */
+/* SIDEBAR */
 .sidebar {
   width: 280px;
   background: var(--panel);
@@ -120,7 +120,6 @@ body {
   box-shadow: var(--shadow);
   z-index: 5;
 
-  /* Section headers (like "Files" / "Actions") */
   h3 {
     font-size: 1rem;
     font-weight: 700;
@@ -128,53 +127,55 @@ body {
     margin: 1rem 0 0.4rem;
   }
 
-  /* Buttons ‚Äî cute pastel style */
+  /* Pastel button-in-button style */
   button {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 0.9rem;
-    background: var(--panel);
+    justify-content: center;
+    width: 100%;
+    height: 64px;
+    margin-bottom: 1rem;
     border: none;
-    padding: 0.9rem 1.1rem;
+    background: #ffffff; /* outer shell */
     border-radius: 18px;
-    font-weight: 700;
-    font-size: 0.95rem;
     cursor: pointer;
-    color: var(--text-dark);
-    box-shadow:
-      inset 0 1px 2px rgba(255, 255, 255, 0.8),
-      0 3px 6px rgba(0, 0, 0, 0.05);
-    transition: all 0.25s ease;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+
+    /* Inner layer */
+    &::before {
+      content: "";
+      position: absolute;
+      top: 6px; left: 6px; right: 6px; bottom: 6px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent1));
+      z-index: 0;
+      transition: all 0.25s ease;
+    }
+
+    /* Label text */
+    span {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      text-align: center;
+      width: 100%;
+    }
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow:
-        inset 0 1px 2px rgba(255, 255, 255, 0.9),
-        0 5px 12px rgba(0, 0, 0, 0.08);
+      &::before {
+        background: linear-gradient(135deg, var(--accent3), var(--accent2));
+      }
     }
 
-    &:active {
-      transform: scale(0.98);
-    }
-
-    /* icon bubble */
-    &::before {
-      content: attr(data-icon);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      font-size: 1.3rem;
-      background: linear-gradient(145deg, var(--accent2), var(--accent1));
-      box-shadow:
-        inset 0 1px 2px rgba(255, 255, 255, 0.7),
-        0 2px 4px rgba(0, 0, 0, 0.05);
-    }
+    &:active { transform: scale(0.98); }
   }
 
-  /* Divider line between groups */
   hr {
     width: 100%;
     border: none;
@@ -184,8 +185,7 @@ body {
   }
 }
 
-
-/* Main area */
+/* MAIN AREA */
 main {
   flex: 1;
   display: flex;
@@ -196,14 +196,15 @@ main {
   position: relative;
 }
 
-/* Toolbar */
+/* TOOLBAR */
 .toolbar {
   position: sticky;
   top: 0;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.75rem;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
@@ -218,14 +219,11 @@ main {
     font-weight: 600;
     cursor: pointer;
     transition: 0.2s;
-
-    &:hover {
-      background: var(--accent2);
-    }
+    &:hover { background: var(--accent2); }
   }
 }
 
-/* Card grid */
+/* CARD GRID */
 .card {
   background: var(--panel);
   border-radius: var(--radius);
@@ -242,10 +240,7 @@ main {
     box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
   }
 
-  h3 {
-    margin: 0;
-    font-size: 1rem;
-  }
+  h3 { margin: 0; font-size: 1rem; }
 
   .badge {
     align-self: flex-start;
@@ -256,13 +251,8 @@ main {
     padding: 0.25rem 0.6rem;
     border-radius: 8px;
 
-    &.sold {
-      background: linear-gradient(120deg, var(--accent1), var(--accent2));
-    }
-
-    &.adult {
-      background: linear-gradient(120deg, #ffd6e0, #ffb6c7);
-    }
+    &.sold { background: linear-gradient(120deg, var(--accent1), var(--accent2)); }
+    &.adult { background: linear-gradient(120deg, #ffd6e0, #ffb6c7); }
   }
 
   .card-body {
@@ -299,8 +289,6 @@ main {
   }
 }
 
-/* ‚¨áÔ∏è These go OUTSIDE of .card now ‚¨áÔ∏è */
-
 /* Add Item Button */
 .add-item {
   margin: 2.5rem auto;
@@ -323,9 +311,7 @@ main {
     background: linear-gradient(135deg, var(--accent3), var(--accent2));
   }
 
-  &:active {
-    transform: scale(0.98);
-  }
+  &:active { transform: scale(0.98); }
 }
 
 /* Delete Button */
@@ -346,9 +332,7 @@ main {
     transform: translateY(-2px);
   }
 
-  &:active {
-    transform: scale(0.98);
-  }
+  &:active { transform: scale(0.98); }
 }
 
 === ./scss/_mixins.scss ===
@@ -456,6 +440,12 @@ main {
 
 === ./index.html ===
 
+=== ./.DS_Store ===
+   Bud1                                                                        t . h t m l                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @      Ä                                        @      Ä                                          @      Ä                                          @                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+ a b o u t . h t m lIlocblob      A   .ˇˇˇˇˇˇ     	 b l o g . h t m lIlocblob      Ø   .ˇˇˇˇˇˇ      c m sIlocblob        .ˇˇˇˇˇˇ      c m sbwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    c m svSrnlong       c o n t a c t . h t m lIlocblob     ã   .ˇˇˇˇˇˇ      c o n t e n tIlocblob     ˘   .ˇˇˇˇˇˇ      c o n t e n tbwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    c o n t e n tvSrnlong       c s sIlocblob     g   .ˇˇˇˇˇˇ      d a t aIlocblob      A   ûˇˇˇˇˇˇ      d a t abwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    d a t avSrnlong       d o w n l o a d s . h t m lIlocblob      Ø   ûˇˇˇˇˇˇ      i m a g e sIlocblob        ûˇˇˇˇˇˇ     
+ i n d e x . h t m lIlocblob     ã   ûˇˇˇˇˇˇ      j sIlocblob     ˘   ûˇˇˇˇˇˇ      j sbwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    j svSrnlong       p r i v a c y . h t m lIlocblob     g   ûˇˇˇˇˇˇ      p r o d u c t . h t m lIlocblob      A  ˇˇˇˇˇˇ      r e t u r n s . h t m lIlocblob      Ø  ˇˇˇˇˇˇ      s c s sIlocblob       ˇˇˇˇˇˇ      s c s sbwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    s c s svSrnlong      	 s h o p . h t m lIlocblob     ã  ˇˇˇˇˇˇ     
+ t e r m s . h t m lIlocblob     ˘  ˇˇˇˇˇˇ      w e b - s e r v i c e s . h t m lIlocblob     g  ˇˇˇˇˇˇ                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            E                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         DSDB                                 `          Ä                          (      0          @      Ä                                          @      Ä                                          @       ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    j svSrnlong       p r i v a c y . h t m lIlocblob     g   ûˇˇˇˇˇˇ      p r o d u c t . h t m lIlocblob      A  ˇˇˇˇˇˇ      r e t u r n s . h t m lIlocblob      Ø  ˇˇˇˇˇˇ      s c s sIlocblob       ˇˇˇˇˇˇ      s c s sbwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    s c s svSrnlong      	 s h o p . h t m lIlocblob     ã  ˇˇˇˇˇˇ     
+ t e r m s . h t m lIlocblob     ˘  ˇˇˇˇˇˇ      w e b - s e r v i c e s . h t m lIlocblob     g  ˇˇˇˇˇ
 === ./contact.html ===
 
 === ./about.html ===
@@ -465,9 +455,8 @@ main {
 === ./blog.html ===
 
 === ./css/main.css.map ===
-{"version":3,"sourceRoot":"","sources":["../scss/_shop.scss","../scss/_admin.scss","../scss/main.scss"],"names":[],"mappings":";AAAA;EACE;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EACE;EACA;EACA;;AAGF;EACE;EACA;;AAGF;EACE;EACA;EACA;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;;AAGF;EACE;EACA;EACA;;;AAKN;EACE;EACA;EACA;EACA;;AACA;EAAM;EAAa;EAAc;;AACjC;EAAW;EAAuB;EAAoB;EAAsB;EAAkB;EAAa;EAAuB;;AAClI;EAAc;EAAuB;EAAkB;EAAa;EAAyB;EAAoB;;;AAEnH;EACE;EACA;EACA;EACA;EACA;EACA;;AACA;EAAkB;;;AC1EpB;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;EACE;;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;AAEA;;AACA;EACE;EACA;EACA;EACA;;AAhBJ;AAmBE;;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA,YACE;EAEF;;AAEA;EACE;EACA,YACE;;AAIJ;EACE;;AAzBJ;AA4BE;;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA,YACE;;AA5DR;AAiEE;;AACA;EACE;EACA;EACA;EACA;EACA;;;AAKJ;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;;;AAKN;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EACE;EACA;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;;AAGF;EACE;;AAIJ;EACE;EACA;;AAEA;EACE;EACA;EACA;;AAGF;EACE;EACA;EACA;;AAGF;AAAA;EAEE;EACA;EACA;EACA;EACA;EACA;;AAGF;EACE;EACA;EACA;;;AAKN;AAEA;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;;AAGF;EACE;;;AAIJ;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EACE;;;AC5PJ;EACE;;;AAGF;EACE;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;;AAEA;EAAU;;AAEV;EAAM;EAAa;EAAc;;AACjC;EAAK;EAAmB;;AACxB;EAAI;EAAa;;;AAIrB;EACE;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;;AAEA;EAAM;EAAqB;EAAa;;AACxC;EAAgB;;AAChB;EACE;EACA;EACA;EACA;EACA;EACA","file":"main.css"}
+{"version":3,"sourceRoot":"","sources":["../scss/_shop.scss","../scss/_admin.scss","../scss/main.scss"],"names":[],"mappings":"AAAA;EACE;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EACE;EACA;EACA;;AAGF;EACE;EACA;;AAGF;EACE;EACA;EACA;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;;AAGF;EACE;EACA;EACA;;;AAKN;EACE;EACA;EACA;EACA;;AACA;EAAM;EAAa;EAAc;;AACjC;EAAW;EAAuB;EAAoB;EAAsB;EAAkB;EAAa;EAAuB;;AAClI;EAAc;EAAuB;EAAkB;EAAa;EAAyB;EAAoB;;;AAEnH;EACE;EACA;EACA;EACA;EACA;EACA;;AACA;EAAkB;;;ACzEpB;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EAAI;;;AAEJ;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;;AAfJ;AAkBE;;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;AAEA;;AACA;EACE;EACA;EACA;EAAU;EAAW;EAAY;EACjC;EACA;EACA;EACA;;AAxBJ;AA2BE;;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAGF;EACE;;AACA;EACE;;AAIJ;EAAW;;AAGb;EACE;EACA;EACA;EACA;EACA;;;AAIJ;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AACA;EAAU;;;AAId;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EAAK;EAAW;;AAEhB;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EAAS;;AACT;EAAU;;AAGZ;EACE;EACA;;AAEA;EACE;EACA;EACA;;AAGF;EACE;EACA;EACA;;AAGF;AAAA;EAEE;EACA;EACA;EACA;EACA;EACA;;AAGF;EACE;EACA;EACA;;;AAKN;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;;AAGF;EAAW;;;AAGb;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EAAW;;;AC7Ob;EACE;;;AAGF;EACE;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;;AAEA;EAAU;;AAEV;EAAM;EAAa;EAAc;;AACjC;EAAK;EAAmB;;AACxB;EAAI;EAAa;;;AAIrB;EACE;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;;AAEA;EAAM;EAAqB;EAAa;;AACxC;EAAgB;;AAChB;EACE;EACA;EACA;EACA;EACA;EACA","file":"main.css"}
 === ./css/main.css ===
-@charset "UTF-8";
 .shop-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -575,6 +564,7 @@ main {
   --text-light: #666;
 }
 
+/* RESET */
 * {
   box-sizing: border-box;
 }
@@ -589,7 +579,7 @@ body {
   color: var(--text-dark);
 }
 
-/* Sidebar */
+/* SIDEBAR */
 .sidebar {
   width: 280px;
   background: var(--panel);
@@ -600,7 +590,6 @@ body {
   gap: 0.75rem;
   box-shadow: var(--shadow);
   z-index: 5;
-  /* Section headers (like "Files" / "Actions") */
 }
 .sidebar h3 {
   font-size: 1rem;
@@ -609,47 +598,57 @@ body {
   margin: 1rem 0 0.4rem;
 }
 .sidebar {
-  /* Buttons ‚Äî cute pastel style */
+  /* Pastel button-in-button style */
 }
 .sidebar button {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  background: var(--panel);
-  border: none;
-  padding: 0.9rem 1.1rem;
-  border-radius: 18px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  cursor: pointer;
-  color: var(--text-dark);
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 3px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.25s ease;
-}
-.sidebar button:hover {
-  transform: translateY(-2px);
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9), 0 5px 12px rgba(0, 0, 0, 0.08);
-}
-.sidebar button:active {
-  transform: scale(0.98);
-}
-.sidebar button {
-  /* icon bubble */
-}
-.sidebar button::before {
-  content: attr(data-icon);
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  font-size: 1.3rem;
-  background: linear-gradient(145deg, var(--accent2), var(--accent1));
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.7), 0 2px 4px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  height: 64px;
+  margin-bottom: 1rem;
+  border: none;
+  background: #ffffff; /* outer shell */
+  border-radius: 18px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+  /* Inner layer */
 }
-.sidebar {
-  /* Divider line between groups */
+.sidebar button::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent2), var(--accent1));
+  z-index: 0;
+  transition: all 0.25s ease;
+}
+.sidebar button {
+  /* Label text */
+}
+.sidebar button span {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
+  width: 100%;
+}
+.sidebar button:hover {
+  transform: translateY(-2px);
+}
+.sidebar button:hover::before {
+  background: linear-gradient(135deg, var(--accent3), var(--accent2));
+}
+.sidebar button:active {
+  transform: scale(0.98);
 }
 .sidebar hr {
   width: 100%;
@@ -659,7 +658,7 @@ body {
   opacity: 0.7;
 }
 
-/* Main area */
+/* MAIN AREA */
 main {
   flex: 1;
   display: flex;
@@ -670,14 +669,15 @@ main {
   position: relative;
 }
 
-/* Toolbar */
+/* TOOLBAR */
 .toolbar {
   position: sticky;
   top: 0;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.75rem;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
@@ -697,7 +697,7 @@ main {
   background: var(--accent2);
 }
 
-/* Card grid */
+/* CARD GRID */
 .card {
   background: var(--panel);
   border-radius: var(--radius);
@@ -761,7 +761,6 @@ main {
   accent-color: var(--accent2);
 }
 
-/* ‚¨áÔ∏è These go OUTSIDE of .card now ‚¨áÔ∏è */
 /* Add Item Button */
 .add-item {
   margin: 2.5rem auto;
@@ -894,6 +893,14 @@ body {
   <script src="js/shop.js"></script>
 </body>
 </html>
+
+=== ./data/package-lock.json ===
+{
+  "name": "justapremise-site",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {}
+}
 
 === ./data/shop.json ===
 [
@@ -1148,34 +1155,40 @@ body {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Just a Premise CMS</title>
-  <link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="/css/main.css" />
 </head>
 
 <body>
   <script>
-const pass = prompt("Enter CMS password:");
+const savedPass = localStorage.getItem("cms_pass");
+let pass = savedPass;
+
+if (!pass) {
+  pass = prompt("Enter CMS password:");
+  if (pass) localStorage.setItem("cms_pass", pass);
+}
+
 if (pass !== "Yesme1me") {
   document.body.innerHTML = "<h2>Access denied</h2>";
 }
 </script>
 
+
   <!-- Sidebar -->
  <aside class="sidebar">
   <h3>Files</h3>
-  <button class="nav-btn" onclick="loadFile('shop')"><span class="icon">üõç</span> Shop</button>
-  <button class="nav-btn" onclick="loadFile('web_services')"><span class="icon">üñ•</span> Web Services</button>
-  <button class="nav-btn" onclick="loadFile('pages')"><span class="icon">üìÑ</span> Pages</button>
-  <button class="nav-btn" onclick="loadFile('downloads')"><span class="icon">‚¨á</span> Downloads</button>
+  <button><span>Shop</span></button>
+  <button><span>Web Services</span></button>
+  <button><span>Pages</span></button>
+  <button><span>Downloads</span></button>
 
-
-  <hr />
+  <hr>
 
   <h3>Actions</h3>
-    <h3>Actions</h3>
-  <button class="nav-btn" onclick="importLocalFile()"><span class="icon">üìÇ</span> Import JSON</button>
-  <button class="nav-btn" onclick="saveJSON()"><span class="icon">üíæ</span> Save File</button>
-
+  <button><span>Import JSON</span></button>
+  <button><span>Save File</span></button>
 </aside>
+
 
 
   <!-- Main workspace -->
@@ -1192,7 +1205,7 @@ if (pass !== "Yesme1me") {
     <button class="add-item" onclick="addItem()">+ Add Item</button>
   </main>
 
-  <script src="js/admin.js"></script>
+<script src="/js/admin.js"></script>
 </body>
 </html>
 
@@ -1256,20 +1269,18 @@ function renderCards() {
 
   data.forEach((item, index) => {
     const card = document.createElement("div");
-    card.className = "card";
+card.className = "card";
+card.innerHTML = `
+  <div class="card-body open">
+    <input value="${item.title}" data-field="title" placeholder="Title">
+    <input type="number" value="${item.price}" data-field="price" placeholder="Price">
+    <input value="${item.stripe_link || ""}" data-field="stripe_link" placeholder="Stripe link">
+    <textarea data-field="description" placeholder="Description">${item.description || ""}</textarea>
+    <label><input type="checkbox" ${item.available ? "checked" : ""} data-field="available"> Available</label>
+    <button class="delete-btn" onclick="removeItem(${index})">Delete</button>
+  </div>
+`;
 
-    // this wraps the inputs, lets CSS control spacing and open/closed states
-    const body = document.createElement("div");
-    body.className = "card-body open";
-    body.innerHTML = `
-      <input value="${item.title}" data-field="title" placeholder="Title">
-      <input type="number" value="${item.price}" data-field="price" placeholder="Price">
-      <input value="${item.stripe_link || ""}" data-field="stripe_link" placeholder="Stripe link">
-      <textarea data-field="description" placeholder="Description">${item.description || ""}</textarea>
-      <label><input type="checkbox" ${item.available ? "checked" : ""} data-field="available"> Available</label>
-      <button class="delete-btn" onclick="removeItem(${index})">Delete</button>
-    `;
-    card.appendChild(body);
     grid.appendChild(card);
   });
 }
@@ -1293,24 +1304,59 @@ function removeItem(i) {
   renderCards();
 }
 
-function saveJSON() {
-  const cards = document.querySelectorAll(".cms-card");
-  data = Array.from(cards).map(card => {
+async function saveJSON() {
+  const token = localStorage.getItem("cms_token");
+  if (!token) {
+    alert("No GitHub token found. In your browser console, run:\nlocalStorage.setItem('cms_token','YOUR_TOKEN')");
+    return;
+  }
+
+  const repo = "Uchannn/just-a-premise";
+  const path = "data/shop.json";
+  const message = "Auto-update shop.json from CMS";
+
+  // Rebuild product data from your form
+  const cards = document.querySelectorAll(".card-body");
+  const updated = Array.from(cards).map(card => {
     const obj = {};
     card.querySelectorAll("[data-field]").forEach(el => {
       const field = el.dataset.field;
-      if (el.type === "checkbox") obj[field] = el.checked;
-      else obj[field] = el.value;
+      obj[field] = el.type === "checkbox" ? el.checked : el.value;
     });
     return obj;
   });
 
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "shop.json";
-  a.click();
+  const jsonString = JSON.stringify(updated, null, 2);
+
+  // Get the file‚Äôs current SHA (required by GitHub)
+  const getRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+    headers: { Authorization: `token ${token}` }
+  });
+  const fileData = await getRes.json();
+
+  // Push the new file contents
+  const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `token ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message,
+      content: btoa(unescape(encodeURIComponent(jsonString))),
+      sha: fileData.sha
+    })
+  });
+
+  if (updateRes.ok) {
+    alert("‚úÖ shop.json pushed live to GitHub!");
+  } else {
+    const err = await updateRes.json();
+    console.error(err);
+    alert("‚ùå Failed to push. See console for details.");
+  }
 }
+
 
 === ./js/main.js ===
 
