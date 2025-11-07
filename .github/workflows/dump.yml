@@ -31,8 +31,10 @@ jobs:
             echo "" >> repo_dump.txt
           done
 
-      - name: Commit dump file
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: repo_dump.txt
-          message: "Auto dump repo snapshot"
+           - name: Commit and push dump file manually
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add repo_dump.txt
+          git commit -m "Auto dump repo snapshot" || echo "No changes to commit"
+          git push origin HEAD:main
