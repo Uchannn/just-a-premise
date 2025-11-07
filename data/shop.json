@@ -1,35 +1,23 @@
 [
   {
-    "id": "test-product",
     "title": "Test Product",
-    "price": 15,
-    "available": true,
-    "featured": false,
+    "price": "15",
+    "stripe_link": "",
     "description": "A simple test item.",
-    "images": ["images/shop/test.jpg"],
-    "tags": [],
-    "stripe_link": ""
+    "available": false
   },
   {
-    "id": "sold-example",
     "title": "Sold Example",
-    "price": 10,
-    "available": false,
-    "featured": false,
+    "price": "10",
+    "stripe_link": "",
     "description": "This should show a SOLD badge.",
-    "images": ["images/shop/test2.jpg"],
-    "tags": [],
-    "stripe_link": ""
+    "available": false
   },
   {
-    "id": "blueprint-dreamveil",
     "title": "Dreamveil Narrative Blueprint",
-    "price": 180,
-    "available": true,
-    "featured": false,
+    "price": "180",
+    "stripe_link": "https://buy.stripe.com/example",
     "description": "A mysterious dream-woven story template.",
-    "images": ["images/shop/dreamveil.jpg"],
-    "tags": ["Blueprint", "Fantasy"],
-    "stripe_link": "https://buy.stripe.com/example"
+    "available": true
   }
 ]
