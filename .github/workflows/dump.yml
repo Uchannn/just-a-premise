@@ -9,9 +9,9 @@ permissions:
 jobs:
   dump:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out code
+        uses: actions/checkout@v3
 
       - name: Create text dump of all files
         run: |
@@ -26,12 +26,12 @@ jobs:
             ! -path './assets/images/*' \
             ! -name 'repo_dump.txt' \
             -print0 | while IFS= read -r -d '' file; do
-            echo "=== $file ===" >> repo_dump.txt
-            cat "$file" >> repo_dump.txt
-            echo "" >> repo_dump.txt
+              echo "=== $file ===" >> repo_dump.txt
+              cat "$file" >> repo_dump.txt
+              echo "" >> repo_dump.txt
           done
 
-           - name: Commit and push dump file manually
+      - name: Commit and push dump file manually
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
