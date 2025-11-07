@@ -1,0 +1,1339 @@
+=== REPO SNAPSHOT ===
+Generated on Fri Nov  7 08:02:00 UTC 2025
+
+=== ./scss/_pages.scss ===
+
+=== ./scss/_layout.scss ===
+
+=== ./scss/_variables.scss ===
+
+=== ./scss/main.scss ===
+// main.scss — central entry point for your SCSS build
+
+// 1. Base variables & mixins
+@import 'variables';
+@import 'mixins';
+
+// 2. Reset & layout
+@import 'reset';
+@import 'layout';
+
+// 3. Page-specific sections
+@import 'pages';
+@import 'shop';
+@import 'admin';
+
+// 4. Temporary test styling
+body {
+  background: pink; // keep it if you still want that sanity check
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+
+  .product-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    text-align: center;
+    transition: transform .2s ease;
+
+    &:hover { transform: translateY(-5px); }
+
+    img { width: 100%; height: auto; border-bottom: 1px solid #eee; }
+    h2 { font-size: 1.1rem; margin: 0.75rem 0; }
+    p { color: #666; margin-bottom: 1rem; }
+  }
+}
+
+.product-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+
+  .product-hero {
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img { border-radius: 16px; width: 100%; margin-bottom: 1.5rem; }
+    .product-info { text-align: center; }
+    .product-tags span {
+      background: #f0f0f8;
+      border-radius: 12px;
+      padding: 0.25rem 0.75rem;
+      margin: 0.25rem;
+      font-size: 0.8rem;
+      color: #666;
+    }
+  }
+}
+
+
+=== ./scss/_reset.scss ===
+
+=== ./scss/_admin.scss ===
+// _admin.scss — Pastel UI version for Just a Premise CMS 💫
+
+:root {
+  --bg: #fafbff;
+  --panel: #ffffff;
+  --border: #e7e8ec;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --radius: 16px;
+  --accent1: #ffd6e0;
+  --accent2: #d1e8ff;
+  --accent3: #c9ffe1;
+  --text-dark: #2d2d2d;
+  --text-light: #666;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", "Poppins", sans-serif;
+  background: var(--bg);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--text-dark);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  gap: 0.75rem;
+  box-shadow: var(--shadow);
+  z-index: 5;
+
+  /* Section headers (like "Files" / "Actions") */
+  h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-light);
+    margin: 1rem 0 0.4rem;
+  }
+
+  /* Buttons — cute pastel style */
+  button {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background: var(--panel);
+    border: none;
+    padding: 0.9rem 1.1rem;
+    border-radius: 18px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    color: var(--text-dark);
+    box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.8),
+      0 3px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.9),
+        0 5px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    /* icon bubble */
+    &::before {
+      content: attr(data-icon);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      font-size: 1.3rem;
+      background: linear-gradient(145deg, var(--accent2), var(--accent1));
+      box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.7),
+        0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  /* Divider line between groups */
+  hr {
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1.5rem 0;
+    opacity: 0.7;
+  }
+}
+
+
+/* Main area */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  overflow-y: auto;
+  padding: 2rem;
+  position: relative;
+}
+
+/* Toolbar */
+.toolbar {
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+
+  button {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      background: var(--accent2);
+    }
+  }
+}
+
+/* Card grid */
+.card {
+  background: var(--panel);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .badge {
+    align-self: flex-start;
+    background: linear-gradient(120deg, var(--accent3), var(--accent2));
+    color: #000;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 8px;
+
+    &.sold {
+      background: linear-gradient(120deg, var(--accent1), var(--accent2));
+    }
+
+    &.adult {
+      background: linear-gradient(120deg, #ffd6e0, #ffb6c7);
+    }
+  }
+
+  .card-body {
+    display: none;
+    margin-top: 0.75rem;
+
+    &.open {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    input,
+    textarea {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      background: #fff;
+      width: 100%;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+      transform: scale(1.2);
+      accent-color: var(--accent2);
+    }
+  }
+}
+
+/* ⬇️ These go OUTSIDE of .card now ⬇️ */
+
+/* Add Item Button */
+.add-item {
+  margin: 2.5rem auto;
+  display: block;
+  padding: 1rem 2.4rem;
+  border-radius: 30px;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #2d2d2d;
+  background: linear-gradient(135deg, var(--accent2), var(--accent3));
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.2px;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, var(--accent3), var(--accent2));
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Delete Button */
+.delete-btn {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  color: #2d2d2d;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+  &:hover {
+    background: linear-gradient(135deg, var(--accent2), var(--accent1));
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+=== ./scss/_mixins.scss ===
+
+=== ./scss/_shop.scss ===
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+  }
+
+  h3 {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+  }
+
+  .price {
+    font-weight: 600;
+    color: #333;
+    margin: 0.25rem 0 0.5rem;
+  }
+
+  button {
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: #4f8c95;
+    color: #fff;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: #3e6e75;
+    }
+
+    &.sold {
+      background: #999;
+      cursor: not-allowed;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.product-card {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin: 1rem;
+  text-align: center;
+  img { width: 100%; height: auto; border-radius: 8px; }
+  .buy-btn { display: inline-block; margin-top: 0.5rem; padding: 0.5rem 1rem; background: #000; color: #fff; text-decoration: none; border-radius: 4px; }
+  .sold-badge { display: inline-block; background: #900; color: #fff; padding: 0.25rem 0.5rem; border-radius: 4px; margin-top: 0.5rem; }
+}
+.cms-card {
+  border: 1px solid #999;
+  padding: 1rem;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  input, textarea { width: 100%; }
+}
+
+=== ./web-services.html ===
+
+=== ./product.html ===
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product — Just a Premise</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <header>
+    <a href="shop.html" class="back-link">← Back to Shop</a>
+  </header>
+
+  <main id="product-detail" class="product-detail"></main>
+
+  <script src="js/product.js"></script>
+</body>
+</html>
+
+=== ./index.html ===
+
+=== ./contact.html ===
+
+=== ./about.html ===
+
+=== ./returns.html ===
+
+=== ./blog.html ===
+
+=== ./css/main.css.map ===
+{"version":3,"sourceRoot":"","sources":["../scss/_shop.scss","../scss/_admin.scss","../scss/main.scss"],"names":[],"mappings":";AAAA;EACE;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EACE;EACA;EACA;;AAGF;EACE;EACA;;AAGF;EACE;EACA;EACA;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;;AAGF;EACE;EACA;EACA;;;ACrDN;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;EACE;;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;AAEA;;AACA;EACE;EACA;EACA;EACA;;AAhBJ;AAmBE;;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA,YACE;EAEF;;AAEA;EACE;EACA,YACE;;AAIJ;EACE;;AAzBJ;AA4BE;;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA,YACE;;AA5DR;AAiEE;;AACA;EACE;EACA;EACA;EACA;EACA;;;AAKJ;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;;;AAKN;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EACE;EACA;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;;AAGF;EACE;;AAIJ;EACE;EACA;;AAEA;EACE;EACA;EACA;;AAGF;EACE;EACA;EACA;;AAGF;AAAA;EAEE;EACA;EACA;EACA;EACA;EACA;;AAGF;EACE;EACA;EACA;;;AAKN;AAEA;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;;AAGF;EACE;;;AAIJ;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EACE;;;AC5PJ;EACE;;;AAGF;EACE;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;;AAEA;EAAU;;AAEV;EAAM;EAAa;EAAc;;AACjC;EAAK;EAAmB;;AACxB;EAAI;EAAa;;;AAIrB;EACE;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;;AAEA;EAAM;EAAqB;EAAa;;AACxC;EAAgB;;AAChB;EACE;EACA;EACA;EACA;EACA;EACA","file":"main.css"}
+=== ./css/main.css ===
+@charset "UTF-8";
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+.product-card img {
+  max-width: 100%;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+.product-card h3 {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+.product-card .price {
+  font-weight: 600;
+  color: #333;
+  margin: 0.25rem 0 0.5rem;
+}
+.product-card button {
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #4f8c95;
+  color: #fff;
+  transition: background 0.2s ease;
+}
+.product-card button:hover {
+  background: #3e6e75;
+}
+.product-card button.sold {
+  background: #999;
+  cursor: not-allowed;
+  text-transform: uppercase;
+}
+
+:root {
+  --bg: #fafbff;
+  --panel: #ffffff;
+  --border: #e7e8ec;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --radius: 16px;
+  --accent1: #ffd6e0;
+  --accent2: #d1e8ff;
+  --accent3: #c9ffe1;
+  --text-dark: #2d2d2d;
+  --text-light: #666;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", "Poppins", sans-serif;
+  background: var(--bg);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--text-dark);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  gap: 0.75rem;
+  box-shadow: var(--shadow);
+  z-index: 5;
+  /* Section headers (like "Files" / "Actions") */
+}
+.sidebar h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin: 1rem 0 0.4rem;
+}
+.sidebar {
+  /* Buttons — cute pastel style */
+}
+.sidebar button {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  background: var(--panel);
+  border: none;
+  padding: 0.9rem 1.1rem;
+  border-radius: 18px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: var(--text-dark);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 3px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
+}
+.sidebar button:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9), 0 5px 12px rgba(0, 0, 0, 0.08);
+}
+.sidebar button:active {
+  transform: scale(0.98);
+}
+.sidebar button {
+  /* icon bubble */
+}
+.sidebar button::before {
+  content: attr(data-icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  font-size: 1.3rem;
+  background: linear-gradient(145deg, var(--accent2), var(--accent1));
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.7), 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.sidebar {
+  /* Divider line between groups */
+}
+.sidebar hr {
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+  opacity: 0.7;
+}
+
+/* Main area */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  overflow-y: auto;
+  padding: 2rem;
+  position: relative;
+}
+
+/* Toolbar */
+.toolbar {
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+.toolbar button {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.toolbar button:hover {
+  background: var(--accent2);
+}
+
+/* Card grid */
+.card {
+  background: var(--panel);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: 0.2s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+}
+.card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+.card .badge {
+  align-self: flex-start;
+  background: linear-gradient(120deg, var(--accent3), var(--accent2));
+  color: #000;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+}
+.card .badge.sold {
+  background: linear-gradient(120deg, var(--accent1), var(--accent2));
+}
+.card .badge.adult {
+  background: linear-gradient(120deg, #ffd6e0, #ffb6c7);
+}
+.card .card-body {
+  display: none;
+  margin-top: 0.75rem;
+}
+.card .card-body.open {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.card .card-body label {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+.card .card-body input,
+.card .card-body textarea {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  background: #fff;
+  width: 100%;
+}
+.card .card-body input[type=checkbox] {
+  width: auto;
+  transform: scale(1.2);
+  accent-color: var(--accent2);
+}
+
+/* ⬇️ These go OUTSIDE of .card now ⬇️ */
+/* Add Item Button */
+.add-item {
+  margin: 2.5rem auto;
+  display: block;
+  padding: 1rem 2.4rem;
+  border-radius: 30px;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #2d2d2d;
+  background: linear-gradient(135deg, var(--accent2), var(--accent3));
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.2px;
+}
+.add-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, var(--accent3), var(--accent2));
+}
+.add-item:active {
+  transform: scale(0.98);
+}
+
+/* Delete Button */
+.delete-btn {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  color: #2d2d2d;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+.delete-btn:hover {
+  background: linear-gradient(135deg, var(--accent2), var(--accent1));
+  transform: translateY(-2px);
+}
+.delete-btn:active {
+  transform: scale(0.98);
+}
+
+body {
+  background: pink;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+.shop-grid .product-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+.shop-grid .product-card:hover {
+  transform: translateY(-5px);
+}
+.shop-grid .product-card img {
+  width: 100%;
+  height: auto;
+  border-bottom: 1px solid #eee;
+}
+.shop-grid .product-card h2 {
+  font-size: 1.1rem;
+  margin: 0.75rem 0;
+}
+.shop-grid .product-card p {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.product-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+.product-detail .product-hero {
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.product-detail .product-hero img {
+  border-radius: 16px;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+.product-detail .product-hero .product-info {
+  text-align: center;
+}
+.product-detail .product-hero .product-tags span {
+  background: #f0f0f8;
+  border-radius: 12px;
+  padding: 0.25rem 0.75rem;
+  margin: 0.25rem;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/*# sourceMappingURL=main.css.map */
+
+=== ./privacy.html ===
+
+=== ./shop.html ===
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shop — Just a Premise</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <header>
+    <h1>Just a Premise Shop</h1>
+  </header>
+
+  <main id="shop-grid" class="shop-grid"></main>
+
+  <script src="js/shop.js"></script>
+</body>
+</html>
+
+=== ./data/shop.json ===
+[
+  {
+    "id": "test-product",
+    "title": "Test Product",
+    "price": 15,
+    "available": true,
+    "featured": false,
+    "description": "A simple test item.",
+    "images": ["images/shop/test.jpg"],
+    "tags": [],
+    "stripe_link": ""
+  },
+  {
+    "id": "sold-example",
+    "title": "Sold Example",
+    "price": 10,
+    "available": false,
+    "featured": false,
+    "description": "This should show a SOLD badge.",
+    "images": ["images/shop/test2.jpg"],
+    "tags": [],
+    "stripe_link": ""
+  },
+  {
+    "id": "blueprint-dreamveil",
+    "title": "Dreamveil Narrative Blueprint",
+    "price": 180,
+    "available": true,
+    "featured": false,
+    "description": "A mysterious dream-woven story template.",
+    "images": ["images/shop/dreamveil.jpg"],
+    "tags": ["Blueprint", "Fantasy"],
+    "stripe_link": "https://buy.stripe.com/example"
+  }
+]
+
+=== ./content/settings.json ===
+
+=== ./content/pages.json ===
+
+=== ./content/downloads.json ===
+
+=== ./content/blog.json ===
+
+=== ./content/web_services.json ===
+
+=== ./content/filters.json ===
+
+=== ./cms/admin-preview.html ===
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just a Premise CMS — Preview</title>
+  <style>
+    :root {
+      --bg: #fafbff;
+      --panel: #ffffff;
+      --border: #e7e8ec;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      --radius: 16px;
+      --accent1: #ffd6e0;
+      --accent2: #d1e8ff;
+      --accent3: #c9ffe1;
+      --text-dark: #2d2d2d;
+      --text-light: #666;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Poppins", sans-serif;
+      background: var(--bg);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      color: var(--text-dark);
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      width: 280px;
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 1rem;
+      gap: 0.75rem;
+      box-shadow: var(--shadow);
+      z-index: 5;
+    }
+
+    .sidebar h3 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 0.7rem 0.8rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: 0.2s;
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--text-dark);
+      background: linear-gradient(145deg, var(--accent2), var(--accent1));
+    }
+
+    /* Main Area */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      overflow-y: auto;
+      padding: 2rem;
+      position: relative;
+    }
+
+    /* Top Bar */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .toolbar button {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 0.6rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .toolbar button:hover {
+      background: var(--accent2);
+    }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--panel);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .card h4 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .badge {
+      align-self: flex-start;
+      background: linear-gradient(120deg, var(--accent3), var(--accent2));
+      color: #000;
+      font-weight: 700;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 8px;
+    }
+
+    .subtext {
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h3>Files</h3>
+    <button class="nav-btn"><span class="icon">📁</span> Shop</button>
+    <button class="nav-btn"><span class="icon">🧾</span> Pages</button>
+    <button class="nav-btn"><span class="icon">⚙️</span> Settings</button>
+    <h3>Actions</h3>
+    <button class="nav-btn"><span class="icon">📂</span> Import</button>
+    <button class="nav-btn"><span class="icon">💾</span> Save</button>
+  </div>
+
+  <main>
+    <div class="toolbar">
+      <button>Insert</button>
+      <button>Layout</button>
+      <button>Text</button>
+      <button>CMS</button>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="badge">Available</div>
+        <h4>Test Product</h4>
+        <p class="subtext">A simple test item.</p>
+      </div>
+      <div class="card">
+        <div class="badge">Sold Out</div>
+        <h4>Story Blueprint</h4>
+        <p class="subtext">This item is currently unavailable.</p>
+      </div>
+      <div class="card">
+        <div class="badge">Active</div>
+        <h4>Web Services</h4>
+        <p class="subtext">Current tier: Narrative Pro</p>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
+
+=== ./cms/admin-local.html ===
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just a Premise CMS</title>
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+<body>
+  <script>
+const pass = prompt("Enter CMS password:");
+if (pass !== "Yesme1me") {
+  document.body.innerHTML = "<h2>Access denied</h2>";
+}
+</script>
+
+  <!-- Sidebar -->
+ <aside class="sidebar">
+  <h3>Files</h3>
+  <button data-icon="🛍" onclick="loadFile('shop')">Shop</button>
+  <button data-icon="🖥" onclick="loadFile('web_services')">Web Services</button>
+  <button data-icon="📄" onclick="loadFile('pages')">Pages</button>
+  <button data-icon="⬇" onclick="loadFile('downloads')">Downloads</button>
+
+  <hr />
+
+  <h3>Actions</h3>
+  <button data-icon="📂" onclick="importLocalFile()">Import JSON</button>
+  <button data-icon="💾" onclick="saveJSON()">Save File</button>
+</aside>
+
+
+  <!-- Main workspace -->
+  <main>
+    <header class="toolbar">
+      <div class="file-info">
+        <h1 id="file-title">Nothing Loaded</h1>
+        <p id="file-desc">Select a section to begin editing.</p>
+      </div>
+    </header>
+
+    <section id="card-grid" class="card-grid"></section>
+
+    <button class="add-item" onclick="addItem()">+ Add Item</button>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
+
+=== ./js/product.js ===
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+if (!productId) {
+  document.getElementById("product-detail").innerHTML =
+    "<p>Product not found.</p>";
+} else {
+  fetch("/content/shop.json")
+    .then(res => res.json())
+    .then(data => {
+      const item = data.find(p => p.id === productId);
+      if (!item) {
+        document.getElementById("product-detail").innerHTML =
+          "<p>Product not found.</p>";
+        return;
+      }
+
+      document.title = `${item.title} — Just a Premise`;
+      document.getElementById("product-detail").innerHTML = `
+        <div class="product-hero">
+          <img src="${item.image}" alt="${item.title}">
+          <div class="product-info">
+            <h1>${item.title}</h1>
+            <p class="product-price">$${item.price}</p>
+            <p>${item.description}</p>
+            <p class="product-tags">${item.tags
+              .map(tag => `<span>${tag}</span>`)
+              .join("")}</p>
+            <button class="buy-btn" ${
+              !item.available ? "disabled" : ""
+            }>${item.available ? "Add to Cart" : "Sold Out"}</button>
+          </div>
+        </div>
+      `;
+    })
+    .catch(err => console.error("Error loading product:", err));
+}
+
+=== ./js/admin.js ===
+let currentFile = null;
+let data = [];
+
+async function loadFile(type) {
+  if (type !== "shop") return;
+  currentFile = "data/shop.json";
+  document.getElementById("file-title").textContent = "Shop";
+  document.getElementById("file-desc").textContent = "Edit products below";
+
+  const res = await fetch("../data/shop.json?cachebust=" + Date.now());
+  data = await res.json();
+  renderCards();
+}
+
+function renderCards() {
+  const grid = document.getElementById("card-grid");
+  grid.innerHTML = "";
+  data.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "cms-card";
+    card.innerHTML = `
+      <input value="${item.title}" data-field="title" placeholder="Title">
+      <input type="number" value="${item.price}" data-field="price" placeholder="Price">
+      <input value="${item.stripe_link || ""}" data-field="stripe_link" placeholder="Stripe link">
+      <textarea data-field="description" placeholder="Description">${item.description || ""}</textarea>
+      <label><input type="checkbox" ${item.available ? "checked" : ""} data-field="available"> Available</label>
+      <button onclick="removeItem(${index})">Delete</button>
+    `;
+    grid.append(card);
+  });
+}
+
+function addItem() {
+  data.push({
+    id: Date.now().toString(),
+    title: "New Product",
+    price: 0,
+    available: true,
+    stripe_link: "",
+    description: "",
+    images: []
+  });
+  renderCards();
+}
+
+function removeItem(i) {
+  data.splice(i, 1);
+  renderCards();
+}
+
+function saveJSON() {
+  const cards = document.querySelectorAll(".cms-card");
+  data = Array.from(cards).map(card => {
+    const obj = {};
+    card.querySelectorAll("[data-field]").forEach(el => {
+      const field = el.dataset.field;
+      if (el.type === "checkbox") obj[field] = el.checked;
+      else obj[field] = el.value;
+    });
+    return obj;
+  });
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "shop.json";
+  a.click();
+}
+
+=== ./js/main.js ===
+
+=== ./js/shop.js ===
+async function loadShop() {
+  const grid = document.getElementById("shop-grid");
+  grid.innerHTML = "<p>Loading products...</p>";
+
+  try {
+    const response = await fetch("data/shop.json?cachebust=" + Date.now());
+    const products = await response.json();
+    grid.innerHTML = "";
+
+    products.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "product-card" + (!p.available ? " sold" : "");
+
+      const img = document.createElement("img");
+      img.src = p.images?.[0] || "images/placeholder.jpg";
+      img.alt = p.title;
+
+      const title = document.createElement("h3");
+      title.textContent = p.title;
+
+      const desc = document.createElement("p");
+      desc.textContent = p.description || "";
+
+      const price = document.createElement("p");
+      price.className = "price";
+      price.textContent = `$${p.price}`;
+
+      card.append(img, title, desc, price);
+
+      if (p.available && p.stripe_link) {
+        const btn = document.createElement("a");
+        btn.href = p.stripe_link;
+        btn.target = "_blank";
+        btn.textContent = "Buy Now";
+        btn.className = "buy-btn";
+        card.append(btn);
+      } else if (!p.available) {
+        const sold = document.createElement("span");
+        sold.className = "sold-badge";
+        sold.textContent = "SOLD";
+        card.append(sold);
+      }
+
+      grid.append(card);
+    });
+
+    if (!products.length) grid.innerHTML = "<p>No products yet.</p>";
+
+  } catch (err) {
+    console.error(err);
+    grid.innerHTML = "<p>Failed to load products.</p>";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadShop);
+
+=== ./downloads.html ===
+
+=== ./terms.html ===
+
