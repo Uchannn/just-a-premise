@@ -4,14 +4,14 @@
     "price": "15",
     "stripe_link": "",
     "description": "A simple test item.",
-    "available": true
+    "available": false
   },
   {
     "title": "Sold Example",
     "price": "10",
     "stripe_link": "",
     "description": "This should show a SOLD badge.",
-    "available": true
+    "available": false
   },
   {
     "title": "Dreamveil Narrative Blueprint",
