@@ -1,79 +1,55 @@
-// shop.js — renders products from shop.json
-
 async function loadShop() {
+  const grid = document.getElementById("shop-grid");
+  grid.innerHTML = "<p>Loading products...</p>";
+
   try {
-    const res = await fetch('content/shop.json');
-    if (!res.ok) throw new Error('Shop data not found.');
-    const products = await res.json();
+    const response = await fetch("data/shop.json?cachebust=" + Date.now());
+    const products = await response.json();
+    grid.innerHTML = "";
 
-    const shopContainer = document.getElementById('shop');
-    shopContainer.innerHTML = '';
+    products.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "product-card" + (!p.available ? " sold" : "");
 
-    // Build product cards
-    products.forEach((product) => {
-      const card = document.createElement('div');
-      card.classList.add('product-card');
+      const img = document.createElement("img");
+      img.src = p.images?.[0] || "images/placeholder.jpg";
+      img.alt = p.title;
 
-      // Link to product page (wraps image + title)
-      const link = document.createElement('a');
-      link.href = `product.html?id=${product.id}`;
-      link.classList.add('product-link');
+      const title = document.createElement("h3");
+      title.textContent = p.title;
 
-      if (product.images && product.images.length > 0) {
-        const img = document.createElement('img');
-        img.src = product.images[0];
-        img.alt = product.title;
-        link.appendChild(img);
+      const desc = document.createElement("p");
+      desc.textContent = p.description || "";
+
+      const price = document.createElement("p");
+      price.className = "price";
+      price.textContent = `$${p.price}`;
+
+      card.append(img, title, desc, price);
+
+      if (p.available && p.stripe_link) {
+        const btn = document.createElement("a");
+        btn.href = p.stripe_link;
+        btn.target = "_blank";
+        btn.textContent = "Buy Now";
+        btn.className = "buy-btn";
+        card.append(btn);
+      } else if (!p.available) {
+        const sold = document.createElement("span");
+        sold.className = "sold-badge";
+        sold.textContent = "SOLD";
+        card.append(sold);
       }
 
-      const title = document.createElement('h3');
-      title.textContent = product.title;
-      link.appendChild(title);
-
-      card.appendChild(link);
-
-      // Description
-      const desc = document.createElement('p');
-      desc.textContent = product.description || '';
-      card.appendChild(desc);
-
-      // Price
-      const price = document.createElement('p');
-      price.classList.add('price');
-      price.textContent = `$${product.price}`;
-      card.appendChild(price);
-
-      // Buy/Sold button
-      const button = document.createElement('button');
-      if (!product.available) {
-        button.textContent = 'SOLD OUT';
-        button.disabled = true;
-        button.classList.add('sold');
-      } else {
-        button.textContent = 'Buy Now';
-        button.onclick = () => openStripeCheckout(product.stripe_link);
-      }
-      card.appendChild(button);
-
-      // Add to shop container
-      shopContainer.appendChild(card);
+      grid.append(card);
     });
 
+    if (!products.length) grid.innerHTML = "<p>No products yet.</p>";
+
   } catch (err) {
-    console.error('Error loading shop:', err);
-    const shopContainer = document.getElementById('shop');
-    shopContainer.innerHTML = `<p>Error loading shop data.</p>`;
+    console.error(err);
+    grid.innerHTML = "<p>Failed to load products.</p>";
   }
 }
 
-// Placeholder for Stripe integration
-function openStripeCheckout(link) {
-  if (!link) {
-    alert('No Stripe link configured.');
-    return;
-  }
-  window.location.href = link;
-}
-
-// Run it when the page loads
-document.addEventListener('DOMContentLoaded', loadShop);
+document.addEventListener("DOMContentLoaded", loadShop);
