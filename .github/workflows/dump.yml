@@ -1,0 +1,33 @@
+name: Dump repo contents
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create text dump of all files
+        run: |
+          echo "=== REPO SNAPSHOT ===" > repo_dump.txt
+          echo "Generated on $(date)" >> repo_dump.txt
+          echo "" >> repo_dump.txt
+          find . -type f \
+            ! -path './.git/*' \
+            ! -path './node_modules/*' \
+            ! -path './.github/*' \
+            ! -path './images/*' \
+            ! -path './assets/images/*' \
+            -print0 | while IFS= read -r -d '' file; do
+            echo "=== $file ===" >> repo_dump.txt
+            cat "$file" >> repo_dump.txt
+            echo "" >> repo_dump.txt
+          done
+
+      - name: Commit dump file
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: repo_dump.txt
+          message: "Auto dump repo snapshot"
