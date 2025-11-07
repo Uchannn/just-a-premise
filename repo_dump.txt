@@ -1,5 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Fri Nov  7 09:05:08 UTC 2025
+Generated on Fri Nov  7 09:05:34 UTC 2025
 
 === ./scss/_pages.scss ===
 
@@ -902,14 +902,14 @@ body {
     "price": "15",
     "stripe_link": "",
     "description": "A simple test item.",
-    "available": false
+    "available": true
   },
   {
     "title": "Sold Example",
     "price": "10",
     "stripe_link": "",
     "description": "This should show a SOLD badge.",
-    "available": false
+    "available": true
   },
   {
     "title": "Dreamveil Narrative Blueprint",
