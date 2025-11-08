@@ -26,16 +26,20 @@ if (pass !== "Yesme1me") {
   <!-- Sidebar -->
  <aside class="sidebar">
   <h3>Files</h3>
-  <button><span>Shop</span></button>
-  <button><span>Web Services</span></button>
-  <button><span>Pages</span></button>
-  <button><span>Downloads</span></button>
+<button onclick="loadFile('shop')"><span>Shop</span></button>
+<button onclick="loadFile('web_services')"><span>Web Services</span></button>
+<button onclick="loadFile('pages')"><span>Pages</span></button>
+<button onclick="loadFile('downloads')"><span>Downloads</span></button>
+<button onclick="logout()"><span>Logout</span></button>
+
+
 
   <hr>
 
   <h3>Actions</h3>
-  <button><span>Import JSON</span></button>
-  <button><span>Save File</span></button>
+  <button onclick="importLocalFile()"><span>Import JSON</span></button>
+<button onclick="saveJSON()"><span>Save File</span></button>
+
 </aside>
 
 
