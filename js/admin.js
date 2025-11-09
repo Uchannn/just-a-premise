@@ -13,12 +13,41 @@ async function loadFile(type) {
   renderCards();
 }
 
+/* ─────────────── Filtering Logic ─────────────── */
+function getFilteredData() {
+  let filtered = [...data];
+
+  const search = document.getElementById("filter-search")?.value.toLowerCase() || "";
+  const avail = document.getElementById("filter-availability")?.value || "all";
+  const adult = document.getElementById("filter-adult")?.value || "all";
+  const min = parseFloat(document.getElementById("filter-min")?.value) || 0;
+  const max = parseFloat(document.getElementById("filter-max")?.value) || Infinity;
+
+  // Search
+  if (search) filtered = filtered.filter(p => p.title.toLowerCase().includes(search));
+
+  // Availability
+  if (avail === "available") filtered = filtered.filter(p => p.available);
+  if (avail === "sold") filtered = filtered.filter(p => !p.available);
+
+  // Adult content
+  if (adult === "adult") filtered = filtered.filter(p => p.adult);
+  if (adult === "nonadult") filtered = filtered.filter(p => !p.adult);
+
+  // Price range
+  filtered = filtered.filter(p => p.price >= min && p.price <= max);
+
+  return filtered;
+}
+
 /* ─────────────── Render Editable Cards ─────────────── */
 function renderCards() {
   const grid = document.getElementById("card-grid");
   grid.innerHTML = "";
 
-  data.forEach((item, index) => {
+  const filteredData = getFilteredData();
+
+  filteredData.forEach((item, index) => {
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
@@ -45,7 +74,7 @@ function addItem() {
     title: "New Product",
     price: 0,
     available: true,
-    adult: false, // <-- new field
+    adult: false,
     stripe_link: "",
     description: "",
     images: []
@@ -70,7 +99,6 @@ async function saveJSON() {
   const path = "data/shop.json";
   const message = "Update shop.json via CMS";
 
-  // Rebuild product list from inputs
   const cards = document.querySelectorAll(".card-body");
   const updated = Array.from(cards).map(card => {
     const obj = {};
@@ -83,7 +111,6 @@ async function saveJSON() {
 
   const jsonString = JSON.stringify(updated, null, 2);
 
-  // Get file SHA from GitHub
   const getRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
     headers: { Authorization: `token ${token}` }
   });
@@ -94,7 +121,6 @@ async function saveJSON() {
   }
   const fileData = await getRes.json();
 
-  // Push new file
   const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
     method: "PUT",
     headers: {
@@ -124,3 +150,10 @@ function logout() {
   localStorage.removeItem("cms_token");
   location.reload();
 }
+
+/* ─────────────── Filter Event Listeners ─────────────── */
+["filter-search", "filter-availability", "filter-adult", "filter-min", "filter-max"]
+  .forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", renderCards);
+  });
