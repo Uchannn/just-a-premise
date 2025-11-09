@@ -23,18 +23,11 @@ function getFilteredData() {
   const min = parseFloat(document.getElementById("filter-min")?.value) || 0;
   const max = parseFloat(document.getElementById("filter-max")?.value) || Infinity;
 
-  // Search
   if (search) filtered = filtered.filter(p => p.title.toLowerCase().includes(search));
-
-  // Availability
   if (avail === "available") filtered = filtered.filter(p => p.available);
   if (avail === "sold") filtered = filtered.filter(p => !p.available);
-
-  // Adult content
   if (adult === "adult") filtered = filtered.filter(p => p.adult);
   if (adult === "nonadult") filtered = filtered.filter(p => !p.adult);
-
-  // Price range
   filtered = filtered.filter(p => p.price >= min && p.price <= max);
 
   return filtered;
