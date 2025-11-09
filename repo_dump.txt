@@ -1,5 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Sun Nov  9 09:01:57 UTC 2025
+Generated on Sun Nov  9 09:05:57 UTC 2025
 
 === ./scss/_pages.scss ===
 
@@ -335,6 +335,61 @@ main {
   &:active { transform: scale(0.98); }
 }
 
+/* ─────────────── CMS Filter Bar ─────────────── */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  background: var(--panel);
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+
+  input,
+  select {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.85rem;
+    background: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(209, 232, 255, 0.4);
+      outline: none;
+    }
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    min-width: 90px;
+  }
+
+  select {
+    cursor: pointer;
+    background: linear-gradient(135deg, #fff, #f9f9fb);
+    &:hover {
+      background: linear-gradient(135deg, var(--accent3), #fff);
+    }
+  }
+}
+
+/* Optional pastel hover pulse for filters */
+.filter-bar input:focus,
+.filter-bar select:focus {
+  animation: filterFocus 0.3s ease;
+}
+
+@keyframes filterFocus {
+  from { box-shadow: 0 0 0 0 rgba(209,232,255,0.4); }
+  to { box-shadow: 0 0 0 3px rgba(209,232,255,0.4); }
+}
+
+
 === ./scss/_mixins.scss ===
 
 === ./scss/_shop.scss ===
@@ -540,8 +595,9 @@ main {
 === ./blog.html ===
 
 === ./css/main.css.map ===
-{"version":3,"sourceRoot":"","sources":["../scss/_shop.scss","../scss/_admin.scss","../scss/main.scss"],"names":[],"mappings":"AAAA;EACE;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EACE;EACA;EACA;;AAGF;EACE;EACA;;AAGF;EACE;EACA;EACA;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;;AAGF;EACE;EACA;EACA;;AAKJ;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;;AAKJ;EACE;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;;;AAMJ;EACE;EACA;EAAQ;EACR;EAAc;EACd;EACA;EACA;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;;;AAGF;EACE;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;;;AAGF;EACE;;;AAGF;EACE;EACA;;;AAGF;EACE;EACA;;;AAGF;EACE;IAAO;IAAY;;EACnB;IAAK;IAAY;;;AC9JnB;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EAAI;;;AAEJ;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;;AAfJ;AAkBE;;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;AAEA;;AACA;EACE;EACA;EACA;EAAU;EAAW;EAAY;EACjC;EACA;EACA;EACA;;AAxBJ;AA2BE;;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAGF;EACE;;AACA;EACE;;AAIJ;EAAW;;AAGb;EACE;EACA;EACA;EACA;EACA;;;AAIJ;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AACA;EAAU;;;AAId;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EAAK;EAAW;;AAEhB;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EAAS;;AACT;EAAU;;AAGZ;EACE;EACA;;AAEA;EACE;EACA;EACA;;AAGF;EACE;EACA;EACA;;AAGF;AAAA;EAEE;EACA;EACA;EACA;EACA;EACA;;AAGF;EACE;EACA;EACA;;;AAKN;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;;AAGF;EAAW;;;AAGb;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EAAW;;;AC7Ob;EACE;;;AAGF;EACE;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;;AAEA;EAAU;;AAEV;EAAM;EAAa;EAAc;;AACjC;EAAK;EAAmB;;AACxB;EAAI;EAAa;;;AAIrB;EACE;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;;AAEA;EAAM;EAAqB;EAAa;;AACxC;EAAgB;;AAChB;EACE;EACA;EACA;EACA;EACA;EACA","file":"main.css"}
+{"version":3,"sourceRoot":"","sources":["../scss/_shop.scss","../scss/_admin.scss","../scss/main.scss"],"names":[],"mappings":";AAAA;EACE;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EACE;EACA;EACA;;AAGF;EACE;EACA;;AAGF;EACE;EACA;EACA;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;;AAGF;EACE;EACA;EACA;;AAKJ;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;;AAKJ;EACE;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;;;AAMJ;EACE;EACA;EAAQ;EACR;EAAc;EACd;EACA;EACA;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;;;AAGF;EACE;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;;;AAGF;EACE;;;AAGF;EACE;EACA;;;AAGF;EACE;EACA;;;AAGF;EACE;IAAO;IAAY;;EACnB;IAAK;IAAY;;;AC9JnB;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EAAI;;;AAEJ;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;;AAfJ;AAkBE;;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;AAEA;;AACA;EACE;EACA;EACA;EAAU;EAAW;EAAY;EACjC;EACA;EACA;EACA;;AAxBJ;AA2BE;;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAGF;EACE;;AACA;EACE;;AAIJ;EAAW;;AAGb;EACE;EACA;EACA;EACA;EACA;;;AAIJ;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;;AAGF;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AACA;EAAU;;;AAId;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EAAK;EAAW;;AAEhB;EACE;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EAAS;;AACT;EAAU;;AAGZ;EACE;EACA;;AAEA;EACE;EACA;EACA;;AAGF;EACE;EACA;EACA;;AAGF;AAAA;EAEE;EACA;EACA;EACA;EACA;EACA;;AAGF;EACE;EACA;EACA;;;AAKN;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;;AAGF;EAAW;;;AAGb;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;;AAGF;EAAW;;;AAGb;AACA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;AAAA;EAEE;EACA;EACA;EACA;EACA;EACA;;AAEA;AAAA;EACE;EACA;EACA;;AAIJ;AAAA;EAEE;;AAGF;EACE;EACA;;AACA;EACE;;;AAKN;AACA;AAAA;EAEE;;;AAGF;EACE;IAAO;;EACP;IAAK;;;ACnSP;EACE;;;AAGF;EACE;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;;AAEA;EAAU;;AAEV;EAAM;EAAa;EAAc;;AACjC;EAAK;EAAmB;;AACxB;EAAI;EAAa;;;AAIrB;EACE;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;;AAEA;EAAM;EAAqB;EAAa;;AACxC;EAAgB;;AAChB;EACE;EACA;EACA;EACA;EACA;EACA","file":"main.css"}
 === ./css/main.css ===
+@charset "UTF-8";
 .shop-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -956,6 +1012,60 @@ main {
   transform: scale(0.98);
 }
 
+/* ─────────────── CMS Filter Bar ─────────────── */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  background: var(--panel);
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+}
+.filter-bar input,
+.filter-bar select {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85rem;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.filter-bar input:focus,
+.filter-bar select:focus {
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 3px rgba(209, 232, 255, 0.4);
+  outline: none;
+}
+.filter-bar input[type=text],
+.filter-bar input[type=number] {
+  min-width: 90px;
+}
+.filter-bar select {
+  cursor: pointer;
+  background: linear-gradient(135deg, #fff, #f9f9fb);
+}
+.filter-bar select:hover {
+  background: linear-gradient(135deg, var(--accent3), #fff);
+}
+
+/* Optional pastel hover pulse for filters */
+.filter-bar input:focus,
+.filter-bar select:focus {
+  animation: filterFocus 0.3s ease;
+}
+
+@keyframes filterFocus {
+  from {
+    box-shadow: 0 0 0 0 rgba(209, 232, 255, 0.4);
+  }
+  to {
+    box-shadow: 0 0 0 3px rgba(209, 232, 255, 0.4);
+  }
+}
 body {
   background: pink;
 }
