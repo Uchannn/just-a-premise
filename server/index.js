@@ -4,8 +4,8 @@ import fs from "fs";
 import path from "path";
 import cors from "cors";
 import bodyParser from "body-parser";
-import stripePkg from "stripe";
 import dotenv from "dotenv";
+import stripePkg from "stripe";
 
 dotenv.config();
 const stripe = stripePkg(process.env.STRIPE_SECRET_KEY);
@@ -60,10 +60,10 @@ app.post("/api/stripe/create-link", async (req, res) => {
       line_items: [{ price: priceObj.id, quantity: 1 }],
     });
     res.json({ success: true, url: link.url });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ success: false, error: e.message });
+  } catch (err) {
+    console.error("Stripe error:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
-app.listen(4000, () => console.log("CMS API running on http://localhost:4000"));
+app.listen(4000, () => console.log("✅ CMS API running on http://localhost:4000"));
