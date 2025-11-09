@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-  
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -63,7 +62,9 @@
     }
   </style>
 </head>
+
 <body>
+  <!-- LOGIN SCREEN -->
   <div id="login-screen" class="panel">
     <h2>CMS Login</h2>
     <input id="user" placeholder="Username" />
@@ -72,6 +73,7 @@
     <p id="login-status"></p>
   </div>
 
+  <!-- DASHBOARD SCREEN -->
   <div id="cms-screen" class="panel" style="display:none;">
     <h2>CMS Dashboard</h2>
     <div>
@@ -89,18 +91,20 @@
     <div id="item-grid"></div>
   </div>
 
-  // Keep login after refresh
-document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("cms_token");
-  if (token === "admin-session") {
-    document.getElementById("login-screen").style.display = "none";
-    document.getElementById("cms-screen").style.display = "block";
-    loadData(); // already defined below
-  } else {
-    document.getElementById("login-screen").style.display = "block";
-    document.getElementById("cms-screen").style.display = "none";
-  }
-});
+  <!-- Keep login after refresh -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("cms_token");
+      if (token === "admin-session") {
+        document.getElementById("login-screen").style.display = "none";
+        document.getElementById("cms-screen").style.display = "block";
+        loadData(); // defined in admin.js
+      } else {
+        document.getElementById("login-screen").style.display = "block";
+        document.getElementById("cms-screen").style.display = "none";
+      }
+    });
+  </script>
 
   <script src="admin.js"></script>
 </body>
