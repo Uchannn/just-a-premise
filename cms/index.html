@@ -1,5 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+  
+// Keep login after refresh
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("cms_token");
+  if (token === "admin-session") {
+    // Already logged in, show the dashboard immediately
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("cms-screen").style.display = "block";
+    loadData(); // existing function in admin.js
+  } else {
+    // Not logged in yet
+    document.getElementById("login-screen").style.display = "block";
+    document.getElementById("cms-screen").style.display = "none";
+  }
+});
+
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
