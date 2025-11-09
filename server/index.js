@@ -7,44 +7,26 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import stripePkg from "stripe";
 
-dotenv.config();
-const stripe = stripePkg(process.env.STRIPE_SECRET_KEY);
+import authRoutes from "./routes/auth.js";
+import contentRoutes from "./routes/content.js";
 
+// ========== ENVIRONMENT SETUP ==========
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+
+const stripe = stripePkg(process.env.STRIPE_SECRET_KEY);
 const app = express();
+
 app.use(cors());
 app.use(bodyParser.json());
 
-// Helper to resolve paths
-const resolvePath = (file) => path.join(process.cwd(), file);
+// ========== STATIC FRONTEND (optional) ==========
+// If you have your CMS or site HTML in the project root or /public folder,
+// this allows it to be served directly via http://localhost:4000/cms.html etc.
+app.use(express.static(path.resolve(process.cwd())));
 
-// ========== AUTH ROUTES ==========
-app.post("/api/login", (req, res) => {
-  const { username, password } = req.body;
-  if (
-    username === process.env.ADMIN_USER &&
-    password === process.env.ADMIN_PASS
-  ) {
-    return res.json({ success: true, token: "admin-session" });
-  }
-  res.status(401).json({ success: false });
-});
-
-// ========== JSON READ/WRITE ==========
-app.get("/api/content/:type", (req, res) => {
-  const type = req.params.type;
-  const file = resolvePath(`data/${type}.json`);
-  if (!fs.existsSync(file)) return res.status(404).json({ error: "Not found" });
-
-  const content = JSON.parse(fs.readFileSync(file, "utf-8"));
-  res.json(content);
-});
-
-app.post("/api/content/:type", (req, res) => {
-  const type = req.params.type;
-  const file = resolvePath(`data/${type}.json`);
-  fs.writeFileSync(file, JSON.stringify(req.body, null, 2));
-  res.json({ success: true });
-});
+// ========== ROUTES ==========
+app.use("/api", authRoutes);           // handles /api/login, /api/logout
+app.use("/api/content", contentRoutes); // handles /api/content/:type
 
 // ========== STRIPE LINK GENERATOR ==========
 app.post("/api/stripe/create-link", async (req, res) => {
@@ -66,4 +48,13 @@ app.post("/api/stripe/create-link", async (req, res) => {
   }
 });
 
-app.listen(4000, () => console.log("✅ CMS API running on http://localhost:4000"));
+// ========== FALLBACK ROUTE ==========
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
+
+// ========== SERVER START ==========
+const PORT = 4000;
+app.listen(PORT, () => {
+  console.log(`✅ CMS API running on http://localhost:${PORT}`);
+});
