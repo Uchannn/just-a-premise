@@ -1,30 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Just A Premise CMS</title>
+
   <link rel="stylesheet" href="../css/main.css" />
+
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <style>
+    body { font-family: Inter, sans-serif; background: #fafbff; color: #2d2d2d; margin: 0; }
+    .panel { max-width: 800px; margin: 3rem auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 2rem; }
+    button { background: #d1e8ff; border: none; border-radius: 8px; padding: 0.6rem 1.2rem; cursor: pointer; font-weight: 600; transition: .2s; }
+    button:hover { background: #c9ffe1; }
+    textarea { width: 100%; height: 60vh; border-radius: 8px; border: 1px solid #ccc; padding: 1rem; font-family: monospace; }
+    input { padding: 0.5rem; margin: 0.3rem 0; border: 1px solid #ccc; border-radius: 6px; width: 100%; }
+  </style>
 </head>
 <body>
-  <div id="login-screen">
-    <h2>Login</h2>
+  <div id="login-screen" class="panel">
+    <h2>CMS Login</h2>
     <input id="user" placeholder="Username" />
     <input id="pass" type="password" placeholder="Password" />
     <button onclick="login()">Login</button>
     <p id="login-status"></p>
   </div>
 
-  <div id="cms-screen" style="display:none;">
-    <h1>CMS Dashboard</h1>
-    <select id="data-type" onchange="loadData()">
-      <option value="shop">Shop</option>
-      <option value="pages">Pages</option>
-      <option value="blog">Blog</option>
-    </select>
-    <button onclick="saveData()">Save</button>
-    <button onclick="logout()">Logout</button>
+  <div id="cms-screen" class="panel" style="display:none;">
+    <h2>Dashboard</h2>
+    <div>
+      <label>Choose Data Type:</label>
+      <select id="data-type" onchange="loadData()">
+        <option value="shop">Shop</option>
+        <option value="pages">Pages</option>
+        <option value="blog">Blog</option>
+      </select>
+      <button onclick="saveData()">💾 Save</button>
+      <button onclick="logout()">Logout</button>
+    </div>
 
-    <textarea id="editor" style="width:90%;height:60vh;"></textarea>
+<div id="item-grid"></div>
+<button id="add-item" onclick="addItem()">+ Add Product</button>
   </div>
 
   <script src="admin.js"></script>
