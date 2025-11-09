@@ -1,5 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Sun Nov  9 07:53:18 UTC 2025
+Generated on Sun Nov  9 08:07:35 UTC 2025
 
 === ./scss/_pages.scss ===
 
@@ -1297,12 +1297,6 @@ function renderCards() {
   const grid = document.getElementById("card-grid");
   grid.innerHTML = "";
 
-  <label>
-  <input type="checkbox" ${item.adult ? "checked" : ""} data-field="adult">
-  18+ Content
-</label>
-
-
   data.forEach((item, index) => {
     const card = document.createElement("div");
     card.className = "card";
@@ -1312,7 +1306,10 @@ function renderCards() {
         <input type="number" value="${item.price}" data-field="price" placeholder="Price">
         <input value="${item.stripe_link || ""}" data-field="stripe_link" placeholder="Stripe link">
         <textarea data-field="description" placeholder="Description">${item.description || ""}</textarea>
+
         <label><input type="checkbox" ${item.available ? "checked" : ""} data-field="available"> Available</label>
+        <label><input type="checkbox" ${item.adult ? "checked" : ""} data-field="adult"> 18+ Content</label>
+
         <button class="delete-btn" onclick="removeItem(${index})">Delete</button>
       </div>
     `;
@@ -1327,6 +1324,7 @@ function addItem() {
     title: "New Product",
     price: 0,
     available: true,
+    adult: false, // <-- new field
     stripe_link: "",
     description: "",
     images: []
@@ -1409,61 +1407,80 @@ function logout() {
 === ./js/main.js ===
 
 === ./js/shop.js ===
-async function loadShop() {
-  const grid = document.getElementById("shop-grid");
-  grid.innerHTML = "<p>Loading products...</p>";
-
-  try {
-    const response = await fetch("data/shop.json?cachebust=" + Date.now());
-    const products = await response.json();
+// ─────────────── Load Products ───────────────
+fetch("/data/shop.json")
+  .then(res => res.json())
+  .then(data => {
+    const grid = document.getElementById("shop-grid");
     grid.innerHTML = "";
 
-    products.forEach(p => {
+    data.forEach((item) => {
       const card = document.createElement("div");
-      card.className = "product-card" + (!p.available ? " sold" : "");
+      card.className = "product-card";
 
-      const img = document.createElement("img");
-      img.src = p.images?.[0] || "images/placeholder.jpg";
-      img.alt = p.title;
+      // Build product card
+      card.innerHTML = `
+        <img src="${item.image || 'images/placeholder.jpg'}" alt="${item.title}">
+        <h3>${item.title}</h3>
+        <p class="price">$${item.price}</p>
+        ${item.adult ? `<div class="sold-badge" style="background:#ffb6c7;">18+ Content</div>` : ""}
+        <button class="buy-btn" ${!item.available ? "disabled" : ""}>
+          ${item.available ? "View Product" : "Sold Out"}
+        </button>
+      `;
 
-      const title = document.createElement("h3");
-      title.textContent = p.title;
+      // Handle button click
+      const button = card.querySelector(".buy-btn");
+      button.addEventListener("click", () => {
+        if (!item.available) return;
 
-      const desc = document.createElement("p");
-      desc.textContent = p.description || "";
+        // Check if product is 18+
+        if (item.adult) {
+          // Check if user has already verified age
+          if (!localStorage.getItem("age_verified")) {
+            showAgeGate(item);
+          } else {
+            window.location.href = `/product.html?id=${item.id}`;
+          }
+        } else {
+          // Normal item, go straight to product page
+          window.location.href = `/product.html?id=${item.id}`;
+        }
+      });
 
-      const price = document.createElement("p");
-      price.className = "price";
-      price.textContent = `$${p.price}`;
-
-      card.append(img, title, desc, price);
-
-      if (p.available && p.stripe_link) {
-        const btn = document.createElement("a");
-        btn.href = p.stripe_link;
-        btn.target = "_blank";
-        btn.textContent = "Buy Now";
-        btn.className = "buy-btn";
-        card.append(btn);
-      } else if (!p.available) {
-        const sold = document.createElement("span");
-        sold.className = "sold-badge";
-        sold.textContent = "SOLD";
-        card.append(sold);
-      }
-
-      grid.append(card);
+      grid.appendChild(card);
     });
+  })
+  .catch(err => console.error("Error loading shop:", err));
 
-    if (!products.length) grid.innerHTML = "<p>No products yet.</p>";
 
-  } catch (err) {
-    console.error(err);
-    grid.innerHTML = "<p>Failed to load products.</p>";
-  }
+// ─────────────── AGE GATE ───────────────
+function showAgeGate(item) {
+  const modal = document.createElement("div");
+  modal.className = "age-modal";
+  modal.innerHTML = `
+    <div class="age-modal-content">
+      <h2>Adult Content Warning</h2>
+      <p>This product contains mature material. You must be 18 or older to view or purchase it.</p>
+      <div class="age-buttons">
+        <button id="age-yes">Yes, I’m 18+</button>
+        <button id="age-no">No, I’m not</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // Handle choices
+  document.getElementById("age-yes").addEventListener("click", () => {
+    localStorage.setItem("age_verified", "true"); // Remember approval
+    document.body.removeChild(modal);
+    window.location.href = `/product.html?id=${item.id}`;
+  });
+
+  document.getElementById("age-no").addEventListener("click", () => {
+    document.body.removeChild(modal);
+  });
 }
-
-document.addEventListener("DOMContentLoaded", loadShop);
 
 === ./downloads.html ===
 
