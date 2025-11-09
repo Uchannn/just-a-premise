@@ -253,3 +253,58 @@ main {
 
   &:active { transform: scale(0.98); }
 }
+
+/* ─────────────── CMS Filter Bar ─────────────── */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  background: var(--panel);
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+
+  input,
+  select {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.85rem;
+    background: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(209, 232, 255, 0.4);
+      outline: none;
+    }
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    min-width: 90px;
+  }
+
+  select {
+    cursor: pointer;
+    background: linear-gradient(135deg, #fff, #f9f9fb);
+    &:hover {
+      background: linear-gradient(135deg, var(--accent3), #fff);
+    }
+  }
+}
+
+/* Optional pastel hover pulse for filters */
+.filter-bar input:focus,
+.filter-bar select:focus {
+  animation: filterFocus 0.3s ease;
+}
+
+@keyframes filterFocus {
+  from { box-shadow: 0 0 0 0 rgba(209,232,255,0.4); }
+  to { box-shadow: 0 0 0 3px rgba(209,232,255,0.4); }
+}
+
