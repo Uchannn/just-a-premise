@@ -250,8 +250,10 @@ main {
     transform: translateY(-2px);
   }
 
-  &:active { transform: scale(0.98); } // ← closes .delete-btn fully!
-}
+  &:active { 
+    transform: scale(0.98); 
+  }
+} // ← closes .delete-btn fully!
 
 /* ─────────────── CMS Filter Bar ─────────────── */
 .filter-bar {
