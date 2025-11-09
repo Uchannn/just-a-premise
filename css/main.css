@@ -1,9 +1,9 @@
 /* Error: Top-level selectors may not contain the parent selector "&".
  *     ,
- * 257 |   &:active { transform: scale(0.98); }
+ * 256 |   &:active { transform: scale(0.98); }
  *     |   ^
  *     '
- *   scss/_admin.scss 257:3  @import
+ *   scss/_admin.scss 256:3  @import
  *   scss/main.scss 14:9     root stylesheet */
 
 body::before {
@@ -14,5 +14,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: 'Error: Top-level selectors may not contain the parent selector "&".\a     \2577 \a 257 \2502    &:active { transform: scale(0.98); }\a     \2502    ^\a     \2575 \a   scss/_admin.scss 257:3  @import\a   scss/main.scss 14:9     root stylesheet';
+  content: 'Error: Top-level selectors may not contain the parent selector "&".\a     \2577 \a 256 \2502    &:active { transform: scale(0.98); }\a     \2502    ^\a     \2575 \a   scss/_admin.scss 256:3  @import\a   scss/main.scss 14:9     root stylesheet';
 }
