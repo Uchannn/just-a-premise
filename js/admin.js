@@ -18,6 +18,12 @@ function renderCards() {
   const grid = document.getElementById("card-grid");
   grid.innerHTML = "";
 
+  <label>
+  <input type="checkbox" ${item.adult ? "checked" : ""} data-field="adult">
+  18+ Content
+</label>
+
+
   data.forEach((item, index) => {
     const card = document.createElement("div");
     card.className = "card";
