@@ -1,5 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Sun Nov  9 09:48:12 UTC 2025
+Generated on Sun Nov  9 09:54:18 UTC 2025
 
 === ./scss/_pages.scss ===
 
@@ -173,7 +173,6 @@ body {
       }
     }
 
-    &:active { transform: scale(0.98); }
   }
 
   hr {
@@ -623,8 +622,8 @@ import fs from "fs";
 import path from "path";
 import cors from "cors";
 import bodyParser from "body-parser";
-import stripePkg from "stripe";
 import dotenv from "dotenv";
+import stripePkg from "stripe";
 
 dotenv.config();
 const stripe = stripePkg(process.env.STRIPE_SECRET_KEY);
@@ -679,13 +678,13 @@ app.post("/api/stripe/create-link", async (req, res) => {
       line_items: [{ price: priceObj.id, quantity: 1 }],
     });
     res.json({ success: true, url: link.url });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ success: false, error: e.message });
+  } catch (err) {
+    console.error("Stripe error:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
-app.listen(4000, () => console.log("CMS API running on http://localhost:4000"));
+app.listen(4000, () => console.log("✅ CMS API running on http://localhost:4000"));
 
 === ./index.html ===
 
@@ -710,10 +709,10 @@ app.listen(4000, () => console.log("CMS API running on http://localhost:4000"));
 === ./css/main.css ===
 /* Error: Top-level selectors may not contain the parent selector "&".
  *     ,
- * 257 |   &:active { transform: scale(0.98); }
+ * 256 |   &:active { transform: scale(0.98); }
  *     |   ^
  *     '
- *   scss/_admin.scss 257:3  @import
+ *   scss/_admin.scss 256:3  @import
  *   scss/main.scss 14:9     root stylesheet */
 
 body::before {
@@ -724,7 +723,7 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: 'Error: Top-level selectors may not contain the parent selector "&".\a     \2577 \a 257 \2502    &:active { transform: scale(0.98); }\a     \2502    ^\a     \2575 \a   scss/_admin.scss 257:3  @import\a   scss/main.scss 14:9     root stylesheet';
+  content: 'Error: Top-level selectors may not contain the parent selector "&".\a     \2577 \a 256 \2502    &:active { transform: scale(0.98); }\a     \2502    ^\a     \2575 \a   scss/_admin.scss 256:3  @import\a   scss/main.scss 14:9     root stylesheet';
 }
 
 === ./privacy.html ===
