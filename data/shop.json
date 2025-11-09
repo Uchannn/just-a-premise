@@ -4,20 +4,23 @@
     "price": "15",
     "stripe_link": "",
     "description": "A simple test item.",
-    "available": false
+    "available": true,
+    "adult": true
   },
   {
     "title": "Sold Example",
     "price": "10",
     "stripe_link": "",
     "description": "This should show a SOLD badge.",
-    "available": false
+    "available": false,
+    "adult": false
   },
   {
     "title": "Dreamveil Narrative Blueprint",
     "price": "180",
     "stripe_link": "https://buy.stripe.com/example",
     "description": "A mysterious dream-woven story template.",
-    "available": true
+    "available": true,
+    "adult": false
   }
 ]
