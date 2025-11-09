@@ -1,5 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Sun Nov  9 07:46:29 UTC 2025
+Generated on Sun Nov  9 07:49:32 UTC 2025
 
 === ./scss/_pages.scss ===
 
@@ -894,6 +894,27 @@ body {
 </body>
 </html>
 
+=== ./autopush.sh ===
+#!/bin/bash
+cd ~/Documents/justapremise-site
+
+echo "🌸 Starting SCSS watcher..."
+sass --watch scss:css &
+
+echo "🚀 Starting auto Git sync..."
+while true; do
+  git pull --rebase origin main
+  if ! git diff --quiet; then
+    git add .
+    git commit -m "auto update"
+    git push origin main
+    echo "✅ Changes pushed at $(date)"
+  else
+    echo "No changes at $(date)"
+  fi
+  sleep 120
+done
+
 === ./data/package-lock.json ===
 {
   "name": "justapremise-site",
@@ -1272,6 +1293,12 @@ async function loadFile(type) {
 function renderCards() {
   const grid = document.getElementById("card-grid");
   grid.innerHTML = "";
+
+  <label>
+  <input type="checkbox" ${item.adult ? "checked" : ""} data-field="adult">
+  18+ Content
+</label>
+
 
   data.forEach((item, index) => {
     const card = document.createElement("div");
