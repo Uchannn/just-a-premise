@@ -254,6 +254,9 @@ main {
   &:active { transform: scale(0.98); }
 }
 
+  &:active { transform: scale(0.98); }
+ // ← closes .delete-btn fully!
+
 /* ─────────────── CMS Filter Bar ─────────────── */
 .filter-bar {
   display: flex;
@@ -307,4 +310,3 @@ main {
   from { box-shadow: 0 0 0 0 rgba(209,232,255,0.4); }
   to { box-shadow: 0 0 0 3px rgba(209,232,255,0.4); }
 }
-
