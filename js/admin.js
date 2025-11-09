@@ -18,12 +18,6 @@ function renderCards() {
   const grid = document.getElementById("card-grid");
   grid.innerHTML = "";
 
-  <label>
-  <input type="checkbox" ${item.adult ? "checked" : ""} data-field="adult">
-  18+ Content
-</label>
-
-
   data.forEach((item, index) => {
     const card = document.createElement("div");
     card.className = "card";
@@ -33,7 +27,10 @@ function renderCards() {
         <input type="number" value="${item.price}" data-field="price" placeholder="Price">
         <input value="${item.stripe_link || ""}" data-field="stripe_link" placeholder="Stripe link">
         <textarea data-field="description" placeholder="Description">${item.description || ""}</textarea>
+
         <label><input type="checkbox" ${item.available ? "checked" : ""} data-field="available"> Available</label>
+        <label><input type="checkbox" ${item.adult ? "checked" : ""} data-field="adult"> 18+ Content</label>
+
         <button class="delete-btn" onclick="removeItem(${index})">Delete</button>
       </div>
     `;
@@ -48,6 +45,7 @@ function addItem() {
     title: "New Product",
     price: 0,
     available: true,
+    adult: false, // <-- new field
     stripe_link: "",
     description: "",
     images: []
