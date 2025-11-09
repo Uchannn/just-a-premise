@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Just A Premise CMS</title>
+  <link rel="stylesheet" href="../css/main.css" />
+</head>
+<body>
+  <div id="login-screen">
+    <h2>Login</h2>
+    <input id="user" placeholder="Username" />
+    <input id="pass" type="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <p id="login-status"></p>
+  </div>
+
+  <div id="cms-screen" style="display:none;">
+    <h1>CMS Dashboard</h1>
+    <select id="data-type" onchange="loadData()">
+      <option value="shop">Shop</option>
+      <option value="pages">Pages</option>
+      <option value="blog">Blog</option>
+    </select>
+    <button onclick="saveData()">Save</button>
+    <button onclick="logout()">Logout</button>
+
+    <textarea id="editor" style="width:90%;height:60vh;"></textarea>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

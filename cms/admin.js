@@ -1,53 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Just A Premise CMS</title>
-  <link rel="stylesheet" href="/css/admin.css" />
-</head>
-<body>
-  <!-- Sidebar Navigation -->
-  <div class="sidebar">
-    <button onclick="loadFile('shop')"><span>Shop</span></button>
-    <button onclick="saveJSON()"><span>Save</span></button>
-    <hr />
-    <button onclick="logout()"><span>Logout</span></button>
-  </div>
+const API = "http://localhost:4000/api";
+let currentType = "shop";
 
-  <!-- Main Content -->
-  <main>
-    <header class="toolbar">
-      <div class="file-info">
-        <h1 id="file-title">Shop</h1>
-        <p id="file-desc">Edit products below</p>
-      </div>
+async function login() {
+  const user = document.getElementById("user").value;
+  const pass = document.getElementById("pass").value;
 
-      <!-- Filter Bar -->
-      <div id="filters" class="filter-bar">
-        <input id="filter-search" type="text" placeholder="Search title…" />
-        <select id="filter-availability">
-          <option value="all">All</option>
-          <option value="available">Available</option>
-          <option value="sold">Sold Out</option>
-        </select>
-        <select id="filter-adult">
-          <option value="all">All</option>
-          <option value="adult">18+ Only</option>
-          <option value="nonadult">Non-Adult</option>
-        </select>
-        <input id="filter-min" type="number" placeholder="Min $" style="width: 70px" />
-        <input id="filter-max" type="number" placeholder="Max $" style="width: 70px" />
-      </div>
-    </header>
+  const res = await fetch(`${API}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: user, password: pass }),
+  });
+  const data = await res.json();
+  if (data.success) {
+    localStorage.setItem("cms_token", data.token);
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("cms-screen").style.display = "block";
+    loadData();
+  } else {
+    document.getElementById("login-status").innerText = "Invalid login";
+  }
+}
 
-    <!-- Dynamic Grid -->
-    <div id="card-grid" class="card-grid"></div>
+function logout() {
+  localStorage.removeItem("cms_token");
+  document.getElementById("login-screen").style.display = "block";
+  document.getElementById("cms-screen").style.display = "none";
+}
 
-    <!-- Add Button -->
-    <button class="add-item" onclick="addItem()">+ Add Product</button>
-  </main>
+async function loadData() {
+  currentType = document.getElementById("data-type").value;
+  const res = await fetch(`${API}/content/${currentType}`);
+  const json = await res.json();
+  document.getElementById("editor").value = JSON.stringify(json, null, 2);
+}
 
-  <script src="/js/admin.js"></script>
-</body>
-</html>
+async function saveData() {
+  const json = JSON.parse(document.getElementById("editor").value);
+  const res = await fetch(`${API}/content/${currentType}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(json),
+  });
+  const result = await res.json();
+  alert(result.success ? "Saved!" : "Error saving data");
+}
