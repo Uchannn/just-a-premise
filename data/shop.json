@@ -4,7 +4,7 @@
     "price": "15",
     "stripe_link": "",
     "description": "A simple test item.",
-    "available": true
+    "available": false
   },
   {
     "title": "Sold Example",
