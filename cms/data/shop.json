@@ -6,7 +6,8 @@
     "description": "A simple test item.",
     "available": true,
     "adult": true,
-    "isAdult": true
+    "isAdult": true,
+    "image": "/cms/uploads/1762765993308-230071053.png"
   },
   {
     "title": "Sold Example",
