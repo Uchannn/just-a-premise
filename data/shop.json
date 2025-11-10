@@ -1,11 +1,12 @@
 [
   {
-    "title": "Test Product",
+    "title": "Out here Gal",
     "price": "15",
     "stripe_link": "",
     "description": "A simple test item.",
     "available": true,
-    "adult": true
+    "adult": true,
+    "isAdult": true
   },
   {
     "title": "Sold Example",

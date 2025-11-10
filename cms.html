@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Just a Premise CMS — Shop Manager</title>
+  <link rel="stylesheet" href="css/main.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <aside class="sidebar">
+    <h3>Just a Premise CMS</h3>
+
+    <button id="shop-btn"><span>🛍️ Shop Listings</span></button>
+    <hr>
+    <button id="logout-btn"><span>Logout</span></button>
+  </aside>
+
+  <main>
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <h2>Shop Listings</h2>
+      <div>
+        <button id="save-btn">💾 Save Changes</button>
+        <button id="add-btn">➕ Add Item</button>
+      </div>
+    </div>
+
+    <!-- Filter Bar (optional search) -->
+    <div class="filter-bar">
+      <input type="text" id="search" placeholder="Search by title…">
+      <select id="filter-category">
+        <option value="">All Categories</option>
+      </select>
+    </div>
+
+    <!-- Dynamic content goes here -->
+    <div id="shop-list"></div>
+
+    <!-- Add-item button for mobile layout -->
+    <button class="add-item" id="add-item-mobile">+ Add Item</button>
+  </main>
+
+  <script src="js/cms-shop.js"></script>
+</body>
+</html>
