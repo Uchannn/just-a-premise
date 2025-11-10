@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-   "dev": "nodemon cms/server/index.js"
+    "dev": "nodemon cms/server/index.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "multer": "^2.0.2",
     "stripe": "^16.4.0"
   },
   "bugs": {
