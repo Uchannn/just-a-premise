@@ -42,8 +42,16 @@ function renderShop() {
         <label>Price (USD)</label>
         <input type="number" step="0.01" data-index="${index}" data-key="price" value="${item.price || ""}">
 
-        <label>Image URL</label>
-        <input type="text" data-index="${index}" data-key="image" value="${item.image || ""}">
+        <label>Image</label>
+<div class="image-upload" data-index="${index}">
+  ${
+    item.image
+      ? `<img src="${item.image}" alt="" class="preview">`
+      : `<p class="drop-zone">Drag & drop or click to upload</p>`
+  }
+  <input type="file" accept="image/*" hidden>
+</div>
+
 
         <label>Description</label>
         <textarea rows="3" data-index="${index}" data-key="description">${item.description || ""}</textarea>
@@ -72,6 +80,8 @@ function renderShop() {
   });
 
   attachListeners();
+  initImageUploads();
+
 }
 
 // ===== ATTACH INPUT LISTENERS =====
@@ -145,6 +155,55 @@ async function saveShop() {
     alert("❌ Error saving shop data. Check console for details.");
   }
 }
+
+// ===== IMAGE UPLOAD HANDLER =====
+function initImageUploads() {
+  document.querySelectorAll(".image-upload").forEach((box) => {
+    const index = box.dataset.index;
+    const input = box.querySelector("input[type=file]");
+
+    // Clicking anywhere triggers file select
+    box.addEventListener("click", () => input.click());
+
+    // Drag-drop behavior
+    box.addEventListener("dragover", (e) => e.preventDefault());
+    box.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const file = e.dataTransfer.files[0];
+      if (file) uploadFile(file, index, box);
+    });
+
+    // File chosen manually
+    input.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) uploadFile(file, index, box);
+    });
+  });
+}
+
+async function uploadFile(file, index, box) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+
+    if (data.url) {
+      products[index].image = data.url;
+      box.innerHTML = `<img src="${data.url}" class="preview">`;
+    } else {
+      throw new Error("No URL returned");
+    }
+  } catch (err) {
+    console.error("Upload failed:", err);
+    alert("❌ Image upload failed. Check console for details.");
+  }
+}
+
 
 // ===== EVENT HOOKUP =====
 saveBtn?.addEventListener("click", saveShop);
