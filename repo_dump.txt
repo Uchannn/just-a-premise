@@ -1,5 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Mon Nov 10 08:27:11 UTC 2025
+Generated on Mon Nov 10 08:55:18 UTC 2025
 
 === ./pubweb/shop.html ===
 <!DOCTYPE html>
@@ -2435,7 +2435,7 @@ done
   "main": "index.js",
   "type": "module",
   "scripts": {
-   "dev": "nodemon server/index.js"
+   "dev": "nodemon cms/server/index.js"
   },
   "repository": {
     "type": "git",
