@@ -1,5 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Mon Nov 10 07:58:56 UTC 2025
+Generated on Mon Nov 10 08:08:59 UTC 2025
 
 === ./scss/_pages.scss ===
 
@@ -557,184 +557,504 @@ main {
   to { opacity: 1; transform: scale(1); }
 }
 
-=== ./product.html ===
+=== ./cms1]/auth.js ===
+
+=== ./cms1]/admin-preview.html ===
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Product ‚Äî Just a Premise</title>
-  <link rel="stylesheet" href="css/main.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just a Premise CMS ‚Äî Preview</title>
+  <style>
+    :root {
+      --bg: #fafbff;
+      --panel: #ffffff;
+      --border: #e7e8ec;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      --radius: 16px;
+      --accent1: #ffd6e0;
+      --accent2: #d1e8ff;
+      --accent3: #c9ffe1;
+      --text-dark: #2d2d2d;
+      --text-light: #666;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Poppins", sans-serif;
+      background: var(--bg);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      color: var(--text-dark);
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      width: 280px;
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 1rem;
+      gap: 0.75rem;
+      box-shadow: var(--shadow);
+      z-index: 5;
+    }
+
+    .sidebar h3 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 0.7rem 0.8rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: 0.2s;
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--text-dark);
+      background: linear-gradient(145deg, var(--accent2), var(--accent1));
+    }
+
+    /* Main Area */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      overflow-y: auto;
+      padding: 2rem;
+      position: relative;
+    }
+
+    /* Top Bar */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .toolbar button {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 0.6rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .toolbar button:hover {
+      background: var(--accent2);
+    }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--panel);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .card h4 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .badge {
+      align-self: flex-start;
+      background: linear-gradient(120deg, var(--accent3), var(--accent2));
+      color: #000;
+      font-weight: 700;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 8px;
+    }
+
+    .subtext {
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <a href="shop.html" class="back-link">‚Üê Back to Shop</a>
-  </header>
+  <div class="sidebar">
+    <h3>Files</h3>
+    <button class="nav-btn"><span class="icon">üìÅ</span> Shop</button>
+    <button class="nav-btn"><span class="icon">üßæ</span> Pages</button>
+    <button class="nav-btn"><span class="icon">‚öôÔ∏è</span> Settings</button>
+    <h3>Actions</h3>
+    <button class="nav-btn"><span class="icon">üìÇ</span> Import</button>
+    <button class="nav-btn"><span class="icon">üíæ</span> Save</button>
+  </div>
 
-  <main id="product-detail" class="product-detail"></main>
+  <main>
+    <div class="toolbar">
+      <button>Insert</button>
+      <button>Layout</button>
+      <button>Text</button>
+      <button>CMS</button>
+    </div>
 
-  <script src="js/product.js"></script>
+    <div class="card-grid">
+      <div class="card">
+        <div class="badge">Available</div>
+        <h4>Test Product</h4>
+        <p class="subtext">A simple test item.</p>
+      </div>
+      <div class="card">
+        <div class="badge">Sold Out</div>
+        <h4>Story Blueprint</h4>
+        <p class="subtext">This item is currently unavailable.</p>
+      </div>
+      <div class="card">
+        <div class="badge">Active</div>
+        <h4>Web Services</h4>
+        <p class="subtext">Current tier: Narrative Pro</p>
+      </div>
+    </div>
+  </main>
 </body>
 </html>
 
-=== ./server/utils/fileUtils.js ===
-// server/utils/fileUtils.js
-import fs from "fs";
-
-export const safeWrite = (filePath, data) => {
-  const backupPath = filePath + ".bak";
-  try {
-    if (fs.existsSync(filePath)) {
-      fs.copyFileSync(filePath, backupPath);
+=== ./cms1]/index.html ===
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just A Premise CMS</title>
+  <link rel="stylesheet" href="../css/main.css" />
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      background: #fafbff;
+      color: #222;
+      margin: 0;
+      padding: 2rem;
     }
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-    return { success: true };
-  } catch (err) {
-    console.error("Write error:", err);
-    return { success: false, error: err.message };
+    .panel {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    button {
+      background: #c7e6ff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 0.5rem;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #b0f7ce;
+    }
+    input, textarea, select {
+      width: 100%;
+      margin: 0.3rem 0 1rem;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+    #item-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    .cms-card {
+      background: #fdfdfd;
+      border: 1px solid #e3e3e3;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .cms-card h3 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="panel">
+    <h2>CMS Login</h2>
+    <input id="user" placeholder="Username" />
+    <input id="pass" type="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <p id="login-status"></p>
+  </div>
+
+  <!-- DASHBOARD SCREEN -->
+  <div id="cms-screen" class="panel" style="display:none;">
+    <h2>CMS Dashboard</h2>
+    <div>
+      <label>Choose Data Type:</label>
+      <select id="data-type" onchange="loadData()">
+        <option value="shop">Shop</option>
+        <option value="pages">Pages</option>
+        <option value="blog">Blog</option>
+      </select>
+      <button onclick="saveData()">üíæ Save</button>
+      <button onclick="logout()">Logout</button>
+      <button onclick="addItem()">+ Add New</button>
+    </div>
+
+    <div id="item-grid"></div>
+  </div>
+
+  <!-- Keep login after refresh -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("cms_token");
+      if (token === "admin-session") {
+        document.getElementById("login-screen").style.display = "none";
+        document.getElementById("cms-screen").style.display = "block";
+        loadData(); // defined in admin.js
+      } else {
+        document.getElementById("login-screen").style.display = "block";
+        document.getElementById("cms-screen").style.display = "none";
+      }
+    });
+  </script>
+
+  <script src="admin.js"></script>
+</body>
+</html>
+
+=== ./cms1]/admin.js ===
+// cms/admin.js
+const API = "http://localhost:4000/api";
+let currentType = "shop";
+let data = [];
+
+/* ===========================================================
+   KEEP LOGIN AFTER REFRESH
+   =========================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("cms_token");
+  if (token === "admin-session") {
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("cms-screen").style.display = "block";
+    loadData(); // load dashboard data immediately
+  } else {
+    document.getElementById("login-screen").style.display = "block";
+    document.getElementById("cms-screen").style.display = "none";
   }
-};
+});
 
-=== ./server/utils/generateStripe.js ===
-// server/utils/generateStripe.js
-import Stripe from "stripe";
-import dotenv from "dotenv";
-dotenv.config();
+/* ===========================================================
+   LOGIN + LOGOUT
+   =========================================================== */
+async function login() {
+  const user = document.getElementById("user").value;
+  const pass = document.getElementById("pass").value;
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-export async function createStripeLink(name, price) {
-  const product = await stripe.products.create({ name });
-  const priceObj = await stripe.prices.create({
-    product: product.id,
-    unit_amount: price * 100,
-    currency: "usd",
+  const res = await fetch(`${API}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: user, password: pass }),
   });
-  const link = await stripe.paymentLinks.create({
-    line_items: [{ price: priceObj.id, quantity: 1 }],
-  });
-  return link.url;
+  const out = await res.json();
+
+  if (out.success) {
+    // Save token locally so session persists
+    localStorage.setItem("cms_token", out.token);
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("cms-screen").style.display = "block";
+    loadData();
+  } else {
+    document.getElementById("login-status").innerText = "‚ùå Invalid credentials";
+  }
 }
 
-=== ./server/routes/auth.js ===
-// server/routes/auth.js
-import express from "express";
-const router = express.Router();
+function logout() {
+  localStorage.removeItem("cms_token");
+  document.getElementById("cms-screen").style.display = "none";
+  document.getElementById("login-screen").style.display = "block";
+}
 
-router.post("/login", (req, res) => {
-  const { username, password } = req.body;
-  if (
-    username === process.env.ADMIN_USER &&
-    password === process.env.ADMIN_PASS
-  ) {
-    return res.json({ success: true, token: "admin-session" });
-  }
-  res.status(401).json({ success: false });
-});
-
-router.post("/logout", (req, res) => {
-  res.json({ success: true });
-});
-
-export default router;
-
-=== ./server/routes/content.js ===
-// server/routes/content.js
-import express from "express";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const router = express.Router();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Helper: safely locate your JSON files
-const dataDir = path.resolve(__dirname, "../../data");
-
-router.get("/:type", (req, res) => {
-  const file = path.join(dataDir, `${req.params.type}.json`);
-  if (!fs.existsSync(file)) return res.status(404).json({ error: "Not found" });
-
-  const data = JSON.parse(fs.readFileSync(file, "utf8"));
-  res.json(data);
-});
-
-router.post("/:type", (req, res) => {
-  const file = path.join(dataDir, `${req.params.type}.json`);
-  fs.writeFileSync(file, JSON.stringify(req.body, null, 2));
-  res.json({ success: true });
-});
-
-export default router;
-
-=== ./server/index.js ===
-// server/index.js
-import express from "express";
-import fs from "fs";
-import path from "path";
-import cors from "cors";
-import bodyParser from "body-parser";
-import dotenv from "dotenv";
-import stripePkg from "stripe";
-
-import authRoutes from "./routes/auth.js";
-import contentRoutes from "./routes/content.js";
-
-// ========== ENVIRONMENT SETUP ==========
-dotenv.config({ path: path.resolve(process.cwd(), ".env") });
-
-const stripe = stripePkg(process.env.STRIPE_SECRET_KEY);
-const app = express();
-
-app.use(cors());
-app.use(bodyParser.json());
-
-// ========== STATIC FRONTEND (optional) ==========
-// If you have your CMS or site HTML in the project root or /public folder,
-// this allows it to be served directly via http://localhost:4000/cms.html etc.
-app.use(express.static(path.resolve(process.cwd())));
-
-// ========== ROUTES ==========
-app.use("/api", authRoutes);           // handles /api/login, /api/logout
-app.use("/api/content", contentRoutes); // handles /api/content/:type
-
-// ========== STRIPE LINK GENERATOR ==========
-app.post("/api/stripe/create-link", async (req, res) => {
-  const { name, price } = req.body;
+/* ===========================================================
+   DATA HANDLING
+   =========================================================== */
+async function loadData() {
+  currentType = document.getElementById("data-type").value;
   try {
-    const product = await stripe.products.create({ name });
-    const priceObj = await stripe.prices.create({
-      product: product.id,
-      unit_amount: price * 100,
-      currency: "usd",
-    });
-    const link = await stripe.paymentLinks.create({
-      line_items: [{ price: priceObj.id, quantity: 1 }],
-    });
-    res.json({ success: true, url: link.url });
+    const res = await fetch(`${API}/content/${currentType}`);
+    data = await res.json();
+    renderItems();
   } catch (err) {
-    console.error("Stripe error:", err);
-    res.status(500).json({ success: false, error: err.message });
+    alert("Error loading data");
   }
-});
+}
 
-// ========== FALLBACK ROUTE ==========
-app.use((req, res) => {
-  res.status(404).json({ error: "Route not found" });
-});
+function renderItems() {
+  const grid = document.getElementById("item-grid");
+  grid.innerHTML = "";
 
-// ========== SERVER START ==========
-const PORT = 4000;
-app.listen(PORT, () => {
-  console.log(`‚úÖ CMS API running on http://localhost:${PORT}`);
-});
+  data.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "cms-card";
+    card.innerHTML = `
+      <h3>${item.title || "Untitled Product"}</h3>
+
+      <label>Title</label>
+      <input value="${item.title || ""}" onchange="updateField(${index}, 'title', this.value)">
+
+      <label>Price ($)</label>
+      <input type="number" step="0.01" value="${item.price || 0}" onchange="updateField(${index}, 'price', parseFloat(this.value))">
+
+      <label>Description</label>
+      <textarea onchange="updateField(${index}, 'description', this.value)">${item.description || ""}</textarea>
+
+      <label>Available</label>
+      <input type="checkbox" ${item.available ? "checked" : ""} onchange="updateField(${index}, 'available', this.checked)">
+
+      <label>18+ Content</label>
+      <input type="checkbox" ${item.adult ? "checked" : ""} onchange="updateField(${index}, 'adult', this.checked)">
+
+      <label>Stripe Link</label>
+      <input value="${item.stripe_link || ""}" onchange="updateField(${index}, 'stripe_link', this.value)">
+
+      <button onclick="generateStripe(${index})">üí≥ Generate Stripe Link</button>
+      <button onclick="deleteItem(${index})" style="background:#ffd6e0;">üóë Delete</button>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+/* ===========================================================
+   CRUD HELPERS
+   =========================================================== */
+function updateField(index, field, value) {
+  data[index][field] = value;
+}
+
+function addItem() {
+  data.push({
+    title: "New Product",
+    price: 0,
+    description: "",
+    available: true,
+    adult: false,
+    stripe_link: "",
+  });
+  renderItems();
+}
+
+function deleteItem(index) {
+  if (confirm("Delete this item?")) {
+    data.splice(index, 1);
+    renderItems();
+  }
+}
+
+async function saveData() {
+  try {
+    const res = await fetch(`${API}/content/${currentType}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const out = await res.json();
+    if (out.success) alert("‚úÖ Saved successfully!");
+    else alert("‚ùå Save failed");
+  } catch (err) {
+    alert("‚ö†Ô∏è Error saving data");
+  }
+}
+
+/* ===========================================================
+   STRIPE LINK GENERATOR
+   =========================================================== */
+async function generateStripe(index) {
+  const item = data[index];
+  if (!item.title || !item.price) {
+    return alert("‚ö†Ô∏è You must set a title and price first!");
+  }
+
+  const res = await fetch(`${API}/stripe/create-link`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: item.title, price: item.price }),
+  });
+
+  const out = await res.json();
+  if (out.success) {
+    data[index].stripe_link = out.url;
+    alert("‚úÖ Stripe link created!");
+    renderItems();
+  } else {
+    alert("‚ùå Stripe error: " + out.error);
+  }
+}
 
 === ./.DS_Store ===
-   Bud1                                                                        t . h t m l                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @      Ä                                        @      Ä                                          @      Ä                                          @                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
- a b o u t . h t m lIlocblob      A   .ˇˇˇˇˇˇ     	 b l o g . h t m lIlocblob      Ø   .ˇˇˇˇˇˇ      c m sIlocblob        .ˇˇˇˇˇˇ      c m sbwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    c m svSrnlong       c o n t a c t . h t m lIlocblob     ã   .ˇˇˇˇˇˇ      c o n t e n tIlocblob     ˘   .ˇˇˇˇˇˇ      c o n t e n tbwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    c o n t e n tvSrnlong       c s sIlocblob     g   .ˇˇˇˇˇˇ      d a t aIlocblob      A   ûˇˇˇˇˇˇ      d a t abwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    d a t avSrnlong       d o w n l o a d s . h t m lIlocblob      Ø   ûˇˇˇˇˇˇ      i m a g e sIlocblob        ûˇˇˇˇˇˇ     
+   Bud1                                                                      t . h t m l                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @      Ä                                        @      Ä                                          @      Ä                                          @                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+ a b o u t . h t m lIlocblob      A   .ˇˇˇˇˇˇ     	 b l o g . h t m lIlocblob      Ø   .ˇˇˇˇˇˇ      c m sIlocblob        .ˇˇˇˇˇˇ      c m sbwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    c m svSrnlong       c o n t a c t . h t m lIlocblob     ã   .ˇˇˇˇˇˇ      c s sIlocblob     g   .ˇˇˇˇˇˇ      d a t aIlocblob      A   ûˇˇˇˇˇˇ      d a t abwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    d a t avSrnlong       d o w n l o a d s . h t m lIlocblob      Ø   ûˇˇˇˇˇˇ      i m a g e sIlocblob        ûˇˇˇˇˇˇ     
  i n d e x . h t m lIlocblob     ã   ûˇˇˇˇˇˇ      j sIlocblob     ˘   ûˇˇˇˇˇˇ      j sbwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    j svSrnlong       p r i v a c y . h t m lIlocblob     g   ûˇˇˇˇˇˇ      p r o d u c t . h t m lIlocblob      A  ˇˇˇˇˇˇ      r e t u r n s . h t m lIlocblob      Ø  ˇˇˇˇˇˇ      s c s sIlocblob       ˇˇˇˇˇˇ      s c s sbwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    s c s svSrnlong      	 s h o p . h t m lIlocblob     ã  ˇˇˇˇˇˇ     
- t e r m s . h t m lIlocblob     ˘  ˇˇˇˇˇˇ      w e b - s e r v i c e s . h t m lIlocblob     g  ˇˇˇˇˇˇ                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            E                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         DSDB                                 `          Ä                          (      0          @      Ä                                          @      Ä                                          @       ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    j svSrnlong       p r i v a c y . h t m lIlocblob     g   ûˇˇˇˇˇˇ      p r o d u c t . h t m lIlocblob      A  ˇˇˇˇˇˇ      r e t u r n s . h t m lIlocblob      Ø  ˇˇˇˇˇˇ      s c s sIlocblob       ˇˇˇˇˇˇ      s c s sbwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    s c s svSrnlong      	 s h o p . h t m lIlocblob     ã  ˇˇˇˇˇˇ     
- t e r m s . h t m lIlocblob     ˘  ˇˇˇˇˇˇ      w e b - s e r v i c e s . h t m lIlocblob     g  ˇˇˇˇˇ
+ t e r m s . h t m lIlocblob     ˘  ˇˇˇˇˇˇ      w e b - s e r v i c e s . h t m lIlocblob     g  ˇˇˇˇˇˇ                                                                                                                                                                                                                                                                                                            E                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         DSDB                                 `          Ä                                        @      Ä                                          @      Ä                                          @        e t u r n s . h t m lIlocblob      Ø  ˇˇˇˇˇˇ      s c s sIlocblob       ˇˇˇˇˇˇ      s c s sbwspblob   ∑bplist00÷]ShowStatusBar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds[ShowSidebar		_{{97, -50}, {920, 774}}	#/;R_klmnoâ                            ä    s c s svSrnlong      	 s h o p . h t m lIlocblob     ã  ˇˇˇˇˇˇ     
+ t e r m s . h t m lIlocblob     ˘  ˇˇˇˇˇˇ      w e b - s e r v i c e s . h t m lIlocblob     g  ˇˇˇˇˇˇ                                                                                                                                                                                                                                                                                                
 === ./.env ===
 ADMIN_USER=admin
 ADMIN_PASS=1233
@@ -2598,54 +2918,6 @@ while true; do
 done
 
 
-=== ./data/package-lock.json ===
-{
-  "name": "justapremise-site",
-  "lockfileVersion": 3,
-  "requires": true,
-  "packages": {}
-}
-
-=== ./data/shop.json ===
-[
-  {
-    "title": "Out here Gal",
-    "price": "15",
-    "stripe_link": "",
-    "description": "A simple test item.",
-    "available": true,
-    "adult": true,
-    "isAdult": true
-  },
-  {
-    "title": "Sold Example",
-    "price": "10",
-    "stripe_link": "",
-    "description": "This should show a SOLD badge.",
-    "available": false,
-    "adult": false
-  },
-  {
-    "title": "Dreamveil Narrative Blueprint",
-    "price": "180",
-    "stripe_link": "https://buy.stripe.com/example",
-    "description": "A mysterious dream-woven story template.",
-    "available": true,
-    "adult": false
-  }
-]
-=== ./content/settings.json ===
-
-=== ./content/pages.json ===
-
-=== ./content/downloads.json ===
-
-=== ./content/blog.json ===
-
-=== ./content/web_services.json ===
-
-=== ./content/filters.json ===
-
 === ./package.json ===
 {
   "name": "justapremise-site",
@@ -2679,548 +2951,196 @@ done
   }
 }
 
-=== ./cms/auth.js ===
+=== ./cms/server/utils/fileUtils.js ===
+// server/utils/fileUtils.js
+import fs from "fs";
 
-=== ./cms/admin-preview.html ===
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Just a Premise CMS ‚Äî Preview</title>
-  <style>
-    :root {
-      --bg: #fafbff;
-      --panel: #ffffff;
-      --border: #e7e8ec;
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-      --radius: 16px;
-      --accent1: #ffd6e0;
-      --accent2: #d1e8ff;
-      --accent3: #c9ffe1;
-      --text-dark: #2d2d2d;
-      --text-light: #666;
+export const safeWrite = (filePath, data) => {
+  const backupPath = filePath + ".bak";
+  try {
+    if (fs.existsSync(filePath)) {
+      fs.copyFileSync(filePath, backupPath);
     }
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    return { success: true };
+  } catch (err) {
+    console.error("Write error:", err);
+    return { success: false, error: err.message };
+  }
+};
 
-    * {
-      box-sizing: border-box;
-    }
+=== ./cms/server/utils/generateStripe.js ===
+// server/utils/generateStripe.js
+import Stripe from "stripe";
+import dotenv from "dotenv";
+dotenv.config();
 
-    body {
-      margin: 0;
-      font-family: "Inter", "Poppins", sans-serif;
-      background: var(--bg);
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-      color: var(--text-dark);
-    }
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-    /* Left Sidebar */
-    .sidebar {
-      width: 280px;
-      background: var(--panel);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      padding: 1.5rem 1rem;
-      gap: 0.75rem;
-      box-shadow: var(--shadow);
-      z-index: 5;
-    }
+export async function createStripeLink(name, price) {
+  const product = await stripe.products.create({ name });
+  const priceObj = await stripe.prices.create({
+    product: product.id,
+    unit_amount: price * 100,
+    currency: "usd",
+  });
+  const link = await stripe.paymentLinks.create({
+    line_items: [{ price: priceObj.id, quantity: 1 }],
+  });
+  return link.url;
+}
 
-    .sidebar h3 {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--text-light);
-      margin-bottom: 0.5rem;
-    }
+=== ./cms/server/routes/auth.js ===
+// server/routes/auth.js
+import express from "express";
+const router = express.Router();
 
-    .nav-btn {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      padding: 0.7rem 0.8rem;
-      border-radius: var(--radius);
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: var(--shadow);
-      transition: 0.2s;
-    }
+router.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  if (
+    username === process.env.ADMIN_USER &&
+    password === process.env.ADMIN_PASS
+  ) {
+    return res.json({ success: true, token: "admin-session" });
+  }
+  res.status(401).json({ success: false });
+});
 
-    .nav-btn:hover {
-      transform: translateY(-2px);
-    }
+router.post("/logout", (req, res) => {
+  res.json({ success: true });
+});
 
-    .icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      color: var(--text-dark);
-      background: linear-gradient(145deg, var(--accent2), var(--accent1));
-    }
+export default router;
 
-    /* Main Area */
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
-      overflow-y: auto;
-      padding: 2rem;
-      position: relative;
-    }
+=== ./cms/server/routes/content.js ===
+// server/routes/content.js
+import express from "express";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-    /* Top Bar */
-    .toolbar {
-      position: sticky;
-      top: 0;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 1.5rem;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin-bottom: 1.5rem;
-    }
+const router = express.Router();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-    .toolbar button {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      padding: 0.6rem 1.2rem;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+// Helper: safely locate your JSON files
+const dataDir = path.resolve(__dirname, "../../data");
 
-    .toolbar button:hover {
-      background: var(--accent2);
-    }
+router.get("/:type", (req, res) => {
+  const file = path.join(dataDir, `${req.params.type}.json`);
+  if (!fs.existsSync(file)) return res.status(404).json({ error: "Not found" });
 
-    /* Cards */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
+  const data = JSON.parse(fs.readFileSync(file, "utf8"));
+  res.json(data);
+});
 
-    .card {
-      background: var(--panel);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      transition: 0.2s;
-    }
+router.post("/:type", (req, res) => {
+  const file = path.join(dataDir, `${req.params.type}.json`);
+  fs.writeFileSync(file, JSON.stringify(req.body, null, 2));
+  res.json({ success: true });
+});
 
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
-    }
+export default router;
 
-    .card h4 {
-      margin: 0;
-      font-size: 1rem;
-    }
+=== ./cms/server/index.js ===
+// server/index.js
+import express from "express";
+import fs from "fs";
+import path from "path";
+import cors from "cors";
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
+import stripePkg from "stripe";
 
-    .badge {
-      align-self: flex-start;
-      background: linear-gradient(120deg, var(--accent3), var(--accent2));
-      color: #000;
-      font-weight: 700;
-      font-size: 0.7rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 8px;
-    }
+import authRoutes from "./routes/auth.js";
+import contentRoutes from "./routes/content.js";
 
-    .subtext {
-      color: var(--text-light);
-      font-size: 0.85rem;
-    }
-  </style>
-</head>
-<body>
-  <div class="sidebar">
-    <h3>Files</h3>
-    <button class="nav-btn"><span class="icon">üìÅ</span> Shop</button>
-    <button class="nav-btn"><span class="icon">üßæ</span> Pages</button>
-    <button class="nav-btn"><span class="icon">‚öôÔ∏è</span> Settings</button>
-    <h3>Actions</h3>
-    <button class="nav-btn"><span class="icon">üìÇ</span> Import</button>
-    <button class="nav-btn"><span class="icon">üíæ</span> Save</button>
-  </div>
+// ========== ENVIRONMENT SETUP ==========
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 
-  <main>
-    <div class="toolbar">
-      <button>Insert</button>
-      <button>Layout</button>
-      <button>Text</button>
-      <button>CMS</button>
-    </div>
+const stripe = stripePkg(process.env.STRIPE_SECRET_KEY);
+const app = express();
 
-    <div class="card-grid">
-      <div class="card">
-        <div class="badge">Available</div>
-        <h4>Test Product</h4>
-        <p class="subtext">A simple test item.</p>
-      </div>
-      <div class="card">
-        <div class="badge">Sold Out</div>
-        <h4>Story Blueprint</h4>
-        <p class="subtext">This item is currently unavailable.</p>
-      </div>
-      <div class="card">
-        <div class="badge">Active</div>
-        <h4>Web Services</h4>
-        <p class="subtext">Current tier: Narrative Pro</p>
-      </div>
-    </div>
-  </main>
-</body>
-</html>
+app.use(cors());
+app.use(bodyParser.json());
 
-=== ./cms/index.html ===
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Just A Premise CMS</title>
-  <link rel="stylesheet" href="../css/main.css" />
-  <script src="https://js.stripe.com/v3/"></script>
-  <style>
-    body {
-      font-family: Inter, sans-serif;
-      background: #fafbff;
-      color: #222;
-      margin: 0;
-      padding: 2rem;
-    }
-    .panel {
-      max-width: 900px;
-      margin: 0 auto;
-      background: #fff;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    button {
-      background: #c7e6ff;
-      border: none;
-      border-radius: 6px;
-      padding: 0.5rem 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-right: 0.5rem;
-      transition: 0.2s;
-    }
-    button:hover {
-      background: #b0f7ce;
-    }
-    input, textarea, select {
-      width: 100%;
-      margin: 0.3rem 0 1rem;
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 0.95rem;
-    }
-    #item-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      margin-top: 1.5rem;
-    }
-    .cms-card {
-      background: #fdfdfd;
-      border: 1px solid #e3e3e3;
-      border-radius: 10px;
-      padding: 1.5rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    .cms-card h3 {
-      margin-top: 0;
-    }
-  </style>
-</head>
+// ========== STATIC FRONTEND (optional) ==========
+// If you have your CMS or site HTML in the project root or /public folder,
+// this allows it to be served directly via http://localhost:4000/cms.html etc.
+app.use(express.static(path.resolve(process.cwd())));
 
-<body>
-  <!-- LOGIN SCREEN -->
-  <div id="login-screen" class="panel">
-    <h2>CMS Login</h2>
-    <input id="user" placeholder="Username" />
-    <input id="pass" type="password" placeholder="Password" />
-    <button onclick="login()">Login</button>
-    <p id="login-status"></p>
-  </div>
+// ========== ROUTES ==========
+app.use("/api", authRoutes);           // handles /api/login, /api/logout
+app.use("/api/content", contentRoutes); // handles /api/content/:type
 
-  <!-- DASHBOARD SCREEN -->
-  <div id="cms-screen" class="panel" style="display:none;">
-    <h2>CMS Dashboard</h2>
-    <div>
-      <label>Choose Data Type:</label>
-      <select id="data-type" onchange="loadData()">
-        <option value="shop">Shop</option>
-        <option value="pages">Pages</option>
-        <option value="blog">Blog</option>
-      </select>
-      <button onclick="saveData()">üíæ Save</button>
-      <button onclick="logout()">Logout</button>
-      <button onclick="addItem()">+ Add New</button>
-    </div>
-
-    <div id="item-grid"></div>
-  </div>
-
-  <!-- Keep login after refresh -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const token = localStorage.getItem("cms_token");
-      if (token === "admin-session") {
-        document.getElementById("login-screen").style.display = "none";
-        document.getElementById("cms-screen").style.display = "block";
-        loadData(); // defined in admin.js
-      } else {
-        document.getElementById("login-screen").style.display = "block";
-        document.getElementById("cms-screen").style.display = "none";
-      }
+// ========== STRIPE LINK GENERATOR ==========
+app.post("/api/stripe/create-link", async (req, res) => {
+  const { name, price } = req.body;
+  try {
+    const product = await stripe.products.create({ name });
+    const priceObj = await stripe.prices.create({
+      product: product.id,
+      unit_amount: price * 100,
+      currency: "usd",
     });
-  </script>
-
-  <script src="admin.js"></script>
-</body>
-</html>
-
-=== ./cms/admin-local.html ===
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Just A Premise CMS</title>
-  <link rel="stylesheet" href="/css/admin.css">
-</head>
-<body>
-  <div class="sidebar">
-    <button onclick="loadFile('shop')"><span>Shop</span></button>
-    <button onclick="saveJSON()"><span>Save</span></button>
-    <hr>
-    <button onclick="logout()"><span>Logout</span></button>
-  </div>
-
-  <main>
-    <header class="toolbar">
-      <div class="file-info">
-        <h1 id="file-title">Shop</h1>
-        <p id="file-desc">Edit products below</p>
-      </div>
-
-      <!-- Shop Filters -->
-      <div id="filters" class="filter-bar">
-        <input id="filter-search" type="text" placeholder="Search title‚Ä¶">
-        <select id="filter-availability">
-          <option value="all">All</option>
-          <option value="available">Available</option>
-          <option value="sold">Sold Out</option>
-        </select>
-        <select id="filter-adult">
-          <option value="all">All</option>
-          <option value="adult">18+ Only</option>
-          <option value="nonadult">Non-Adult</option>
-        </select>
-        <input id="filter-min" type="number" placeholder="Min $" style="width:70px;">
-        <input id="filter-max" type="number" placeholder="Max $" style="width:70px;">
-      </div>
-    </header>
-
-    <div id="card-grid" class="card-grid"></div>
-    <button class="add-item" onclick="addItem()">+ Add Product</button>
-  </main>
-
-  <script src="/js/admin.js"></script>
-</body>
-</html>
-
-=== ./cms/admin.js ===
-// cms/admin.js
-const API = "http://localhost:4000/api";
-let currentType = "shop";
-let data = [];
-
-/* ===========================================================
-   KEEP LOGIN AFTER REFRESH
-   =========================================================== */
-document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("cms_token");
-  if (token === "admin-session") {
-    document.getElementById("login-screen").style.display = "none";
-    document.getElementById("cms-screen").style.display = "block";
-    loadData(); // load dashboard data immediately
-  } else {
-    document.getElementById("login-screen").style.display = "block";
-    document.getElementById("cms-screen").style.display = "none";
+    const link = await stripe.paymentLinks.create({
+      line_items: [{ price: priceObj.id, quantity: 1 }],
+    });
+    res.json({ success: true, url: link.url });
+  } catch (err) {
+    console.error("Stripe error:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
-/* ===========================================================
-   LOGIN + LOGOUT
-   =========================================================== */
-async function login() {
-  const user = document.getElementById("user").value;
-  const pass = document.getElementById("pass").value;
+// ========== FALLBACK ROUTE ==========
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
 
-  const res = await fetch(`${API}/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username: user, password: pass }),
-  });
-  const out = await res.json();
+// ========== SERVER START ==========
+const PORT = 4000;
+app.listen(PORT, () => {
+  console.log(`‚úÖ CMS API running on http://localhost:${PORT}`);
+});
 
-  if (out.success) {
-    // Save token locally so session persists
-    localStorage.setItem("cms_token", out.token);
-    document.getElementById("login-screen").style.display = "none";
-    document.getElementById("cms-screen").style.display = "block";
-    loadData();
-  } else {
-    document.getElementById("login-status").innerText = "‚ùå Invalid credentials";
+=== ./cms/data/package-lock.json ===
+{
+  "name": "justapremise-site",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {}
+}
+
+=== ./cms/data/shop.json ===
+[
+  {
+    "title": "Out here Gal",
+    "price": "15",
+    "stripe_link": "",
+    "description": "A simple test item.",
+    "available": true,
+    "adult": true,
+    "isAdult": true
+  },
+  {
+    "title": "Sold Example",
+    "price": "10",
+    "stripe_link": "",
+    "description": "This should show a SOLD badge.",
+    "available": false,
+    "adult": false
+  },
+  {
+    "title": "Dreamveil Narrative Blueprint",
+    "price": "180",
+    "stripe_link": "https://buy.stripe.com/example",
+    "description": "A mysterious dream-woven story template.",
+    "available": true,
+    "adult": false
   }
-}
-
-function logout() {
-  localStorage.removeItem("cms_token");
-  document.getElementById("cms-screen").style.display = "none";
-  document.getElementById("login-screen").style.display = "block";
-}
-
-/* ===========================================================
-   DATA HANDLING
-   =========================================================== */
-async function loadData() {
-  currentType = document.getElementById("data-type").value;
-  try {
-    const res = await fetch(`${API}/content/${currentType}`);
-    data = await res.json();
-    renderItems();
-  } catch (err) {
-    alert("Error loading data");
-  }
-}
-
-function renderItems() {
-  const grid = document.getElementById("item-grid");
-  grid.innerHTML = "";
-
-  data.forEach((item, index) => {
-    const card = document.createElement("div");
-    card.className = "cms-card";
-    card.innerHTML = `
-      <h3>${item.title || "Untitled Product"}</h3>
-
-      <label>Title</label>
-      <input value="${item.title || ""}" onchange="updateField(${index}, 'title', this.value)">
-
-      <label>Price ($)</label>
-      <input type="number" step="0.01" value="${item.price || 0}" onchange="updateField(${index}, 'price', parseFloat(this.value))">
-
-      <label>Description</label>
-      <textarea onchange="updateField(${index}, 'description', this.value)">${item.description || ""}</textarea>
-
-      <label>Available</label>
-      <input type="checkbox" ${item.available ? "checked" : ""} onchange="updateField(${index}, 'available', this.checked)">
-
-      <label>18+ Content</label>
-      <input type="checkbox" ${item.adult ? "checked" : ""} onchange="updateField(${index}, 'adult', this.checked)">
-
-      <label>Stripe Link</label>
-      <input value="${item.stripe_link || ""}" onchange="updateField(${index}, 'stripe_link', this.value)">
-
-      <button onclick="generateStripe(${index})">üí≥ Generate Stripe Link</button>
-      <button onclick="deleteItem(${index})" style="background:#ffd6e0;">üóë Delete</button>
-    `;
-    grid.appendChild(card);
-  });
-}
-
-/* ===========================================================
-   CRUD HELPERS
-   =========================================================== */
-function updateField(index, field, value) {
-  data[index][field] = value;
-}
-
-function addItem() {
-  data.push({
-    title: "New Product",
-    price: 0,
-    description: "",
-    available: true,
-    adult: false,
-    stripe_link: "",
-  });
-  renderItems();
-}
-
-function deleteItem(index) {
-  if (confirm("Delete this item?")) {
-    data.splice(index, 1);
-    renderItems();
-  }
-}
-
-async function saveData() {
-  try {
-    const res = await fetch(`${API}/content/${currentType}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    const out = await res.json();
-    if (out.success) alert("‚úÖ Saved successfully!");
-    else alert("‚ùå Save failed");
-  } catch (err) {
-    alert("‚ö†Ô∏è Error saving data");
-  }
-}
-
-/* ===========================================================
-   STRIPE LINK GENERATOR
-   =========================================================== */
-async function generateStripe(index) {
-  const item = data[index];
-  if (!item.title || !item.price) {
-    return alert("‚ö†Ô∏è You must set a title and price first!");
-  }
-
-  const res = await fetch(`${API}/stripe/create-link`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name: item.title, price: item.price }),
-  });
-
-  const out = await res.json();
-  if (out.success) {
-    data[index].stripe_link = out.url;
-    alert("‚úÖ Stripe link created!");
-    renderItems();
-  } else {
-    alert("‚ùå Stripe error: " + out.error);
-  }
-}
-
-=== ./js/cms-shop.js ===
+]
+=== ./cms/js/cms-shop.js ===
 // js/cms-shop.js
 // Controls the Just a Premise CMS Shop editor interface
 
@@ -3377,7 +3297,7 @@ addBtnMobile?.addEventListener("click", addProduct);
 // ===== INIT =====
 loadShop();
 
-=== ./cms.html ===
+=== ./cms/cms.html ===
 <!DOCTYPE html>
 <html lang="en">
 <head>
