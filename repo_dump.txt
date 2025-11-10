@@ -1,5 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Sun Nov  9 19:09:01 UTC 2025
+Generated on Mon Nov 10 07:58:56 UTC 2025
 
 === ./scss/_pages.scss ===
 
@@ -2609,12 +2609,13 @@ done
 === ./data/shop.json ===
 [
   {
-    "title": "Test Product",
+    "title": "Out here Gal",
     "price": "15",
     "stripe_link": "",
     "description": "A simple test item.",
     "available": true,
-    "adult": true
+    "adult": true,
+    "isAdult": true
   },
   {
     "title": "Sold Example",
@@ -2653,7 +2654,7 @@ done
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+   "dev": "nodemon server/index.js"
   },
   "repository": {
     "type": "git",
@@ -2893,23 +2894,6 @@ done
 === ./cms/index.html ===
 <!DOCTYPE html>
 <html lang="en">
-  
-// Keep login after refresh
-document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("cms_token");
-  if (token === "admin-session") {
-    // Already logged in, show the dashboard immediately
-    document.getElementById("login-screen").style.display = "none";
-    document.getElementById("cms-screen").style.display = "block";
-    loadData(); // existing function in admin.js
-  } else {
-    // Not logged in yet
-    document.getElementById("login-screen").style.display = "block";
-    document.getElementById("cms-screen").style.display = "none";
-  }
-});
-
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -2972,7 +2956,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   </style>
 </head>
+
 <body>
+  <!-- LOGIN SCREEN -->
   <div id="login-screen" class="panel">
     <h2>CMS Login</h2>
     <input id="user" placeholder="Username" />
@@ -2981,6 +2967,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <p id="login-status"></p>
   </div>
 
+  <!-- DASHBOARD SCREEN -->
   <div id="cms-screen" class="panel" style="display:none;">
     <h2>CMS Dashboard</h2>
     <div>
@@ -2997,6 +2984,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div id="item-grid"></div>
   </div>
+
+  <!-- Keep login after refresh -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("cms_token");
+      if (token === "admin-session") {
+        document.getElementById("login-screen").style.display = "none";
+        document.getElementById("cms-screen").style.display = "block";
+        loadData(); // defined in admin.js
+      } else {
+        document.getElementById("login-screen").style.display = "block";
+        document.getElementById("cms-screen").style.display = "none";
+      }
+    });
+  </script>
 
   <script src="admin.js"></script>
 </body>
@@ -3057,9 +3059,28 @@ const API = "http://localhost:4000/api";
 let currentType = "shop";
 let data = [];
 
+/* ===========================================================
+   KEEP LOGIN AFTER REFRESH
+   =========================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("cms_token");
+  if (token === "admin-session") {
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("cms-screen").style.display = "block";
+    loadData(); // load dashboard data immediately
+  } else {
+    document.getElementById("login-screen").style.display = "block";
+    document.getElementById("cms-screen").style.display = "none";
+  }
+});
+
+/* ===========================================================
+   LOGIN + LOGOUT
+   =========================================================== */
 async function login() {
   const user = document.getElementById("user").value;
   const pass = document.getElementById("pass").value;
+
   const res = await fetch(`${API}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -3068,6 +3089,7 @@ async function login() {
   const out = await res.json();
 
   if (out.success) {
+    // Save token locally so session persists
     localStorage.setItem("cms_token", out.token);
     document.getElementById("login-screen").style.display = "none";
     document.getElementById("cms-screen").style.display = "block";
@@ -3083,6 +3105,9 @@ function logout() {
   document.getElementById("login-screen").style.display = "block";
 }
 
+/* ===========================================================
+   DATA HANDLING
+   =========================================================== */
 async function loadData() {
   currentType = document.getElementById("data-type").value;
   try {
@@ -3129,6 +3154,9 @@ function renderItems() {
   });
 }
 
+/* ===========================================================
+   CRUD HELPERS
+   =========================================================== */
 function updateField(index, field, value) {
   data[index][field] = value;
 }
@@ -3167,16 +3195,21 @@ async function saveData() {
   }
 }
 
+/* ===========================================================
+   STRIPE LINK GENERATOR
+   =========================================================== */
 async function generateStripe(index) {
   const item = data[index];
   if (!item.title || !item.price) {
     return alert("⚠️ You must set a title and price first!");
   }
+
   const res = await fetch(`${API}/stripe/create-link`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name: item.title, price: item.price }),
   });
+
   const out = await res.json();
   if (out.success) {
     data[index].stripe_link = out.url;
@@ -3187,120 +3220,207 @@ async function generateStripe(index) {
   }
 }
 
-=== ./js/product.js ===
-const params = new URLSearchParams(window.location.search);
-const productId = params.get("id");
+=== ./js/cms-shop.js ===
+// js/cms-shop.js
+// Controls the Just a Premise CMS Shop editor interface
 
-if (!productId) {
-  document.getElementById("product-detail").innerHTML =
-    "<p>Product not found.</p>";
-} else {
-  fetch("/data/shop.json")
-    .then(res => res.json())
-    .then(data => {
-      const item = data.find(p => p.id === productId);
-      if (!item) {
-        document.getElementById("product-detail").innerHTML =
-          "<p>Product not found.</p>";
-        return;
-      }
+const shopList = document.getElementById("shop-list");
+const saveBtn = document.getElementById("save-btn");
+const addBtn = document.getElementById("add-btn");
+const addBtnMobile = document.getElementById("add-item-mobile");
 
-      document.title = `${item.title} — Just a Premise`;
-      document.getElementById("product-detail").innerHTML = `
-        <div class="product-hero">
-          <img src="${item.image}" alt="${item.title}">
-          <div class="product-info">
-            <h1>${item.title}</h1>
-            <p class="product-price">$${item.price}</p>
-            <p>${item.description}</p>
-            <p class="product-tags">${item.tags
-              .map(tag => `<span>${tag}</span>`)
-              .join("")}</p>
-            <button class="buy-btn" ${
-              !item.available ? "disabled" : ""
-            }>${item.available ? "Add to Cart" : "Sold Out"}</button>
-          </div>
-        </div>
-      `;
-    })
-    .catch(err => console.error("Error loading product:", err));
+let products = [];
+
+// ===== FETCH SHOP DATA =====
+async function loadShop() {
+  try {
+    const res = await fetch("/api/content/shop");
+    if (!res.ok) throw new Error("Failed to load shop data");
+    products = await res.json();
+    renderShop();
+  } catch (err) {
+    console.error("Error loading shop:", err);
+    shopList.innerHTML = `<p style="color:red;">Failed to load shop.json</p>`;
+  }
 }
 
-=== ./js/main.js ===
+// ===== RENDER SHOP LIST =====
+function renderShop() {
+  shopList.innerHTML = "";
+  if (!products.length) {
+    shopList.innerHTML = `<p style="color:#666;">No listings yet. Add one below.</p>`;
+    return;
+  }
 
-=== ./js/shop.js ===
-// ─────────────── Load Products ───────────────
-fetch("/data/shop.json")
-  .then(res => res.json())
-  .then(data => {
-    const grid = document.getElementById("shop-grid");
-    grid.innerHTML = "";
+  products.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <h3>${item.title || "Untitled Product"}</h3>
 
-    data.forEach((item) => {
-      const card = document.createElement("div");
-      card.className = "product-card";
+      <div class="card-body open">
+        <label>Title</label>
+        <input type="text" data-index="${index}" data-key="title" value="${item.title || ""}">
 
-      // Build product card
-      card.innerHTML = `
-        <img src="${item.image || 'images/placeholder.jpg'}" alt="${item.title}">
-        <h3>${item.title}</h3>
-        <p class="price">$${item.price}</p>
-        ${item.adult ? `<div class="sold-badge" style="background:#ffb6c7;">18+ Content</div>` : ""}
-        <button class="buy-btn" ${!item.available ? "disabled" : ""}>
-          ${item.available ? "View Product" : "Sold Out"}
-        </button>
-      `;
+        <label>Price (USD)</label>
+        <input type="number" step="0.01" data-index="${index}" data-key="price" value="${item.price || ""}">
 
-      // Handle button click
-      const button = card.querySelector(".buy-btn");
-      button.addEventListener("click", () => {
-        if (!item.available) return;
+        <label>Image URL</label>
+        <input type="text" data-index="${index}" data-key="image" value="${item.image || ""}">
 
-        // Check if product is 18+
-        if (item.adult) {
-          // Check if user has already verified age
-          if (!localStorage.getItem("age_verified")) {
-            showAgeGate(item);
-          } else {
-            window.location.href = `/product.html?id=${item.id}`;
-          }
-        } else {
-          // Normal item, go straight to product page
-          window.location.href = `/product.html?id=${item.id}`;
-        }
-      });
+        <label>Description</label>
+        <textarea rows="3" data-index="${index}" data-key="description">${item.description || ""}</textarea>
 
-      grid.appendChild(card);
+        <label>Category</label>
+        <input type="text" data-index="${index}" data-key="category" value="${item.category || ""}">
+
+        <label>Tags (comma-separated)</label>
+        <input type="text" data-index="${index}" data-key="tags" value="${(item.tags || []).join(", ")}">
+
+        <label>Stripe Link</label>
+        <input type="text" data-index="${index}" data-key="stripeUrl" value="${item.stripeUrl || ""}">
+
+        <label>
+          <input type="checkbox" data-index="${index}" data-key="isAdult" ${item.isAdult ? "checked" : ""}> Adult Content
+        </label>
+
+        <label>
+          <input type="checkbox" data-index="${index}" data-key="isSold" ${item.isSold ? "checked" : ""}> Sold Out
+        </label>
+
+        <button class="delete-btn" data-index="${index}">Delete Item</button>
+      </div>
+    `;
+    shopList.appendChild(card);
+  });
+
+  attachListeners();
+}
+
+// ===== ATTACH INPUT LISTENERS =====
+function attachListeners() {
+  document.querySelectorAll("input, textarea").forEach((el) => {
+    el.addEventListener("input", handleInput);
+  });
+  document.querySelectorAll(".delete-btn").forEach((btn) => {
+    btn.addEventListener("click", handleDelete);
+  });
+}
+
+// ===== HANDLE FIELD EDITS =====
+function handleInput(e) {
+  const { index, key } = e.target.dataset;
+  const value =
+    e.target.type === "checkbox"
+      ? e.target.checked
+      : e.target.value;
+
+  if (key === "tags") {
+    products[index][key] = value
+      .split(",")
+      .map((t) => t.trim())
+      .filter((t) => t);
+  } else if (key === "price") {
+    products[index][key] = parseFloat(value) || 0;
+  } else {
+    products[index][key] = value;
+  }
+}
+
+// ===== ADD NEW PRODUCT =====
+function addProduct() {
+  products.push({
+    id: `prod-${Date.now()}`,
+    title: "",
+    price: 0,
+    image: "",
+    description: "",
+    category: "",
+    tags: [],
+    stripeUrl: "",
+    isAdult: false,
+    isSold: false
+  });
+  renderShop();
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+// ===== DELETE PRODUCT =====
+function handleDelete(e) {
+  const index = e.target.dataset.index;
+  if (!confirm("Delete this product?")) return;
+  products.splice(index, 1);
+  renderShop();
+}
+
+// ===== SAVE ALL CHANGES =====
+async function saveShop() {
+  try {
+    const res = await fetch("/api/content/shop", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(products, null, 2)
     });
-  })
-  .catch(err => console.error("Error loading shop:", err));
+    if (!res.ok) throw new Error("Save failed");
+    alert("✅ Shop data saved successfully!");
+  } catch (err) {
+    console.error("Save error:", err);
+    alert("❌ Error saving shop data. Check console for details.");
+  }
+}
 
+// ===== EVENT HOOKUP =====
+saveBtn?.addEventListener("click", saveShop);
+addBtn?.addEventListener("click", addProduct);
+addBtnMobile?.addEventListener("click", addProduct);
 
-// ─────────────── AGE GATE ───────────────
-function showAgeGate(item) {
-  const modal = document.createElement("div");
-  modal.className = "age-modal";
-  modal.innerHTML = `
-    <div class="age-modal-content">
-      <h2>Adult Content Warning</h2>
-      <p>This product contains mature material. You must be 18 or older to view or purchase it.</p>
-      <div class="age-buttons">
-        <button id="age-yes">Yes, I’m 18+</button>
-        <button id="age-no">No, I’m not</button>
+// ===== INIT =====
+loadShop();
+
+=== ./cms.html ===
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Just a Premise CMS — Shop Manager</title>
+  <link rel="stylesheet" href="css/main.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <aside class="sidebar">
+    <h3>Just a Premise CMS</h3>
+
+    <button id="shop-btn"><span>🛍️ Shop Listings</span></button>
+    <hr>
+    <button id="logout-btn"><span>Logout</span></button>
+  </aside>
+
+  <main>
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <h2>Shop Listings</h2>
+      <div>
+        <button id="save-btn">💾 Save Changes</button>
+        <button id="add-btn">➕ Add Item</button>
       </div>
     </div>
-  `;
-  document.body.appendChild(modal);
 
-  // Handle choices
-  document.getElementById("age-yes").addEventListener("click", () => {
-    localStorage.setItem("age_verified", "true"); // Remember approval
-    document.body.removeChild(modal);
-    window.location.href = `/product.html?id=${item.id}`;
-  });
+    <!-- Filter Bar (optional search) -->
+    <div class="filter-bar">
+      <input type="text" id="search" placeholder="Search by title…">
+      <select id="filter-category">
+        <option value="">All Categories</option>
+      </select>
+    </div>
 
-  document.getElementById("age-no").addEventListener("click", () => {
-    document.body.removeChild(modal);
-  });
-}
+    <!-- Dynamic content goes here -->
+    <div id="shop-list"></div>
+
+    <!-- Add-item button for mobile layout -->
+    <button class="add-item" id="add-item-mobile">+ Add Item</button>
+  </main>
+
+  <script src="js/cms-shop.js"></script>
+</body>
+</html>
 
