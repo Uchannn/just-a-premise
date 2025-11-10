@@ -9,8 +9,7 @@ import stripePkg from "stripe";
 
 import authRoutes from "./routes/auth.js";
 import contentRoutes from "./routes/content.js";
-import uploadRoute from "./routes/upload.js";
-app.use("/api/upload", uploadRoute);
+import uploadRoute from "./routes/upload.js"; // ✅ add this line
 
 // ========== ENVIRONMENT SETUP ==========
 dotenv.config({ path: path.resolve(process.cwd(), ".env") });
@@ -27,8 +26,9 @@ app.use(bodyParser.json());
 app.use(express.static(path.resolve(process.cwd())));
 
 // ========== ROUTES ==========
-app.use("/api", authRoutes);           // handles /api/login, /api/logout
+app.use("/api", authRoutes);            // handles /api/login, /api/logout
 app.use("/api/content", contentRoutes); // handles /api/content/:type
+app.use("/api/upload", uploadRoute);    // ✅ add this line
 
 // ========== STRIPE LINK GENERATOR ==========
 app.post("/api/stripe/create-link", async (req, res) => {
