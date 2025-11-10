@@ -1,3 +1,4 @@
+// server/index.js
 import express from "express";
 import fs from "fs";
 import path from "path";
@@ -8,7 +9,6 @@ import stripePkg from "stripe";
 
 import authRoutes from "./routes/auth.js";
 import contentRoutes from "./routes/content.js";
-import uploadRoute from "./routes/upload.js";  // ← 🆕 add this line
 
 // ========== ENVIRONMENT SETUP ==========
 dotenv.config({ path: path.resolve(process.cwd(), ".env") });
@@ -19,13 +19,14 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// ========== STATIC FRONTEND ==========
+// ========== STATIC FRONTEND (optional) ==========
+// If you have your CMS or site HTML in the project root or /public folder,
+// this allows it to be served directly via http://localhost:4000/cms.html etc.
 app.use(express.static(path.resolve(process.cwd())));
 
 // ========== ROUTES ==========
-app.use("/api", authRoutes);             // handles /api/login, /api/logout
-app.use("/api/content", contentRoutes);  // handles /api/content/:type
-app.use("/api/upload", uploadRoute);     // ← 🆕 add this line
+app.use("/api", authRoutes);           // handles /api/login, /api/logout
+app.use("/api/content", contentRoutes); // handles /api/content/:type
 
 // ========== STRIPE LINK GENERATOR ==========
 app.post("/api/stripe/create-link", async (req, res) => {
