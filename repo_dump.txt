@@ -1,5 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Mon Nov 10 08:15:03 UTC 2025
+Generated on Mon Nov 10 08:21:05 UTC 2025
 
 === ./pubweb/shop.html ===
 <!DOCTYPE html>
@@ -2551,8 +2551,38 @@ router.post("/:type", (req, res) => {
 
 export default router;
 
+=== ./cms/server/routes/upload.js ===
+// cms/server/routes/upload.js
+import express from "express";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+
+const router = express.Router();
+
+// Create an "uploads" folder if it doesn't exist
+const uploadDir = path.join(process.cwd(), "cms", "uploads");
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+
+// Configure multer (handles file uploads)
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => cb(null, uploadDir),
+  filename: (_, file, cb) => {
+    const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, unique + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
+
+// POST /api/upload
+router.post("/", upload.single("file"), (req, res) => {
+  const publicPath = `/cms/uploads/${req.file.filename}`;
+  res.json({ url: publicPath });
+});
+
+export default router;
+
 === ./cms/server/index.js ===
-// server/index.js
 import express from "express";
 import fs from "fs";
 import path from "path";
@@ -2563,6 +2593,7 @@ import stripePkg from "stripe";
 
 import authRoutes from "./routes/auth.js";
 import contentRoutes from "./routes/content.js";
+import uploadRoute from "./routes/upload.js";  // ← 🆕 add this line
 
 // ========== ENVIRONMENT SETUP ==========
 dotenv.config({ path: path.resolve(process.cwd(), ".env") });
@@ -2573,14 +2604,13 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// ========== STATIC FRONTEND (optional) ==========
-// If you have your CMS or site HTML in the project root or /public folder,
-// this allows it to be served directly via http://localhost:4000/cms.html etc.
+// ========== STATIC FRONTEND ==========
 app.use(express.static(path.resolve(process.cwd())));
 
 // ========== ROUTES ==========
-app.use("/api", authRoutes);           // handles /api/login, /api/logout
-app.use("/api/content", contentRoutes); // handles /api/content/:type
+app.use("/api", authRoutes);             // handles /api/login, /api/logout
+app.use("/api/content", contentRoutes);  // handles /api/content/:type
+app.use("/api/upload", uploadRoute);     // ← 🆕 add this line
 
 // ========== STRIPE LINK GENERATOR ==========
 app.post("/api/stripe/create-link", async (req, res) => {
