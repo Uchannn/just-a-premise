@@ -1,5 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Wed Nov 12 00:11:25 UTC 2025
+Generated on Wed Nov 12 00:35:33 UTC 2025
 
 === ./pubweb/shop.html ===
 <!DOCTYPE html>
@@ -610,6 +610,7 @@ npx nodemon cms/server/index.js
         "dotenv": "^16.4.5",
         "express": "^4.19.2",
         "multer": "^2.0.2",
+        "slugify": "^1.6.6",
         "stripe": "^16.4.0"
       },
       "devDependencies": {
@@ -1839,6 +1840,15 @@ npx nodemon cms/server/index.js
         "node": ">=10"
       }
     },
+    "node_modules/slugify": {
+      "version": "1.6.6",
+      "resolved": "https://registry.npmjs.org/slugify/-/slugify-1.6.6.tgz",
+      "integrity": "sha512-h+z7HKHYXj6wJU+AnS/+IH8Uh9fdcX1Lrhg1/VMdf9PwoBQXFcXiAdsy2tSK0P6gKwJLXp02r90ahUCqHk9rrw==",
+      "license": "MIT",
+      "engines": {
+        "node": ">=8.0.0"
+      }
+    },
     "node_modules/statuses": {
       "version": "2.0.1",
       "resolved": "https://registry.npmjs.org/statuses/-/statuses-2.0.1.tgz",
@@ -2580,6 +2590,7 @@ done
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "multer": "^2.0.2",
+    "slugify": "^1.6.6",
     "stripe": "^16.4.0"
   },
   "bugs": {
@@ -2703,7 +2714,7 @@ function makeSlug(title) {
 
 // ========== PRODUCT PAGE GENERATOR ==========
 router.post("/product", (req, res) => {
-  const { title, image, description, price, stripeUrl } = req.body;
+  const { title, image, description, price, stripeUrl, isSold } = req.body;
   if (!title) return res.status(400).json({ error: "Missing title" });
 
   const slug = makeSlug(title);
@@ -2711,6 +2722,17 @@ router.post("/product", (req, res) => {
   ensureDir(folder);
 
   const filePath = path.join(folder, `${slug}.html`);
+
+  const soldBadge = isSold
+    ? `<span class="badge sold-out">SOLD OUT</span>`
+    : "";
+
+  const buyButton = isSold
+    ? `<button class="buy-btn disabled" disabled>Unavailable</button>`
+    : stripeUrl
+    ? `<a href="${stripeUrl}" class="buy-btn">Buy on Stripe</a>`
+    : "";
+
   const html = `
 <!DOCTYPE html>
 <html lang="en">
@@ -2721,11 +2743,14 @@ router.post("/product", (req, res) => {
 </head>
 <body>
   <main class="product-page">
-    <h1>${title}</h1>
-    ${image ? `<img src="${image}" alt="${title}">` : ""}
-    <p>${description || ""}</p>
-    ${price ? `<p><strong>$${price}</strong></p>` : ""}
-    ${stripeUrl ? `<a href="${stripeUrl}" class="buy-btn">Buy on Stripe</a>` : ""}
+    <div class="product-header">
+      <h1>${title}</h1>
+      ${soldBadge}
+    </div>
+    ${image ? `<img src="${image}" alt="${title}" class="product-image">` : ""}
+    <p class="desc">${description || ""}</p>
+    ${price ? `<p class="price">$${price}</p>` : ""}
+    ${buyButton}
   </main>
 </body>
 </html>
@@ -2738,6 +2763,7 @@ router.post("/product", (req, res) => {
     pageUrl: `/products/${slug}.html`
   });
 });
+
 
 // ========== DOWNLOAD PAGE GENERATOR ==========
 router.post("/download", (req, res) => {
@@ -2823,9 +2849,9 @@ import stripePkg from "stripe";
 
 import authRoutes from "./routes/auth.js";
 import contentRoutes from "./routes/content.js";
-import uploadRoute from "./routes/upload.js"; // ✅ add this line
-import generateRoutes from "./routes/generate.js";
-app.use("/api/generate", generateRoutes);
+import uploadRoute from "./routes/upload.js";
+import generateRoutes from "./routes/generate.js"; // ✅ this must be below imports, not mid-code
+
 
 
 // ========== ENVIRONMENT SETUP ==========
@@ -2846,6 +2872,7 @@ app.use(express.static(path.resolve(process.cwd())));
 app.use("/api", authRoutes);            // handles /api/login, /api/logout
 app.use("/api/content", contentRoutes); // handles /api/content/:type
 app.use("/api/upload", uploadRoute);    // ✅ add this line
+app.use("/api/generate", generateRoutes);
 
 // ========== STRIPE LINK GENERATOR ==========
 app.post("/api/stripe/create-link", async (req, res) => {
@@ -4752,15 +4779,14 @@ function renderShop() {
         <input type="number" step="0.01" data-index="${index}" data-key="price" value="${item.price || ""}">
 
         <label>Image</label>
-<div class="image-upload" data-index="${index}">
-  ${
-    item.image
-      ? `<img src="${item.image}" alt="" class="preview">`
-      : `<p class="drop-zone">Drag & drop or click to upload</p>`
-  }
-  <input type="file" accept="image/*" hidden>
-</div>
-
+        <div class="image-upload" data-index="${index}">
+          ${
+            item.image
+              ? `<img src="${item.image}" alt="" class="preview">`
+              : `<p class="drop-zone">Drag & drop or click to upload</p>`
+          }
+          <input type="file" accept="image/*" hidden>
+        </div>
 
         <label>Description</label>
         <textarea rows="3" data-index="${index}" data-key="description">${item.description || ""}</textarea>
@@ -4782,6 +4808,9 @@ function renderShop() {
           <input type="checkbox" data-index="${index}" data-key="isSold" ${item.isSold ? "checked" : ""}> Sold Out
         </label>
 
+        <button class="gen-product" data-index="${index}">Generate Product Page</button>
+        <button class="gen-download" data-index="${index}">Generate Download Page</button>
+
         <button class="delete-btn" data-index="${index}">Delete Item</button>
       </div>
     `;
@@ -4790,10 +4819,10 @@ function renderShop() {
 
   attachListeners();
   initImageUploads();
-
+  initGeneratorButtons(); // fix for the missing listeners
 }
 
-// ===== ATTACH INPUT LISTENERS =====
+// ===== INPUT / DELETE / ADD LISTENERS =====
 function attachListeners() {
   document.querySelectorAll("input, textarea").forEach((el) => {
     el.addEventListener("input", handleInput);
@@ -4858,10 +4887,68 @@ async function saveShop() {
       body: JSON.stringify(products, null, 2)
     });
     if (!res.ok) throw new Error("Save failed");
-    alert("✅ Shop data saved successfully!");
+    console.log("✅ Shop data saved successfully!");
   } catch (err) {
     console.error("Save error:", err);
     alert("❌ Error saving shop data. Check console for details.");
+  }
+}
+
+// ===== GENERATE PAGE BUTTONS =====
+function initGeneratorButtons() {
+  document.querySelectorAll(".gen-product").forEach((btn) => {
+    btn.addEventListener("click", handleGenerateProduct);
+  });
+  document.querySelectorAll(".gen-download").forEach((btn) => {
+    btn.addEventListener("click", handleGenerateDownload);
+  });
+}
+
+async function handleGenerateProduct(e) {
+  const index = e.target.dataset.index;
+  const item = products[index];
+
+  try {
+    const res = await fetch("/api/generate/product", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    });
+    const data = await res.json();
+    if (data.success) {
+      item.pageUrl = data.pageUrl;
+      alert(`✅ Product page created: ${data.pageUrl}`);
+      await saveShop();
+    } else {
+      throw new Error(data.error);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("❌ Failed to generate product page.");
+  }
+}
+
+async function handleGenerateDownload(e) {
+  const index = e.target.dataset.index;
+  const item = products[index];
+
+  try {
+    const res = await fetch("/api/generate/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    });
+    const data = await res.json();
+    if (data.success) {
+      item.downloadUrl = data.downloadUrl;
+      alert(`✅ Download page created: ${data.downloadUrl}`);
+      await saveShop();
+    } else {
+      throw new Error(data.error);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("❌ Failed to generate download page.");
   }
 }
 
@@ -4871,18 +4958,13 @@ function initImageUploads() {
     const index = box.dataset.index;
     const input = box.querySelector("input[type=file]");
 
-    // Clicking anywhere triggers file select
     box.addEventListener("click", () => input.click());
-
-    // Drag-drop behavior
     box.addEventListener("dragover", (e) => e.preventDefault());
     box.addEventListener("drop", (e) => {
       e.preventDefault();
       const file = e.dataTransfer.files[0];
       if (file) uploadFile(file, index, box);
     });
-
-    // File chosen manually
     input.addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (file) uploadFile(file, index, box);
@@ -4912,7 +4994,6 @@ async function uploadFile(file, index, box) {
     alert("❌ Image upload failed. Check console for details.");
   }
 }
-
 
 // ===== EVENT HOOKUP =====
 saveBtn?.addEventListener("click", saveShop);
