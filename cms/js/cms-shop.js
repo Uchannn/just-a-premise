@@ -72,10 +72,27 @@ function renderShop() {
           <input type="checkbox" data-index="${index}" data-key="isSold" ${item.isSold ? "checked" : ""}> Sold Out
         </label>
 
-        <button class="gen-product" data-index="${index}">Generate Product Page</button>
-        <button class="gen-download" data-index="${index}">Generate Download Page</button>
+        <hr>
 
-        <button class="delete-btn" data-index="${index}">Delete Item</button>
+        <!-- NEW: Download File uploader -->
+        <label>Download File</label>
+        <div class="file-upload" data-index="${index}" data-field="downloadFile">
+          ${
+            item.downloadFile
+              ? `<p class="file-done">📦 ${item.downloadFile}</p>`
+              : `<p class="drop-zone">Drag & drop or click to upload</p>`
+          }
+          <input type="file" accept=".zip,.pdf,.epub,.txt,.png,.jpg,.jpeg" hidden>
+        </div>
+
+        <div class="row-btns">
+          <button class="gen-product" data-index="${index}">Generate Product Page</button>
+          <button class="gen-download" data-index="${index}">Generate Download Page</button>
+          <!-- NEW: Make Stripe link that redirects to the download page -->
+          <button class="make-stripe" data-index="${index}">Make Stripe Link → redirect to Download</button>
+
+          <button class="delete-btn" data-index="${index}">Delete Item</button>
+        </div>
       </div>
     `;
     shopList.appendChild(card);
@@ -83,8 +100,10 @@ function renderShop() {
 
   attachListeners();
   initImageUploads();
-  initGeneratorButtons(); // fix for the missing listeners
+  initFileUploads();      // NEW
+  initGenerateButtons();  // NEW (note the exact name)
 }
+
 
 // ===== INPUT / DELETE / ADD LISTENERS =====
 function attachListeners() {
