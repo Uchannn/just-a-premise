@@ -43,15 +43,14 @@ function renderShop() {
         <input type="number" step="0.01" data-index="${index}" data-key="price" value="${item.price || ""}">
 
         <label>Image</label>
-<div class="image-upload" data-index="${index}">
-  ${
-    item.image
-      ? `<img src="${item.image}" alt="" class="preview">`
-      : `<p class="drop-zone">Drag & drop or click to upload</p>`
-  }
-  <input type="file" accept="image/*" hidden>
-</div>
-
+        <div class="image-upload" data-index="${index}">
+          ${
+            item.image
+              ? `<img src="${item.image}" alt="" class="preview">`
+              : `<p class="drop-zone">Drag & drop or click to upload</p>`
+          }
+          <input type="file" accept="image/*" hidden>
+        </div>
 
         <label>Description</label>
         <textarea rows="3" data-index="${index}" data-key="description">${item.description || ""}</textarea>
@@ -84,18 +83,10 @@ function renderShop() {
 
   attachListeners();
   initImageUploads();
-
+  initGeneratorButtons(); // fix for the missing listeners
 }
 
-document.querySelectorAll(".gen-product").forEach((btn) => {
-  btn.addEventListener("click", handleGenerateProduct);
-});
-document.querySelectorAll(".gen-download").forEach((btn) => {
-  btn.addEventListener("click", handleGenerateDownload);
-});
-
-
-// ===== ATTACH INPUT LISTENERS =====
+// ===== INPUT / DELETE / ADD LISTENERS =====
 function attachListeners() {
   document.querySelectorAll("input, textarea").forEach((el) => {
     el.addEventListener("input", handleInput);
@@ -160,11 +151,21 @@ async function saveShop() {
       body: JSON.stringify(products, null, 2)
     });
     if (!res.ok) throw new Error("Save failed");
-    alert("✅ Shop data saved successfully!");
+    console.log("✅ Shop data saved successfully!");
   } catch (err) {
     console.error("Save error:", err);
     alert("❌ Error saving shop data. Check console for details.");
   }
+}
+
+// ===== GENERATE PAGE BUTTONS =====
+function initGeneratorButtons() {
+  document.querySelectorAll(".gen-product").forEach((btn) => {
+    btn.addEventListener("click", handleGenerateProduct);
+  });
+  document.querySelectorAll(".gen-download").forEach((btn) => {
+    btn.addEventListener("click", handleGenerateDownload);
+  });
 }
 
 async function handleGenerateProduct(e) {
@@ -181,13 +182,13 @@ async function handleGenerateProduct(e) {
     if (data.success) {
       item.pageUrl = data.pageUrl;
       alert(`✅ Product page created: ${data.pageUrl}`);
-      saveShop(); // update shop.json with new pageUrl
+      await saveShop();
     } else {
       throw new Error(data.error);
     }
   } catch (err) {
-    alert("❌ Failed to generate product page.");
     console.error(err);
+    alert("❌ Failed to generate product page.");
   }
 }
 
@@ -205,16 +206,15 @@ async function handleGenerateDownload(e) {
     if (data.success) {
       item.downloadUrl = data.downloadUrl;
       alert(`✅ Download page created: ${data.downloadUrl}`);
-      saveShop(); // update shop.json with new downloadUrl
+      await saveShop();
     } else {
       throw new Error(data.error);
     }
   } catch (err) {
-    alert("❌ Failed to generate download page.");
     console.error(err);
+    alert("❌ Failed to generate download page.");
   }
 }
-
 
 // ===== IMAGE UPLOAD HANDLER =====
 function initImageUploads() {
@@ -222,18 +222,13 @@ function initImageUploads() {
     const index = box.dataset.index;
     const input = box.querySelector("input[type=file]");
 
-    // Clicking anywhere triggers file select
     box.addEventListener("click", () => input.click());
-
-    // Drag-drop behavior
     box.addEventListener("dragover", (e) => e.preventDefault());
     box.addEventListener("drop", (e) => {
       e.preventDefault();
       const file = e.dataTransfer.files[0];
       if (file) uploadFile(file, index, box);
     });
-
-    // File chosen manually
     input.addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (file) uploadFile(file, index, box);
@@ -263,7 +258,6 @@ async function uploadFile(file, index, box) {
     alert("❌ Image upload failed. Check console for details.");
   }
 }
-
 
 // ===== EVENT HOOKUP =====
 saveBtn?.addEventListener("click", saveShop);

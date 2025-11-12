@@ -10,8 +10,6 @@ import stripePkg from "stripe";
 import authRoutes from "./routes/auth.js";
 import contentRoutes from "./routes/content.js";
 import uploadRoute from "./routes/upload.js"; // ✅ add this line
-import generateRoutes from "./routes/generate.js";
-app.use("/api/generate", generateRoutes);
 
 
 // ========== ENVIRONMENT SETUP ==========
