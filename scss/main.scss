@@ -65,3 +65,37 @@ body {
   }
 }
 
+// ===== CMS Tag Styling =====
+.tags-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.4rem 0 1rem;
+}
+
+.tags-quick .tag-pick {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #ccd;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tags-quick .tag-pick:hover {
+  background: #f0f8ff;
+  border-color: #8ab;
+}
+
+.tags-quick .tag-pick.active {
+  background: #e8f2ff;
+  border-color: #8ab;
+  font-weight: 600;
+}
+
+.field-hint {
+  font-size: 0.8rem;
+  color: #777;
+  margin: 0.25rem 0 0.5rem;
+  line-height: 1.3;
+}

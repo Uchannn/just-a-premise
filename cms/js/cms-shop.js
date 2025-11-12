@@ -8,12 +8,37 @@ const addBtnMobile = document.getElementById("add-item-mobile");
 
 let products = [];
 
+// ===== PRESETS =====
+const STORY_TYPES = ["Narrative Blueprint", "Narrative Kit", "Digital Story"];
+const TAG_OPTIONS = [
+  "Horror","Romance","Comedy","Furry","Fantasy","Sci-Fi","Drama","Angst",
+  "Slice of Life","Dark","NSFW","Short","Long","Mystery","Thriller","Historical",
+  "Urban Fantasy","High Fantasy","Paranormal","Slow Burn","Enemies to Lovers"
+];
+
+// Tiny helper for IDs on legacy items
+function cryptoRandom() {
+  return Math.random().toString(36).slice(2, 9);
+}
+
 // ===== FETCH SHOP DATA =====
 async function loadShop() {
   try {
     const res = await fetch("/api/content/shop");
     if (!res.ok) throw new Error("Failed to load shop data");
     products = await res.json();
+
+    // Normalize legacy items (id, storyType, tags array)
+    products = (products || []).map(p => ({
+      id: p.id || `prod-${cryptoRandom()}`,
+      storyType: p.storyType || "",
+      tags: Array.isArray(p.tags)
+        ? p.tags
+        : (p.tags ? String(p.tags).split(",").map(t => t.trim()).filter(Boolean) : []),
+      ...p,
+    }));
+
+    initFilters();
     renderShop();
   } catch (err) {
     console.error("Error loading shop:", err);
@@ -21,15 +46,58 @@ async function loadShop() {
   }
 }
 
+function initFilters() {
+  // Use existing #filter-category as Story Type filter
+  const typeSel = document.getElementById("filter-category");
+  if (typeSel && typeSel.options.length <= 1) {
+    STORY_TYPES.forEach(t => {
+      const opt = document.createElement("option");
+      opt.value = t; opt.textContent = t;
+      typeSel.appendChild(opt);
+    });
+  }
+
+  // Optional tag filter (#filter-tag exists in your HTML now)
+  const tagSel = document.getElementById("filter-tag");
+  if (tagSel && tagSel.options.length <= 1) {
+    TAG_OPTIONS.forEach(t => {
+      const opt = document.createElement("option");
+      opt.value = t; opt.textContent = t;
+      tagSel.appendChild(opt);
+    });
+  }
+
+  document.getElementById("search")?.addEventListener("input", renderShop);
+  typeSel?.addEventListener("change", renderShop);
+  tagSel?.addEventListener("change", renderShop);
+}
+
 // ===== RENDER SHOP LIST =====
 function renderShop() {
+  const q = (document.getElementById("search")?.value || "").toLowerCase();
+  const typeFilter = document.getElementById("filter-category")?.value || ""; // Story Type filter
+  const tagFilter  = document.getElementById("filter-tag")?.value || "";
+
+  const filtered = (products || []).filter(item => {
+    const matchesQ = !q ||
+      (item.title || "").toLowerCase().includes(q) ||
+      (item.description || "").toLowerCase().includes(q);
+    const matchesType = !typeFilter || item.storyType === typeFilter;
+    const matchesTag = !tagFilter || (item.tags || []).includes(tagFilter);
+    return matchesQ && matchesType && matchesTag;
+  });
+
   shopList.innerHTML = "";
-  if (!products.length) {
-    shopList.innerHTML = `<p style="color:#666;">No listings yet. Add one below.</p>`;
+  if (!filtered.length) {
+    shopList.innerHTML = `<p style="color:#666;">No listings match your filters.</p>`;
     return;
   }
 
-  products.forEach((item, index) => {
+  filtered.forEach(item => {
+    // map to the actual index in `products` to preserve edits under filters
+    let index = products.findIndex(p => p.id === item.id);
+    if (index === -1) index = products.indexOf(item); // legacy fallback
+
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
@@ -44,32 +112,37 @@ function renderShop() {
 
         <label>Image</label>
         <div class="upload-box image-upload" data-index="${index}" data-key="image">
-          ${
-            item.image
-              ? `<img src="${item.image}" alt="" class="preview">`
-              : `<p class="drop-zone">Drag & drop or click to upload</p>`
-          }
+          ${ item.image ? `<img src="${item.image}" alt="" class="preview">`
+                        : `<p class="drop-zone">Drag & drop or click to upload</p>` }
           <input type="file" accept="image/*" hidden>
         </div>
 
         <label>Digital File (what the buyer downloads)</label>
         <div class="upload-box file-upload" data-index="${index}" data-key="downloadFile">
-          ${
-            item.downloadFile
-              ? `<p class="file-chip">${(item.downloadFile.split('/').pop())}</p>`
-              : `<p class="drop-zone">Drag & drop or click to upload</p>`
-          }
+          ${ item.downloadFile ? `<p class="file-chip">${(item.downloadFile.split('/').pop())}</p>`
+                               : `<p class="drop-zone">Drag & drop or click to upload</p>` }
           <input type="file" hidden>
         </div>
 
         <label>Description</label>
         <textarea rows="3" data-index="${index}" data-key="description">${item.description || ""}</textarea>
 
-        <label>Category</label>
-        <input type="text" data-index="${index}" data-key="category" value="${item.category || ""}">
+        <!-- Story Type -->
+        <label>Story Type</label>
+        <select data-index="${index}" data-key="storyType">
+          <option value="">— Select type —</option>
+          ${STORY_TYPES.map(t => `<option value="${t}" ${item.storyType===t?"selected":""}>${t}</option>`).join("")}
+        </select>
 
+        <!-- Tags input + quick-picks -->
         <label>Tags (comma-separated)</label>
         <input type="text" data-index="${index}" data-key="tags" value="${(item.tags || []).join(", ")}">
+        <div class="tags-quick">
+          ${TAG_OPTIONS.map(tag => `
+            <button type="button" class="tag-pick ${item.tags?.includes(tag)?"active":""}" 
+                    data-index="${index}" data-tag="${tag}">${tag}</button>
+          `).join("")}
+        </div>
 
         <label>Stripe Link</label>
         <input type="text" data-index="${index}" data-key="stripeUrl" value="${item.stripeUrl || ""}">
@@ -94,9 +167,10 @@ function renderShop() {
   });
 
   attachListeners();
-  initUploadBoxes();      // unified uploader for image + file
-  initGeneratorButtons(); // product/download
-  initStripeButtons();    // stripe link
+  initUploadBoxes();
+  initGeneratorButtons();
+  initStripeButtons();    // keep for now; you can remove if doing manual Stripe
+  wireTagQuickPicks();
 }
 
 // ===== GENERALIZED UPLOAD WIRING =====
@@ -125,6 +199,29 @@ function wireUploadBox(selector) {
   });
 }
 
+function wireTagQuickPicks() {
+  document.querySelectorAll(".tag-pick").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const index = Number(btn.dataset.index);
+      const tag = btn.dataset.tag;
+
+      products[index].tags = products[index].tags || [];
+
+      if (products[index].tags.includes(tag)) {
+        products[index].tags = products[index].tags.filter(t => t !== tag);
+      } else {
+        products[index].tags.push(tag);
+      }
+
+      // mirror into the input string so handleInput stays valid
+      const input = document.querySelector(`input[data-index="${index}"][data-key="tags"]`);
+      if (input) input.value = products[index].tags.join(", ");
+
+      renderShop();
+    });
+  });
+}
+
 async function uploadFile(file, index, key, box) {
   const formData = new FormData();
   formData.append("file", file);
@@ -149,8 +246,9 @@ async function uploadFile(file, index, key, box) {
 
 // ===== INPUT / DELETE / ADD LISTENERS =====
 function attachListeners() {
-  document.querySelectorAll("input, textarea").forEach((el) => {
+  document.querySelectorAll("input, textarea, select").forEach((el) => {
     el.addEventListener("input", handleInput);
+    el.addEventListener("change", handleInput);
   });
   document.querySelectorAll(".delete-btn").forEach((btn) => {
     btn.addEventListener("click", handleDelete);
@@ -159,17 +257,20 @@ function attachListeners() {
 
 function handleInput(e) {
   const { index, key } = e.target.dataset;
-  const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+  if (index == null || key == null) return;
+
+  const isCheckbox = e.target.type === "checkbox";
+  const raw = isCheckbox ? e.target.checked : e.target.value;
 
   if (key === "tags") {
-    products[index][key] = value
+    products[index][key] = String(raw)
       .split(",")
       .map((t) => t.trim())
       .filter(Boolean);
   } else if (key === "price") {
-    products[index][key] = parseFloat(value) || 0;
-  } else if (key) {
-    products[index][key] = value;
+    products[index][key] = parseFloat(raw) || 0;
+  } else {
+    products[index][key] = raw;
   }
 }
 
@@ -181,7 +282,7 @@ function addProduct() {
     image: "",
     downloadFile: "",
     description: "",
-    category: "",
+    storyType: "",
     tags: [],
     stripeUrl: "",
     pageUrl: "",

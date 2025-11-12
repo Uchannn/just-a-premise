@@ -15,13 +15,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.2",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "express": "^4.19.2",
     "multer": "^2.0.2",
     "slugify": "^1.6.6",
-    "stripe": "^16.4.0"
+    "stripe": "^16.12.0"
   },
   "bugs": {
     "url": "https://github.com/Uchannn/just-a-premise/issues"
