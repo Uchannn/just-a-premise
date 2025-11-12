@@ -4,13 +4,24 @@ import fs from "fs";
 import path from "path";
 import cors from "cors";
 import bodyParser from "body-parser";
-import dotenv from "dotenv";
-import stripePkg from "stripe";
+
 
 import authRoutes from "./routes/auth.js";
 import contentRoutes from "./routes/content.js";
 import uploadRoute from "./routes/upload.js";
 import generateRoutes from "./routes/generate.js"; // ✅ this must be below imports, not mid-code
+
+// ===== ENV + STRIPE SETUP (bulletproof) =====
+import 'dotenv/config';                 // loads .env from current working dir
+import Stripe from 'stripe';
+
+const rawKey = (process.env.STRIPE_SECRET_KEY || '').trim();
+if (!rawKey) {
+  console.error('❌ STRIPE_SECRET_KEY missing from .env');
+}
+console.log('🔑 Stripe key prefix:', rawKey.slice(0, 7)); // should print sk_test or sk_live
+
+const stripe = new Stripe(rawKey);
 
 
 
