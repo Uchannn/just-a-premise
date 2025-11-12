@@ -52,6 +52,16 @@ function renderShop() {
           <input type="file" accept="image/*" hidden>
         </div>
 
+        <label>Digital File (what the buyer downloads)</label>
+       <div class="file-upload" data-index="${index}" data-key="downloadFile">
+         ${
+           item.downloadFile
+             ? `<p class="file-chip">${item.downloadFile.split('/').pop()}</p>`
+             : `<p class="drop-zone">Drag & drop or click to upload</p>`
+         }
+         <input type="file" hidden>
+       </div>
+
         <label>Description</label>
         <textarea rows="3" data-index="${index}" data-key="description">${item.description || ""}</textarea>
 
@@ -88,6 +98,7 @@ function renderShop() {
         <div class="row-btns">
           <button class="gen-product" data-index="${index}">Generate Product Page</button>
           <button class="gen-download" data-index="${index}">Generate Download Page</button>
+          <button class="make-stripe" data-index="${index}">Make Stripe Link</button>
           <!-- NEW: Make Stripe link that redirects to the download page -->
           <button class="make-stripe" data-index="${index}">Make Stripe Link → redirect to Download</button>
 
@@ -100,6 +111,7 @@ function renderShop() {
 
   attachListeners();
   initImageUploads();
+  initStripeButtons();
   initFileUploads();      // NEW
   initGenerateButtons();  // NEW (note the exact name)
 }
