@@ -1,45 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Wed Nov 12 00:41:35 UTC 2025
-
-=== ./pubweb/products/out-here-gal.html ===
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Out here Gal</title>
-  <link rel="stylesheet" href="/css/main.css" />
-</head>
-<body>
-  <main class="product-page">
-    <div class="product-header">
-      <h1>Out here Gal</h1>
-      
-    </div>
-    <img src="/cms/uploads/1762765993308-230071053.png" alt="Out here Gal" class="product-image">
-    <p class="desc">A simple test item.</p>
-    <p class="price">$15</p>
-    
-  </main>
-</body>
-</html>
-
-=== ./pubweb/downloads/out-here-gal.html ===
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Download: Out here Gal</title>
-  <link rel="stylesheet" href="/css/main.css" />
-</head>
-<body>
-  <main class="download-page">
-    <h1>Thank you for purchasing Out here Gal!</h1>
-    <p>No file attached yet.</p>
-  </main>
-</body>
-</html>
+Generated on Wed Nov 12 01:56:02 UTC 2025
 
 === ./pubweb/shop.html ===
 <!DOCTYPE html>
@@ -4902,10 +4862,27 @@ function renderShop() {
           <input type="checkbox" data-index="${index}" data-key="isSold" ${item.isSold ? "checked" : ""}> Sold Out
         </label>
 
-        <button class="gen-product" data-index="${index}">Generate Product Page</button>
-        <button class="gen-download" data-index="${index}">Generate Download Page</button>
+        <hr>
 
-        <button class="delete-btn" data-index="${index}">Delete Item</button>
+        <!-- NEW: Download File uploader -->
+        <label>Download File</label>
+        <div class="file-upload" data-index="${index}" data-field="downloadFile">
+          ${
+            item.downloadFile
+              ? `<p class="file-done">📦 ${item.downloadFile}</p>`
+              : `<p class="drop-zone">Drag & drop or click to upload</p>`
+          }
+          <input type="file" accept=".zip,.pdf,.epub,.txt,.png,.jpg,.jpeg" hidden>
+        </div>
+
+        <div class="row-btns">
+          <button class="gen-product" data-index="${index}">Generate Product Page</button>
+          <button class="gen-download" data-index="${index}">Generate Download Page</button>
+          <!-- NEW: Make Stripe link that redirects to the download page -->
+          <button class="make-stripe" data-index="${index}">Make Stripe Link → redirect to Download</button>
+
+          <button class="delete-btn" data-index="${index}">Delete Item</button>
+        </div>
       </div>
     `;
     shopList.appendChild(card);
@@ -4913,8 +4890,10 @@ function renderShop() {
 
   attachListeners();
   initImageUploads();
-  initGeneratorButtons(); // fix for the missing listeners
+  initFileUploads();      // NEW
+  initGenerateButtons();  // NEW (note the exact name)
 }
+
 
 // ===== INPUT / DELETE / ADD LISTENERS =====
 function attachListeners() {
