@@ -9,7 +9,9 @@ import stripePkg from "stripe";
 
 import authRoutes from "./routes/auth.js";
 import contentRoutes from "./routes/content.js";
-import uploadRoute from "./routes/upload.js"; // ✅ add this line
+import uploadRoute from "./routes/upload.js";
+import generateRoutes from "./routes/generate.js"; // ✅ this must be below imports, not mid-code
+
 
 
 // ========== ENVIRONMENT SETUP ==========
@@ -30,6 +32,7 @@ app.use(express.static(path.resolve(process.cwd())));
 app.use("/api", authRoutes);            // handles /api/login, /api/logout
 app.use("/api/content", contentRoutes); // handles /api/content/:type
 app.use("/api/upload", uploadRoute);    // ✅ add this line
+app.use("/api/generate", generateRoutes);
 
 // ========== STRIPE LINK GENERATOR ==========
 app.post("/api/stripe/create-link", async (req, res) => {
