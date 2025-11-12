@@ -1,5 +1,45 @@
 === REPO SNAPSHOT ===
-Generated on Wed Nov 12 00:35:33 UTC 2025
+Generated on Wed Nov 12 00:41:35 UTC 2025
+
+=== ./pubweb/products/out-here-gal.html ===
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Out here Gal</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+  <main class="product-page">
+    <div class="product-header">
+      <h1>Out here Gal</h1>
+      
+    </div>
+    <img src="/cms/uploads/1762765993308-230071053.png" alt="Out here Gal" class="product-image">
+    <p class="desc">A simple test item.</p>
+    <p class="price">$15</p>
+    
+  </main>
+</body>
+</html>
+
+=== ./pubweb/downloads/out-here-gal.html ===
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Download: Out here Gal</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+  <main class="download-page">
+    <h1>Thank you for purchasing Out here Gal!</h1>
+    <p>No file attached yet.</p>
+  </main>
+</body>
+</html>
 
 === ./pubweb/shop.html ===
 <!DOCTYPE html>
@@ -25,6 +65,58 @@ Generated on Wed Nov 12 00:35:33 UTC 2025
 === ./scss/_layout.scss ===
 
 === ./scss/_variables.scss ===
+
+=== ./scss/_product.scss ===
+.product-page {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.product-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.badge.sold-out { background: crimson; }
+
+.product-image {
+  max-width: 100%;
+  margin: 1rem 0;
+  border-radius: 10px;
+}
+
+.price {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.buy-btn {
+  background: #1b7dff;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+
+.buy-btn:hover { background: #105ccc; }
+.buy-btn.disabled { background: #999; cursor: not-allowed; }
 
 === ./scss/main.scss ===
 // main.scss â€” central entry point for your SCSS build
@@ -4714,7 +4806,9 @@ jÕ!¨**q<pÛVK7I0;?‡Ù¹g¦¥,ë·q€ÏøšªNö­ÈAD6ØàýFäu¾ïo2ÆTD$È³Î­V*È‹EQ Ç¨D1œs
     "available": true,
     "adult": true,
     "isAdult": true,
-    "image": "/cms/uploads/1762765993308-230071053.png"
+    "image": "/cms/uploads/1762765993308-230071053.png",
+    "pageUrl": "/products/out-here-gal.html",
+    "downloadUrl": "/downloads/out-here-gal.html"
   },
   {
     "title": "Sold Example",
