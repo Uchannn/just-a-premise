@@ -104,6 +104,108 @@ function renderShop() {
   initGenerateButtons();  // NEW (note the exact name)
 }
 
+//Something about gen help?
+function initGenerateButtons() {
+  document.querySelectorAll(".gen-product").forEach((btn) => {
+    btn.addEventListener("click", handleGenerateProduct);
+  });
+  document.querySelectorAll(".gen-download").forEach((btn) => {
+    btn.addEventListener("click", handleGenerateDownload);
+  });
+  document.querySelectorAll(".make-stripe").forEach((btn) => {
+    btn.addEventListener("click", handleMakeStripe);
+  });
+}
+
+function initFileUploads() {
+  document.querySelectorAll(".file-upload").forEach((box) => {
+    const index = box.dataset.index;
+    const field = box.dataset.field; // "downloadFile"
+    const input = box.querySelector('input[type="file"]');
+
+    box.addEventListener("click", () => input.click());
+    box.addEventListener("dragover", (e) => e.preventDefault());
+    box.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const file = e.dataTransfer.files[0];
+      if (file) uploadGenericFile(file, index, field, box);
+    });
+    input.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) uploadGenericFile(file, index, field, box);
+    });
+  });
+}
+
+async function uploadGenericFile(file, index, field, box) {
+  const formData = new FormData();
+  formData.append("file", file);
+  try {
+    const res = await fetch("/api/upload", { method: "POST", body: formData });
+    const data = await res.json();
+    if (!data.url) throw new Error("No URL returned");
+    products[index][field] = data.url;
+    box.innerHTML = `<p class="file-done">📦 ${data.url}</p>`;
+  } catch (err) {
+    console.error("Upload failed:", err);
+    alert("❌ File upload failed. Check console for details.");
+  }
+}
+
+//Make the strip link
+async function handleMakeStripe(e) {
+  const index = e.target.dataset.index;
+  const item = products[index];
+
+  if (!item.title || !item.price) {
+    alert("Set a title and price first.");
+    return;
+  }
+
+  // Ensure we have a download page URL to redirect to
+  if (!item.downloadUrl) {
+    if (!item.downloadFile) {
+      alert("Upload a Download File first (or generate the Download Page).");
+      return;
+    }
+    try {
+      const res = await fetch("/api/generate/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(item),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || "Download page gen failed");
+      item.downloadUrl = data.downloadUrl;
+    } catch (err) {
+      console.error(err);
+      alert("❌ Could not generate download page.");
+      return;
+    }
+  }
+
+  // Create a Stripe Payment Link that redirects to the download page after purchase
+  try {
+    const res = await fetch("/api/stripe/create-link-for-item", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: item.title,
+        price: item.price,
+        downloadUrl: item.downloadUrl
+      })
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || "Stripe link failed");
+    item.stripeUrl = data.url;
+    await saveShop();
+    alert("✅ Stripe link created and saved on the item.");
+  } catch (err) {
+    console.error(err);
+    alert("❌ Failed to create Stripe link.");
+  }
+}
+
 
 // ===== INPUT / DELETE / ADD LISTENERS =====
 function attachListeners() {
