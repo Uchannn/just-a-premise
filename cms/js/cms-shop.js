@@ -291,6 +291,45 @@ async function saveShop() {
   }
 }
 
+//Stripe button handler
+function initStripeButtons() {
+  document.querySelectorAll(".make-stripe").forEach((btn) =>
+    btn.addEventListener("click", handleMakeStripeLink)
+  );
+}
+
+async function handleMakeStripeLink(e) {
+  const index = e.target.dataset.index;
+  const item = products[index];
+
+  if (!item.title || !item.price) {
+    return alert("Title and price are required before making a Stripe link.");
+  }
+  if (!item.downloadUrl) {
+    return alert("Generate the Download Page first so we can redirect to it after payment.");
+  }
+
+  try {
+    const res = await fetch("/api/stripe/create-link", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: item.title,
+        price: item.price,
+        redirectUrl: item.downloadUrl
+      })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.url) throw new Error(data.error || "Stripe error");
+    item.stripeUrl = data.url;
+    await saveShop();
+    alert("✅ Stripe link created and saved to this item.");
+  } catch (err) {
+    console.error(err);
+    alert("❌ Could not create Stripe link. Check console.");
+  }
+}
+
 // ===== GENERATE PAGE BUTTONS =====
 function initGeneratorButtons() {
   document.querySelectorAll(".gen-product").forEach((btn) => {
@@ -354,6 +393,12 @@ function initImageUploads() {
   document.querySelectorAll(".image-upload").forEach((box) => {
     const index = box.dataset.index;
     const input = box.querySelector("input[type=file]");
+function wireUploadBox(selector) {
+  document.querySelectorAll(selector).forEach((box) => {
+    const index = box.dataset.index;
+    const key = box.dataset.key; // "image" or "downloadFile"
++    const input = box.querySelector("input[type=file]");
+
 
     box.addEventListener("click", () => input.click());
     box.addEventListener("dragover", (e) => e.preventDefault());
@@ -361,15 +406,20 @@ function initImageUploads() {
       e.preventDefault();
       const file = e.dataTransfer.files[0];
       if (file) uploadFile(file, index, box);
+      if (file) uploadFile(file, index, key, box);
     });
     input.addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (file) uploadFile(file, index, box);
+      if (file) uploadFile(file, index, key, box);
     });
   });
 }
+function initImageUploads() { wireUploadBox(".image-upload"); }
+function initFileUploads() { wireUploadBox(".file-upload"); }
 
 async function uploadFile(file, index, box) {
+async function uploadFile(file, index, key, box) {
   const formData = new FormData();
   formData.append("file", file);
 
@@ -383,6 +433,13 @@ async function uploadFile(file, index, box) {
     if (data.url) {
       products[index].image = data.url;
       box.innerHTML = `<img src="${data.url}" class="preview">`;
+      products[index][key] = data.url;
+      if (key === "image") {
+        box.innerHTML = `<img src="${data.url}" class="preview">`;
+      } else {
+        const name = data.url.split('/').pop();
+        box.innerHTML = `<p class="file-chip">${name}</p>`;
+      }
     } else {
       throw new Error("No URL returned");
     }
