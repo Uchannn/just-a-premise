@@ -73,6 +73,9 @@ function renderShop() {
           <input type="checkbox" data-index="${index}" data-key="isSold" ${item.isSold ? "checked" : ""}> Sold Out
         </label>
 
+        <button class="gen-product" data-index="${index}">Generate Product Page</button>
+        <button class="gen-download" data-index="${index}">Generate Download Page</button>
+
         <button class="delete-btn" data-index="${index}">Delete Item</button>
       </div>
     `;
