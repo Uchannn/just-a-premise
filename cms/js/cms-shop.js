@@ -87,6 +87,14 @@ function renderShop() {
 
 }
 
+document.querySelectorAll(".gen-product").forEach((btn) => {
+  btn.addEventListener("click", handleGenerateProduct);
+});
+document.querySelectorAll(".gen-download").forEach((btn) => {
+  btn.addEventListener("click", handleGenerateDownload);
+});
+
+
 // ===== ATTACH INPUT LISTENERS =====
 function attachListeners() {
   document.querySelectorAll("input, textarea").forEach((el) => {
@@ -158,6 +166,55 @@ async function saveShop() {
     alert("❌ Error saving shop data. Check console for details.");
   }
 }
+
+async function handleGenerateProduct(e) {
+  const index = e.target.dataset.index;
+  const item = products[index];
+
+  try {
+    const res = await fetch("/api/generate/product", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    });
+    const data = await res.json();
+    if (data.success) {
+      item.pageUrl = data.pageUrl;
+      alert(`✅ Product page created: ${data.pageUrl}`);
+      saveShop(); // update shop.json with new pageUrl
+    } else {
+      throw new Error(data.error);
+    }
+  } catch (err) {
+    alert("❌ Failed to generate product page.");
+    console.error(err);
+  }
+}
+
+async function handleGenerateDownload(e) {
+  const index = e.target.dataset.index;
+  const item = products[index];
+
+  try {
+    const res = await fetch("/api/generate/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    });
+    const data = await res.json();
+    if (data.success) {
+      item.downloadUrl = data.downloadUrl;
+      alert(`✅ Download page created: ${data.downloadUrl}`);
+      saveShop(); // update shop.json with new downloadUrl
+    } else {
+      throw new Error(data.error);
+    }
+  } catch (err) {
+    alert("❌ Failed to generate download page.");
+    console.error(err);
+  }
+}
+
 
 // ===== IMAGE UPLOAD HANDLER =====
 function initImageUploads() {
