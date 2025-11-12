@@ -40,10 +40,10 @@ function renderShop() {
         <input type="text" data-index="${index}" data-key="title" value="${item.title || ""}">
 
         <label>Price (USD)</label>
-        <input type="number" step="0.01" data-index="${index}" data-key="price" value="${item.price || ""}">
+        <input type="number" step="0.01" data-index="${index}" data-key="price" value="${item.price ?? ""}">
 
         <label>Image</label>
-        <div class="image-upload" data-index="${index}">
+        <div class="upload-box image-upload" data-index="${index}" data-key="image">
           ${
             item.image
               ? `<img src="${item.image}" alt="" class="preview">`
@@ -53,14 +53,14 @@ function renderShop() {
         </div>
 
         <label>Digital File (what the buyer downloads)</label>
-       <div class="file-upload" data-index="${index}" data-key="downloadFile">
-         ${
-           item.downloadFile
-             ? `<p class="file-chip">${item.downloadFile.split('/').pop()}</p>`
-             : `<p class="drop-zone">Drag & drop or click to upload</p>`
-         }
-         <input type="file" hidden>
-       </div>
+        <div class="upload-box file-upload" data-index="${index}" data-key="downloadFile">
+          ${
+            item.downloadFile
+              ? `<p class="file-chip">${(item.downloadFile.split('/').pop())}</p>`
+              : `<p class="drop-zone">Drag & drop or click to upload</p>`
+          }
+          <input type="file" hidden>
+        </div>
 
         <label>Description</label>
         <textarea rows="3" data-index="${index}" data-key="description">${item.description || ""}</textarea>
@@ -82,26 +82,10 @@ function renderShop() {
           <input type="checkbox" data-index="${index}" data-key="isSold" ${item.isSold ? "checked" : ""}> Sold Out
         </label>
 
-        <hr>
-
-        <!-- NEW: Download File uploader -->
-        <label>Download File</label>
-        <div class="file-upload" data-index="${index}" data-field="downloadFile">
-          ${
-            item.downloadFile
-              ? `<p class="file-done">📦 ${item.downloadFile}</p>`
-              : `<p class="drop-zone">Drag & drop or click to upload</p>`
-          }
-          <input type="file" accept=".zip,.pdf,.epub,.txt,.png,.jpg,.jpeg" hidden>
-        </div>
-
         <div class="row-btns">
           <button class="gen-product" data-index="${index}">Generate Product Page</button>
           <button class="gen-download" data-index="${index}">Generate Download Page</button>
           <button class="make-stripe" data-index="${index}">Make Stripe Link</button>
-          <!-- NEW: Make Stripe link that redirects to the download page -->
-          <button class="make-stripe" data-index="${index}">Make Stripe Link → redirect to Download</button>
-
           <button class="delete-btn" data-index="${index}">Delete Item</button>
         </div>
       </div>
@@ -110,29 +94,21 @@ function renderShop() {
   });
 
   attachListeners();
-  initImageUploads();
-  initStripeButtons();
-  initFileUploads();      // NEW
-  initGenerateButtons();  // NEW (note the exact name)
+  initUploadBoxes();      // unified uploader for image + file
+  initGeneratorButtons(); // product/download
+  initStripeButtons();    // stripe link
 }
 
-//Something about gen help?
-function initGenerateButtons() {
-  document.querySelectorAll(".gen-product").forEach((btn) => {
-    btn.addEventListener("click", handleGenerateProduct);
-  });
-  document.querySelectorAll(".gen-download").forEach((btn) => {
-    btn.addEventListener("click", handleGenerateDownload);
-  });
-  document.querySelectorAll(".make-stripe").forEach((btn) => {
-    btn.addEventListener("click", handleMakeStripe);
-  });
+// ===== GENERALIZED UPLOAD WIRING =====
+function initUploadBoxes() {
+  wireUploadBox(".image-upload");
+  wireUploadBox(".file-upload");
 }
 
-function initFileUploads() {
-  document.querySelectorAll(".file-upload").forEach((box) => {
+function wireUploadBox(selector) {
+  document.querySelectorAll(selector).forEach((box) => {
     const index = box.dataset.index;
-    const field = box.dataset.field; // "downloadFile"
+    const key = box.dataset.key; // "image" or "downloadFile"
     const input = box.querySelector('input[type="file"]');
 
     box.addEventListener("click", () => input.click());
@@ -140,84 +116,36 @@ function initFileUploads() {
     box.addEventListener("drop", (e) => {
       e.preventDefault();
       const file = e.dataTransfer.files[0];
-      if (file) uploadGenericFile(file, index, field, box);
+      if (file) uploadFile(file, index, key, box);
     });
     input.addEventListener("change", (e) => {
       const file = e.target.files[0];
-      if (file) uploadGenericFile(file, index, field, box);
+      if (file) uploadFile(file, index, key, box);
     });
   });
 }
 
-async function uploadGenericFile(file, index, field, box) {
+async function uploadFile(file, index, key, box) {
   const formData = new FormData();
   formData.append("file", file);
   try {
     const res = await fetch("/api/upload", { method: "POST", body: formData });
     const data = await res.json();
     if (!data.url) throw new Error("No URL returned");
-    products[index][field] = data.url;
-    box.innerHTML = `<p class="file-done">📦 ${data.url}</p>`;
+    products[index][key] = data.url;
+
+    // Update UI
+    if (key === "image") {
+      box.innerHTML = `<img src="${data.url}" class="preview">`;
+    } else {
+      const basename = data.url.split("/").pop();
+      box.innerHTML = `<p class="file-chip">${basename}</p>`;
+    }
   } catch (err) {
     console.error("Upload failed:", err);
-    alert("❌ File upload failed. Check console for details.");
+    alert("❌ Image/file upload failed. Check console for details.");
   }
 }
-
-//Make the strip link
-async function handleMakeStripe(e) {
-  const index = e.target.dataset.index;
-  const item = products[index];
-
-  if (!item.title || !item.price) {
-    alert("Set a title and price first.");
-    return;
-  }
-
-  // Ensure we have a download page URL to redirect to
-  if (!item.downloadUrl) {
-    if (!item.downloadFile) {
-      alert("Upload a Download File first (or generate the Download Page).");
-      return;
-    }
-    try {
-      const res = await fetch("/api/generate/download", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(item),
-      });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.error || "Download page gen failed");
-      item.downloadUrl = data.downloadUrl;
-    } catch (err) {
-      console.error(err);
-      alert("❌ Could not generate download page.");
-      return;
-    }
-  }
-
-  // Create a Stripe Payment Link that redirects to the download page after purchase
-  try {
-    const res = await fetch("/api/stripe/create-link-for-item", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: item.title,
-        price: item.price,
-        downloadUrl: item.downloadUrl
-      })
-    });
-    const data = await res.json();
-    if (!data.success) throw new Error(data.error || "Stripe link failed");
-    item.stripeUrl = data.url;
-    await saveShop();
-    alert("✅ Stripe link created and saved on the item.");
-  } catch (err) {
-    console.error(err);
-    alert("❌ Failed to create Stripe link.");
-  }
-}
-
 
 // ===== INPUT / DELETE / ADD LISTENERS =====
 function attachListeners() {
@@ -229,37 +157,35 @@ function attachListeners() {
   });
 }
 
-// ===== HANDLE FIELD EDITS =====
 function handleInput(e) {
   const { index, key } = e.target.dataset;
-  const value =
-    e.target.type === "checkbox"
-      ? e.target.checked
-      : e.target.value;
+  const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
 
   if (key === "tags") {
     products[index][key] = value
       .split(",")
       .map((t) => t.trim())
-      .filter((t) => t);
+      .filter(Boolean);
   } else if (key === "price") {
     products[index][key] = parseFloat(value) || 0;
-  } else {
+  } else if (key) {
     products[index][key] = value;
   }
 }
 
-// ===== ADD NEW PRODUCT =====
 function addProduct() {
   products.push({
     id: `prod-${Date.now()}`,
     title: "",
     price: 0,
     image: "",
+    downloadFile: "",
     description: "",
     category: "",
     tags: [],
     stripeUrl: "",
+    pageUrl: "",
+    downloadUrl: "",
     isAdult: false,
     isSold: false
   });
@@ -267,7 +193,6 @@ function addProduct() {
   window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
 }
 
-// ===== DELETE PRODUCT =====
 function handleDelete(e) {
   const index = e.target.dataset.index;
   if (!confirm("Delete this product?")) return;
@@ -275,7 +200,6 @@ function handleDelete(e) {
   renderShop();
 }
 
-// ===== SAVE ALL CHANGES =====
 async function saveShop() {
   try {
     const res = await fetch("/api/content/shop", {
@@ -291,7 +215,57 @@ async function saveShop() {
   }
 }
 
-//Stripe button handler
+// ===== GENERATE PAGE BUTTONS =====
+function initGeneratorButtons() {
+  document.querySelectorAll(".gen-product").forEach((btn) =>
+    btn.addEventListener("click", handleGenerateProduct)
+  );
+  document.querySelectorAll(".gen-download").forEach((btn) =>
+    btn.addEventListener("click", handleGenerateDownload)
+  );
+}
+
+async function handleGenerateProduct(e) {
+  const index = e.target.dataset.index;
+  const item = products[index];
+  try {
+    const res = await fetch("/api/generate/product", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || "Gen product failed");
+    item.pageUrl = data.pageUrl;
+    alert(`✅ Product page created: ${data.pageUrl}`);
+    await saveShop();
+  } catch (err) {
+    console.error(err);
+    alert("❌ Failed to generate product page.");
+  }
+}
+
+async function handleGenerateDownload(e) {
+  const index = e.target.dataset.index;
+  const item = products[index];
+  try {
+    const res = await fetch("/api/generate/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || "Gen download failed");
+    item.downloadUrl = data.downloadUrl;
+    alert(`✅ Download page created: ${data.downloadUrl}`);
+    await saveShop();
+  } catch (err) {
+    console.error(err);
+    alert("❌ Failed to generate download page.");
+  }
+}
+
+// ===== STRIPE LINK BUTTON =====
 function initStripeButtons() {
   document.querySelectorAll(".make-stripe").forEach((btn) =>
     btn.addEventListener("click", handleMakeStripeLink)
@@ -305,8 +279,25 @@ async function handleMakeStripeLink(e) {
   if (!item.title || !item.price) {
     return alert("Title and price are required before making a Stripe link.");
   }
+
+  // Ensure a download page exists to redirect to; if not, try to generate one if we have a file.
   if (!item.downloadUrl) {
-    return alert("Generate the Download Page first so we can redirect to it after payment.");
+    if (!item.downloadFile) {
+      return alert("Upload the Digital File and click 'Generate Download Page' first.");
+    }
+    try {
+      const res = await fetch("/api/generate/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(item),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || "Download page gen failed");
+      item.downloadUrl = data.downloadUrl;
+    } catch (err) {
+      console.error(err);
+      return alert("❌ Could not generate download page.");
+    }
   }
 
   try {
@@ -327,125 +318,6 @@ async function handleMakeStripeLink(e) {
   } catch (err) {
     console.error(err);
     alert("❌ Could not create Stripe link. Check console.");
-  }
-}
-
-// ===== GENERATE PAGE BUTTONS =====
-function initGeneratorButtons() {
-  document.querySelectorAll(".gen-product").forEach((btn) => {
-    btn.addEventListener("click", handleGenerateProduct);
-  });
-  document.querySelectorAll(".gen-download").forEach((btn) => {
-    btn.addEventListener("click", handleGenerateDownload);
-  });
-}
-
-async function handleGenerateProduct(e) {
-  const index = e.target.dataset.index;
-  const item = products[index];
-
-  try {
-    const res = await fetch("/api/generate/product", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(item),
-    });
-    const data = await res.json();
-    if (data.success) {
-      item.pageUrl = data.pageUrl;
-      alert(`✅ Product page created: ${data.pageUrl}`);
-      await saveShop();
-    } else {
-      throw new Error(data.error);
-    }
-  } catch (err) {
-    console.error(err);
-    alert("❌ Failed to generate product page.");
-  }
-}
-
-async function handleGenerateDownload(e) {
-  const index = e.target.dataset.index;
-  const item = products[index];
-
-  try {
-    const res = await fetch("/api/generate/download", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(item),
-    });
-    const data = await res.json();
-    if (data.success) {
-      item.downloadUrl = data.downloadUrl;
-      alert(`✅ Download page created: ${data.downloadUrl}`);
-      await saveShop();
-    } else {
-      throw new Error(data.error);
-    }
-  } catch (err) {
-    console.error(err);
-    alert("❌ Failed to generate download page.");
-  }
-}
-
-// ===== IMAGE UPLOAD HANDLER =====
-function initImageUploads() {
-  document.querySelectorAll(".image-upload").forEach((box) => {
-    const index = box.dataset.index;
-    const input = box.querySelector("input[type=file]");
-function wireUploadBox(selector) {
-  document.querySelectorAll(selector).forEach((box) => {
-    const index = box.dataset.index;
-    const key = box.dataset.key; // "image" or "downloadFile"
-+    const input = box.querySelector("input[type=file]");
-
-
-    box.addEventListener("click", () => input.click());
-    box.addEventListener("dragover", (e) => e.preventDefault());
-    box.addEventListener("drop", (e) => {
-      e.preventDefault();
-      const file = e.dataTransfer.files[0];
-      if (file) uploadFile(file, index, box);
-      if (file) uploadFile(file, index, key, box);
-    });
-    input.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file) uploadFile(file, index, box);
-      if (file) uploadFile(file, index, key, box);
-    });
-  });
-}
-function initImageUploads() { wireUploadBox(".image-upload"); }
-function initFileUploads() { wireUploadBox(".file-upload"); }
-
-async function uploadFile(file, index, box) {
-async function uploadFile(file, index, key, box) {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  try {
-    const res = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
-    const data = await res.json();
-
-    if (data.url) {
-      products[index].image = data.url;
-      box.innerHTML = `<img src="${data.url}" class="preview">`;
-      products[index][key] = data.url;
-      if (key === "image") {
-        box.innerHTML = `<img src="${data.url}" class="preview">`;
-      } else {
-        const name = data.url.split('/').pop();
-        box.innerHTML = `<p class="file-chip">${name}</p>`;
-      }
-    } else {
-      throw new Error("No URL returned");
-    }
-  } catch (err) {
-    console.error("Upload failed:", err);
-    alert("❌ Image upload failed. Check console for details.");
   }
 }
 
