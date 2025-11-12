@@ -18,7 +18,7 @@ function makeSlug(title) {
 
 // ========== PRODUCT PAGE GENERATOR ==========
 router.post("/product", (req, res) => {
-  const { title, image, description, price, stripeUrl } = req.body;
+  const { title, image, description, price, stripeUrl, isSold } = req.body;
   if (!title) return res.status(400).json({ error: "Missing title" });
 
   const slug = makeSlug(title);
@@ -26,6 +26,17 @@ router.post("/product", (req, res) => {
   ensureDir(folder);
 
   const filePath = path.join(folder, `${slug}.html`);
+
+  const soldBadge = isSold
+    ? `<span class="badge sold-out">SOLD OUT</span>`
+    : "";
+
+  const buyButton = isSold
+    ? `<button class="buy-btn disabled" disabled>Unavailable</button>`
+    : stripeUrl
+    ? `<a href="${stripeUrl}" class="buy-btn">Buy on Stripe</a>`
+    : "";
+
   const html = `
 <!DOCTYPE html>
 <html lang="en">
@@ -36,11 +47,14 @@ router.post("/product", (req, res) => {
 </head>
 <body>
   <main class="product-page">
-    <h1>${title}</h1>
-    ${image ? `<img src="${image}" alt="${title}">` : ""}
-    <p>${description || ""}</p>
-    ${price ? `<p><strong>$${price}</strong></p>` : ""}
-    ${stripeUrl ? `<a href="${stripeUrl}" class="buy-btn">Buy on Stripe</a>` : ""}
+    <div class="product-header">
+      <h1>${title}</h1>
+      ${soldBadge}
+    </div>
+    ${image ? `<img src="${image}" alt="${title}" class="product-image">` : ""}
+    <p class="desc">${description || ""}</p>
+    ${price ? `<p class="price">$${price}</p>` : ""}
+    ${buyButton}
   </main>
 </body>
 </html>
@@ -53,6 +67,7 @@ router.post("/product", (req, res) => {
     pageUrl: `/products/${slug}.html`
   });
 });
+
 
 // ========== DOWNLOAD PAGE GENERATOR ==========
 router.post("/download", (req, res) => {
