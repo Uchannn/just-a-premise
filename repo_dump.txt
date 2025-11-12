@@ -1,5 +1,5 @@
 === REPO SNAPSHOT ===
-Generated on Wed Nov 12 02:31:33 UTC 2025
+Generated on Wed Nov 12 02:35:39 UTC 2025
 
 === ./pubweb/downloads/sold-example.html ===
 
@@ -2945,23 +2945,43 @@ app.use("/api/generate", generateRoutes);
 
 // ========== STRIPE LINK GENERATOR ==========
 app.post("/api/stripe/create-link", async (req, res) => {
-  const { name, price } = req.body;
   try {
+    const { name, price, redirectUrl } = req.body;
+    if (!name || price == null) {
+      return res.status(400).json({ success: false, error: "Missing name or price" });
+    }
+
+    const unitAmount = Math.round(Number(price) * 100);
+    if (!Number.isFinite(unitAmount) || unitAmount <= 0) {
+      return res.status(400).json({ success: false, error: "Invalid price" });
+    }
+
+    // Create (or you could reuse) a Product and Price
     const product = await stripe.products.create({ name });
     const priceObj = await stripe.prices.create({
       product: product.id,
-      unit_amount: price * 100,
+      unit_amount: unitAmount,
       currency: "usd",
     });
+
+    // Build after_completion only if we have a redirectUrl
+    const afterCompletion = redirectUrl
+      ? { type: "redirect", redirect: { url: redirectUrl } }
+      : undefined;
+
     const link = await stripe.paymentLinks.create({
       line_items: [{ price: priceObj.id, quantity: 1 }],
+      after_completion: afterCompletion,
+      // allow_promotion_codes: true, // optional
     });
-    res.json({ success: true, url: link.url });
+
+    return res.json({ success: true, url: link.url });
   } catch (err) {
     console.error("Stripe error:", err);
-    res.status(500).json({ success: false, error: err.message });
+    return res.status(500).json({ success: false, error: err.message });
   }
 });
+
 
 // ========== FALLBACK ROUTE ==========
 app.use((req, res) => {
