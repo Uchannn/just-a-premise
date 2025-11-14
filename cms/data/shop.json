@@ -1,5 +1,8 @@
 [
   {
+    "id": "prod-rkhfkxr",
+    "storyType": "",
+    "tags": [],
     "title": "Out here Gal",
     "price": "15",
     "stripe_link": "",
@@ -7,11 +10,14 @@
     "available": true,
     "adult": true,
     "isAdult": true,
-    "image": "/cms/uploads/1762765993308-230071053.png",
+    "image": "/cms/uploads/1763143828466-546089554.png",
     "pageUrl": "/products/out-here-gal.html",
     "downloadUrl": "/downloads/out-here-gal.html"
   },
   {
+    "id": "prod-jvwr77s",
+    "storyType": "",
+    "tags": [],
     "title": "Sold Example",
     "price": "10",
     "stripe_link": "",
@@ -20,6 +26,9 @@
     "adult": false
   },
   {
+    "id": "prod-hyv3s5r",
+    "storyType": "",
+    "tags": [],
     "title": "Dreamveil Narrative Blueprint",
     "price": "180",
     "stripe_link": "https://buy.stripe.com/example",
