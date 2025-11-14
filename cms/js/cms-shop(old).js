@@ -112,7 +112,7 @@ function renderShop() {
 
         <label>Image</label>
         <div class="upload-box image-upload" data-index="${index}" data-key="image">
-          ${ item.image ? `<img src="${item.image}" alt="" class="preview">`
+          ${ item.image ? `<img src="${item.image}" alt="${item.title || ""}" class="preview">`
                         : `<p class="drop-zone">Drag & drop or click to upload</p>` }
           <input type="file" accept="image/*" hidden>
         </div>
@@ -134,7 +134,12 @@ function renderShop() {
           ${STORY_TYPES.map(t => `<option value="${t}" ${item.storyType===t?"selected":""}>${t}</option>`).join("")}
         </select>
 
-        <!-- Tags input + quick-picks -->
+        <p class="field-hint">
+          <strong>Narrative Blueprint:</strong> full story foundation with exclusive rights.<br>
+          <strong>Narrative Kit:</strong> reusable creative toolkit with multiple POVs.<br>
+          <strong>Digital Story:</strong> finished illustrated short story or zine.
+        </p>
+
         <label>Tags (comma-separated)</label>
         <input type="text" data-index="${index}" data-key="tags" value="${(item.tags || []).join(", ")}">
         <div class="tags-quick">
@@ -144,8 +149,14 @@ function renderShop() {
           `).join("")}
         </div>
 
-        <label>Stripe Link</label>
-        <input type="text" data-index="${index}" data-key="stripeUrl" value="${item.stripeUrl || ""}">
+        <label>Stripe Link (Payment Link URL)</label>
+        <input 
+          type="text" 
+          data-index="${index}" 
+          data-key="stripeUrl" 
+          placeholder="Paste Stripe Payment Link here"
+          value="${item.stripeUrl || ""}"
+        >
 
         <label>
           <input type="checkbox" data-index="${index}" data-key="isAdult" ${item.isAdult ? "checked" : ""}> Adult Content
@@ -158,7 +169,6 @@ function renderShop() {
         <div class="row-btns">
           <button class="gen-product" data-index="${index}">Generate Product Page</button>
           <button class="gen-download" data-index="${index}">Generate Download Page</button>
-          <button class="make-stripe" data-index="${index}">Make Stripe Link</button>
           <button class="delete-btn" data-index="${index}">Delete Item</button>
         </div>
       </div>
@@ -169,7 +179,6 @@ function renderShop() {
   attachListeners();
   initUploadBoxes();
   initGeneratorButtons();
-  initStripeButtons();    // keep for now; you can remove if doing manual Stripe
   wireTagQuickPicks();
 }
 
@@ -363,62 +372,6 @@ async function handleGenerateDownload(e) {
   } catch (err) {
     console.error(err);
     alert("❌ Failed to generate download page.");
-  }
-}
-
-// ===== STRIPE LINK BUTTON =====
-function initStripeButtons() {
-  document.querySelectorAll(".make-stripe").forEach((btn) =>
-    btn.addEventListener("click", handleMakeStripeLink)
-  );
-}
-
-async function handleMakeStripeLink(e) {
-  const index = e.target.dataset.index;
-  const item = products[index];
-
-  if (!item.title || !item.price) {
-    return alert("Title and price are required before making a Stripe link.");
-  }
-
-  // Ensure a download page exists to redirect to; if not, try to generate one if we have a file.
-  if (!item.downloadUrl) {
-    if (!item.downloadFile) {
-      return alert("Upload the Digital File and click 'Generate Download Page' first.");
-    }
-    try {
-      const res = await fetch("/api/generate/download", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(item),
-      });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.error || "Download page gen failed");
-      item.downloadUrl = data.downloadUrl;
-    } catch (err) {
-      console.error(err);
-      return alert("❌ Could not generate download page.");
-    }
-  }
-
-  try {
-    const res = await fetch("/api/stripe/create-link", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: item.title,
-        price: item.price,
-        redirectUrl: item.downloadUrl
-      })
-    });
-    const data = await res.json();
-    if (!res.ok || !data.url) throw new Error(data.error || "Stripe error");
-    item.stripeUrl = data.url;
-    await saveShop();
-    alert("✅ Stripe link created and saved to this item.");
-  } catch (err) {
-    console.error(err);
-    alert("❌ Could not create Stripe link. Check console.");
   }
 }
 
