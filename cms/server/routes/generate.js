@@ -86,8 +86,7 @@ router.post("/download", (req, res) => {
     <section class="backup-section">
       <h2>Want a backup copy?</h2>
       <p class="hint">
-        You can email this download link to yourself so you always have it saved in your inbox.
-        This is optional, but recommended if you switch devices later.
+        You can email this download page link to yourself so you always have it saved in your inbox.
       </p>
 
       <div class="backup-form">
