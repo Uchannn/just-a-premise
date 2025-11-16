@@ -103,7 +103,7 @@ router.post("/download", (req, res) => {
       </div>
     </section>
 
-    <script>
+        <script>
       function emailBackup() {
         const input = document.getElementById('backup-email');
         const email = (input.value || '').trim();
@@ -113,11 +113,11 @@ router.post("/download", (req, res) => {
           return;
         }
 
-        const subject = encodeURIComponent('Your download link for ${title}');
+        const subject = encodeURIComponent('Your download page for ${title}');
         const body = encodeURIComponent(
-          'Here is your download link for ${title}:' + '\\n\\n' +
-          '${downloadFile}' + '\\n\\n' +
-          'Save this email so you always have access.'
+          'Here is the download page for ${title}:' + '\\n\\n' +
+          window.location.href + '\\n\\n' +
+          'You can bookmark this page or keep this email so you always have access.'
         );
 
         const mailtoUrl = 'mailto:' + encodeURIComponent(email)
@@ -127,6 +127,7 @@ router.post("/download", (req, res) => {
         window.location.href = mailtoUrl;
       }
     </script>
+
     `
     : "";
 

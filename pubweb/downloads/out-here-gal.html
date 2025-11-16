@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Download: Out here Gal</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+  <main class="download-page">
+    <h1>Thank you for purchasing Out here Gal!</h1>
+    <a href="/cms/uploads/1763144238762-442912593.png" class="download-btn">Download your file</a>
+
+    
+    <section class="backup-section">
+      <h2>Want a backup copy?</h2>
+      <p class="hint">
+        You can email this download link to yourself so you always have it saved in your inbox.
+        This is optional, but recommended if you switch devices later.
+      </p>
+
+      <div class="backup-form">
+        <input 
+          type="email" 
+          id="backup-email" 
+          placeholder="Enter your email address" 
+          autocomplete="email"
+        >
+        <button type="button" class="backup-btn" onclick="emailBackup()">
+          Email me this link
+        </button>
+      </div>
+    </section>
+
+    <script>
+      function emailBackup() {
+        const input = document.getElementById('backup-email');
+        const email = (input.value || '').trim();
+        if (!email) {
+          alert('Please enter your email address first.');
+          input.focus();
+          return;
+        }
+
+        const subject = encodeURIComponent('Your download link for Out here Gal');
+        const body = encodeURIComponent(
+          'Here is your download link for Out here Gal:' + '\n\n' +
+          '/cms/uploads/1763144238762-442912593.png' + '\n\n' +
+          'Save this email so you always have access.'
+        );
+
+        const mailtoUrl = 'mailto:' + encodeURIComponent(email)
+          + '?subject=' + subject
+          + '&body=' + body;
+
+        window.location.href = mailtoUrl;
+      }
+    </script>
+    
+  </main>
+</body>
+</html>
