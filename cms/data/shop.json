@@ -1,8 +1,12 @@
 [
   {
     "id": "prod-rkhfkxr",
-    "storyType": "",
-    "tags": [],
+    "storyType": "Narrative Blueprint",
+    "tags": [
+      "Comedy",
+      "Furry",
+      "Fantasy"
+    ],
     "title": "Out here Gal",
     "price": "15",
     "stripe_link": "",
