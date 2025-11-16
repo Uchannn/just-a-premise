@@ -141,11 +141,18 @@ router.post("/download", (req, res) => {
 <body>
   <main class="download-page">
     <h1>Thank you for purchasing ${title}!</h1>
-    ${
-      downloadFile
-        ? `<a href="${downloadFile}" class="download-btn">Download your file</a>`
-        : `<p>No file attached yet.</p>`
-    }
+   ${
+  downloadFile
+    ? `
+      <a href="${downloadFile}" class="download-btn">Download your file</a>
+      <p class="save-note">
+        For your records, please download and save a copy of this file to your device.
+        Keeping a local copy ensures you always have access.
+      </p>
+    `
+    : `<p>No file attached yet.</p>`
+}
+
 
     ${backupSection}
   </main>
